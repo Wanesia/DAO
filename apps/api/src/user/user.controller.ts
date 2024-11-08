@@ -17,6 +17,10 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @Get('email/:email')
+  async findByEmail(@Param('email') email: string): Promise<User>{
+    return this.usersService.findUserByEmail(email);
+  }
   @Patch(':id')
   async update(@Param('id') id: string, @Body() userDto: any): Promise<User> {
     return this.usersService.updateUser(id, userDto);
