@@ -43,6 +43,13 @@
     box-shadow: var(--small-shadow);
   }
 
+  .privacy {
+    margin: 0 auto;
+    font-size: 0.8rem;
+    margin-top: 1rem;
+    text-align: center;
+  }
+
   @media (max-width: 900px) {
     .logo {
         display: none;

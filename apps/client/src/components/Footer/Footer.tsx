@@ -33,6 +33,7 @@ const Footer: React.FC = () => {
           <img src="/logo.png" alt="dao-logo" width={250} height={80} />
         </div>
       </div>
+      <p className={styles.privacy}>Privatlivspolitik</p>
     </footer>
   );
 };
