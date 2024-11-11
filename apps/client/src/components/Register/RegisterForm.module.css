@@ -1,0 +1,42 @@
+.container {
+    background-color: var(--bg-light-grey);
+  }
+  .form {
+    display: flex;
+    flex-direction: column;
+    width: 20rem;
+    margin: 0 auto;
+    height: 80vh;
+  }
+  input {
+    color: var(--text-dark-grey);
+    font-size: 1rem;
+    border-radius: var(--small-radius);
+    border: 1px solid var(--text-dark-grey);
+    padding: 0.5rem;
+  }
+  label {
+    font-size: 0.75rem;
+  }
+  h1 {
+    padding: 2rem 0;
+  }
+  .error {
+    color: red;
+    font-size: 0.75rem;
+    padding-bottom: 0.5rem;
+  }
+  .btn {
+    background-color: var(--primary-blue);
+    border-radius: var(--small-radius);
+    font-size: 1rem;
+    color: white;
+    margin: 1rem 0;
+    padding: 0.5rem;
+  }
+  .reset {
+    font-size: 0.75rem;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  
