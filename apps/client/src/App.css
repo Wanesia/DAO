@@ -47,6 +47,7 @@ body {
   color: var(--text-dark-grey);
   font-family: "Montserrat", sans-serif;
   line-height: 1.5;
+  height: 100%;
 }
 
 h1, h2, h3, h4, h5, h6 {
