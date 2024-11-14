@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './schema/user.schema';
@@ -37,6 +37,31 @@ export class UsersService {
       return user;
     } catch (error) {
       console.error('Error retrieving user:', error);
+    }
+  }
+  async findUserById(userId: string): Promise<any> {
+    try {
+      const user = await this.userModel.findById(userId).exec();
+
+      if (!user) {
+        throw new NotFoundException(`User with ID ${userId} not found`);
+      }
+
+      return {
+        id: user._id,
+        name: user.name,
+        surname: user.surname,
+        email: user.email,
+        profilePicture: user.profilePicture || null,
+        createdAt: user.createdAt,
+        lastSeen: user.lastSeen,
+      };
+    } catch (error) {
+      console.error(`Error finding user by ID: ${userId}`, error);
+
+      throw new InternalServerErrorException(
+        'An error occurred while retrieving the user.',
+      );
     }
   }
 
