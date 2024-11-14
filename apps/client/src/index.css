@@ -1,0 +1,59 @@
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 80%;
+    margin: 100px auto;
+}
+
+.heading {
+    max-width: 600px;
+    margin-bottom: 30px;
+}
+
+.img {
+    width: 470px;
+}
+
+.img img {
+    width: 100%;
+}
+
+.buttons {
+    display: flex;
+    gap: 16px;
+}
+
+.reviews {
+    height: 500px;
+    color: var(--white);
+    background-color: var(--primary-blue);
+    padding: 2rem 0;
+}
+
+.reviews .content {
+    max-width: 80%;
+    margin: 0 auto;
+}
+
+.reviews h2 {
+    color: var(--white);
+}
+
+.reviews-container {
+    display: flex;
+    gap: 16px;
+    justify-content: space-between;
+    margin: 40px auto;
+}
+
+.review {
+    display: flex;
+    flex-direction: column;
+    background: var(--white);
+    color: var(--text-dark-grey);
+    padding: 2rem;
+    border-radius: var(--large-radius);
+    text-align: center;
+    gap: 16px;
+}

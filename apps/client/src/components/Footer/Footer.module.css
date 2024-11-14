@@ -2,8 +2,6 @@
     background-color: var(--primary-red);
     color: var(--white);
     padding: 2rem 0;
-    position: absolute;
-    bottom: 0;
     width: 100%;
   }
   
