@@ -8,6 +8,7 @@ type FormFields = {
   email: string;
   password: string;
   isSubscribedToNewsletter: boolean;
+  acceptedTerms: boolean;
 };
 
 export default function RegisterForm() {
@@ -16,12 +17,17 @@ export default function RegisterForm() {
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },
-  } = useForm<FormFields>();
+  } = useForm<FormFields>({
+    defaultValues: {
+      isSubscribedToNewsletter: false,
+    },
+  });
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
+      const { acceptedTerms, ...submitData } = data;
       const response = await axios.post(
         "http://localhost:3000/auth/register",
-        data
+        submitData
       );
       console.log("Registered successfully:", response.data);
     } catch (error: any) {
@@ -101,6 +107,25 @@ export default function RegisterForm() {
         {errors.password && (
           <div className={styles.error}>{errors.password.message}</div>
         )}
+        <div className={styles.checkboxes}>
+          <label className={styles.terms}>
+            <input
+              type="checkbox"
+              {...register("acceptedTerms", {
+                required: "You must accept the terms and conditions",
+              })}
+            />
+            Jeg accepterer betingelserne
+            
+          </label>
+          {errors.acceptedTerms && (
+            <div className={styles.error}>{errors.acceptedTerms.message}</div>
+          )}
+          <label className={styles.terms} htmlFor="isSubscribedToNewsletter">
+            <input {...register("isSubscribedToNewsletter")} type="checkbox" />
+            Tilmeld mig DAOS nyhedsbrev
+          </label>
+        </div>
         <button className={styles.btn} disabled={isSubmitting} type="submit">
           {isSubmitting ? "Loading..." : "Opret profil"}
         </button>
