@@ -1,6 +1,7 @@
 import styles from "./LoginForm.module.css";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
+import { useNavigate } from '@tanstack/react-router';
 
 type FormFields = {
   email: string;
@@ -13,13 +14,20 @@ export default function LoginForm() {
     setError,
     formState: { errors, isSubmitting },
   } = useForm<FormFields>();
+
+  const navigate = useNavigate(); 
+
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
       const response = await axios.post(
         "http://localhost:3000/auth/login",
         data
       );
-      console.log("Logged in:", response.data);
+      if (response.data.accessToken) {
+        localStorage.setItem("access_token", response.data.accessToken);
+        console.log("Logged in:", response.data);
+        navigate({ to: "/profile" }); 
+      }
     } catch (error) {
       setError("root", { message: "Invalid email or password" });
     }
