@@ -1,5 +1,5 @@
 import {
-    ConflictException,
+  ConflictException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -11,7 +11,10 @@ import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly userService: UsersService, private jwtService:JwtService) {}
+  constructor(
+    private readonly userService: UsersService,
+    private jwtService: JwtService,
+  ) {}
 
   async register(userDto: { email: string; password: string }) {
     try {
@@ -19,10 +22,10 @@ export class AuthService {
       if (user) {
         throw new ConflictException('Email already in use');
       }
-  
+
       const salt = await bcrypt.genSalt();
       const hashedPassword = await bcrypt.hash(userDto.password, salt);
-  
+
       return await this.userService.createUser({
         ...userDto,
         password: hashedPassword,
@@ -32,11 +35,13 @@ export class AuthService {
         throw error;
       }
       console.error('Error registering user:', error);
-      
-      throw new Error('An unexpected error occurred while registering the user');
+
+      throw new Error(
+        'An unexpected error occurred while registering the user',
+      );
     }
   }
-  
+
   async validateUser({ email, password }: AuthPayloadDto) {
     try {
       const user = await this.userService.findUserByEmail(email);
@@ -44,7 +49,7 @@ export class AuthService {
 
       if (user && isPasswordValid) {
         const { password, ...result } = user;
-        return result
+        return result;
       }
 
       throw new UnauthorizedException('Invalid email or password');
@@ -57,9 +62,8 @@ export class AuthService {
     }
   }
   async login(user: any) {
-    const payload = { email: user.email };
-    return {
-        access_token: this.jwtService.sign(payload),
-    };
-}
+    const payload = { userId: user._doc._id };
+    const accessToken = this.jwtService.sign(payload);
+    return { accessToken};
+  }
 }

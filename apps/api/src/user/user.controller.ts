@@ -1,7 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { UsersService } from './user.service';
 import { User } from './schema/user.schema';
-
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { Request } from 'express';
 
 @Controller('users')
 export class UsersController {
@@ -17,8 +28,16 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @Get('profile')
+  @UseGuards(JwtAuthGuard)
+  async getProfile(@Req() req) {
+    const userId = req.user.userId;
+    const user = await this.usersService.findUserById(userId);
+    return user;
+  }
+  
   @Get('email/:email')
-  async findByEmail(@Param('email') email: string): Promise<User>{
+  async findByEmail(@Param('email') email: string): Promise<User> {
     return this.usersService.findUserByEmail(email);
   }
   @Patch(':id')
