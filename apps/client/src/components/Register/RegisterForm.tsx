@@ -24,8 +24,15 @@ export default function RegisterForm() {
         data
       );
       console.log("Registered successfully:", response.data);
-    } catch (error) {
-      setError("root", { message: "error during registering user" });
+    } catch (error: any) {
+      if (
+        error.response &&
+        error.response.data.message === "Email already in use"
+      ) {
+        setError("email", { message: "Email already exists" });
+      } else {
+        setError("root", { message: "Error during registration" });
+      }
     }
   };
   return (
@@ -34,13 +41,14 @@ export default function RegisterForm() {
         <h1>Opret profil</h1>
         <label htmlFor="name">Fornavn</label>
         <input
-          {...register("name",  {
+          {...register("name", {
             required: "Name is required",
             minLength: {
               value: 2,
               message: "Name must be at least 2 characters",
             },
-          })} type="text"
+          })}
+          type="text"
           placeholder="Fornavn"
         ></input>
         {errors.name && (
@@ -54,7 +62,8 @@ export default function RegisterForm() {
               value: 2,
               message: "Surname must be at least 2 characters",
             },
-          })} type="text"
+          })}
+          type="text"
           placeholder="Efternavn"
         ></input>
         {errors.surname && (
@@ -95,6 +104,9 @@ export default function RegisterForm() {
         <button className={styles.btn} disabled={isSubmitting} type="submit">
           {isSubmitting ? "Loading..." : "Opret profil"}
         </button>
+        {errors.root && (
+          <div className={styles.error}>{errors.root.message}</div>
+        )}
       </form>
     </div>
   );
