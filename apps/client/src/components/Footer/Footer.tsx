@@ -1,7 +1,11 @@
 import React from "react";
 import styles from "./Footer.module.css";
 import { Link } from "@tanstack/react-router";
-import { RiInstagramFill, RiFacebookBoxFill, RiLinkedinBoxFill } from "react-icons/ri";
+import {
+  RiInstagramFill,
+  RiFacebookBoxFill,
+  RiLinkedinBoxFill,
+} from "react-icons/ri";
 
 const Footer: React.FC = () => {
   return (
@@ -16,9 +20,9 @@ const Footer: React.FC = () => {
             <Link to="/">Profil</Link>
           </div>
           <div className={styles.social}>
-            <RiInstagramFill size={36}/>
-            <RiFacebookBoxFill size={36}/>
-            <RiLinkedinBoxFill size={36}/>
+            <RiInstagramFill size={36} />
+            <RiFacebookBoxFill size={36} />
+            <RiLinkedinBoxFill size={36} />
           </div>
         </div>
         <div className={styles.notes}>
@@ -29,8 +33,10 @@ const Footer: React.FC = () => {
             height={100}
           />
         </div>
-        <div className={styles.logo}>
-          <img src="/logo.png" alt="dao-logo" width={250} height={80} />
+        <div className="logo-container">
+          <div className={styles.logo}>
+            <img src="/logo.png" alt="dao-logo" width={250} height={80} />
+          </div>
         </div>
       </div>
       <p className={styles.privacy}>Privatlivspolitik</p>

@@ -5,15 +5,22 @@
     width: 100%;
   }
   
-  .footer .content {
+.footer .content {
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-  
+}
+
+.notes {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+}
+
   .heading {
     font-family: "Oswald", sans-serif;
     font-size: 1.7rem;
@@ -27,11 +34,16 @@
     gap: 12px;
     font-weight: 500;
     margin-bottom: 1rem;
+    width: 300px;
   }
 
   .social {
     display: flex;
     gap: 0.75rem;
+  }
+
+  .logo-container {
+    width: 300px;
   }
   
   .logo {
