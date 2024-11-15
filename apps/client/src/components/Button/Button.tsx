@@ -4,27 +4,28 @@ import styles from './Button.module.css';
 interface ButtonProps {
   text: string;
   color?: 'blue' | 'white' | 'transparent';
-  link?: string; 
-  onClick?: () => void;  
+  link?: string;
+  onClick?: () => void;
+  children?: React.ReactNode; 
 }
 
-const Button: React.FC<ButtonProps> = ({ text, color = 'blue', link, onClick }) => {
+const Button: React.FC<ButtonProps> = ({ text, color = 'blue', link, onClick, children }) => {
   const className = `${styles.btn} ${styles[color]}`;
 
   if (link) {
     const isExternal = link.startsWith('http');
-    
+
     if (isExternal) {
       return (
         <a href={link} className={className} target="_blank" rel="noopener noreferrer" onClick={onClick}>
-          {text}
+          {children} {text}
         </a>
       );
     } else {
       return (
         <span onClick={onClick}>
           <Link to={link} className={className}>
-            {text}
+            {children} {text}
           </Link>
         </span>
       );
@@ -33,7 +34,7 @@ const Button: React.FC<ButtonProps> = ({ text, color = 'blue', link, onClick }) 
 
   return (
     <button className={className} onClick={onClick}>
-      {text}
+      {children} {text}
     </button>
   );
 };
