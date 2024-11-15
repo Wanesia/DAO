@@ -67,6 +67,7 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileImport
       parentRoute: typeof rootRoute
     }
+
     '/register': {
       id: '/register'
       path: '/register'
