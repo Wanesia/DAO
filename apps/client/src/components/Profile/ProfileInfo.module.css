@@ -1,0 +1,32 @@
+.container {
+    padding: 1rem;
+  }
+  
+  .profileInfo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .picture {
+    width: 120px;
+    height: 120px;
+    border-radius: var(--large-radius);
+  }
+  
+  
+  .buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-start; /* Align buttons to the left */
+  }
+  
+  .btn {
+    background-color: white;
+    color: var(--primary-blue);
+    padding: 0.5rem 2rem;
+    border-radius: var(--small-radius);
+  }
+
+  

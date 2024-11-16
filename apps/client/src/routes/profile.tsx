@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useNavigate } from "@tanstack/react-router";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import ProfileInfo from "../components/Profile/ProfileInfo";
 
 export const Route = createFileRoute("/profile")({
   component: RouteComponent,
@@ -9,6 +10,7 @@ export const Route = createFileRoute("/profile")({
 
 function RouteComponent() {
   const navigate = useNavigate();
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     const checkAuthorization = async () => {
@@ -23,8 +25,7 @@ function RouteComponent() {
             },
           }
         );
-
-        console.log(response.data);
+        setUser(response.data);
       } catch (error: any) {
         if (error.response && error.response.status === 401) {
           // If unauthorized, redirect to the unauthorized page
@@ -38,7 +39,11 @@ function RouteComponent() {
 
   return (
     <div>
-      <h1>Profile Page</h1>
+      {user ? (
+        <ProfileInfo user={user} />
+      ) : (
+        <p>Loading profile...</p>
+      )}
     </div>
   );
 }

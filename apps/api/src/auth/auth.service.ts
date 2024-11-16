@@ -62,6 +62,7 @@ export class AuthService {
     }
   }
   async login(user: any) {
+    await this.userService.updateLastSeen(user._doc._id);
     const payload = { userId: user._doc._id };
     const accessToken = this.jwtService.sign(payload);
     return { accessToken};

@@ -94,4 +94,9 @@ export class UsersService {
       throw new Error('Failed to delete user. Please try again later.');
     }
   }
+  async updateLastSeen(userId: string) {
+    console.log('Updating lastSeen:', userId);
+    const updateData = { lastSeen: new Date() };
+    await this.userModel.findByIdAndUpdate(userId, updateData, { new: true });
+  }
 }
