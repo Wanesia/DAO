@@ -1,12 +1,13 @@
 import styles from "./LoginForm.module.css";
 import { useForm, SubmitHandler } from "react-hook-form";
-import axios from "axios";
-import { useNavigate } from '@tanstack/react-router';
+import { useNavigate } from "@tanstack/react-router";
+import { useAuth } from "../../context/AuthContext";
 
 type FormFields = {
   email: string;
   password: string;
 };
+
 export default function LoginForm() {
   const {
     register,
@@ -15,23 +16,20 @@ export default function LoginForm() {
     formState: { errors, isSubmitting },
   } = useForm<FormFields>();
 
-  const navigate = useNavigate(); 
+
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      const response = await axios.post(
-        "http://localhost:3000/auth/login",
-        data
-      );
-      if (response.data.accessToken) {
-        localStorage.setItem("access_token", response.data.accessToken);
-        console.log("Logged in:", response.data);
-        navigate({ to: "/profile" }); 
-      }
-    } catch (error) {
-      setError("root", { message: "Invalid email or password" });
+      await login(data.email, data.password);
+      navigate({ to: "/profile" });
+    } catch (error: any) {
+      setError("root", { message: error.message || "Invalid email or password" });
     }
   };
+
+
   return (
     <div className={styles.container}>
       <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
