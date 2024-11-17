@@ -2,11 +2,13 @@ import { Link } from "@tanstack/react-router";
 import Button from "../Button/Button";
 import styles from "./Navbar.module.css";
 import { useState, useEffect } from "react";
+import { useAuth } from "../../context/AuthContext";
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const toggleMenu = () => setIsOpen(!isOpen);
   const handleCloseMenu = () => setIsOpen(false);
+  const { isLoggedIn, logout } = useAuth();
 
   // Close hamburger menu when window is resized to desktop
   useEffect(() => {
@@ -37,14 +39,12 @@ const Navbar: React.FC = () => {
       </button>
 
       <div className={`${styles.buttons} ${isOpen ? styles.showMenu : ""}`}>
-        {isOpen && (
-          <Button
-            text="Hjem"
-            link="/"
-            color="transparent"
-            onClick={handleCloseMenu}
-          />
-        )}
+        <Button
+          text="Hjem"
+          link="/"
+          color="transparent"
+          onClick={handleCloseMenu}
+        />
         <Button
           text="Find musiker"
           link="/musiker"
@@ -57,17 +57,38 @@ const Navbar: React.FC = () => {
           color="transparent"
           onClick={handleCloseMenu}
         />
-        <Button
-          text="Opret bruger"
-          link="/register"
-          onClick={handleCloseMenu}
-        />
-        <Button
-          text="Log ind"
-          link="/login"
-          color="white"
-          onClick={handleCloseMenu}
-        />
+        {isLoggedIn ? (
+          <>
+            <Button
+              text="Profil"
+              link="/profile"
+              color="transparent"
+              onClick={handleCloseMenu}
+            />
+            <Button
+              text="Log ud"
+              color="white"
+              onClick={() => {
+                logout();
+                handleCloseMenu();
+              }}
+            />
+          </>
+        ) : (
+          <>
+            <Button
+              text="Log ind"
+              link="/login"
+              color="white"
+              onClick={handleCloseMenu}
+            />
+            <Button
+              text="Opret bruger"
+              link="/register"
+              onClick={handleCloseMenu}
+            />
+          </>
+        )}
       </div>
     </nav>
   );
