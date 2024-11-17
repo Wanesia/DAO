@@ -41,8 +41,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       localStorage.setItem("access_token", accessToken);
       axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-
+        // need to get the actual user and set it here
       const user = await getUserStatus();
+      console.log("user", user);
       setUser(user);
       setIsLoggedIn(true);
     } catch (error) {
