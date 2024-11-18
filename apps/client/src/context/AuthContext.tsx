@@ -1,20 +1,19 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import axiosInstance from "../api/axiosInstance";
-import  { JwtPayload, jwtDecode } from "jwt-decode";
-import { User } from "@shared/types";
+import { JwtPayload, jwtDecode } from "jwt-decode";
+import { User, LoginPayload } from "@shared/types";
 import { loginUser } from "../api/authApi";
 import { getUserStatus } from "../api/userApi";
 
 type AuthContextType = {
   isLoggedIn: boolean;
   user: User | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (payload: LoginPayload) => Promise<void>;
   logout: () => void;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// token management
 const getToken = () => localStorage.getItem("access_token");
 const setToken = (token: string) => localStorage.setItem("access_token", token);
 const removeToken = () => localStorage.removeItem("access_token");
@@ -35,20 +34,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     const initializeAuth = async () => {
+
       const token = getToken();
+
       if (token && isTokenValid(token)) {
         try {
+          // not done 
           axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-          const user = await getUserStatus();
-          setUser(user);
+          const userData = await getUserStatus();
+          setUser(userData);
           setIsLoggedIn(true);
         } catch (error) {
           console.error("Error fetching user status:", error);
           removeToken();
+          setUser(null);
           setIsLoggedIn(false);
         }
       } else {
         removeToken();
+        setUser(null);
         setIsLoggedIn(false);
       }
     };
@@ -56,12 +60,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     initializeAuth();
   }, []);
 
-  const login = async (email: string, password: string) => {
+  const login = async (payload: LoginPayload) => {
     try {
-      const { accessToken, user: loggedInUser } = await loginUser(email, password);
+      const { accessToken, user: loggedInUser } = await loginUser(payload);
+
       setToken(accessToken);
       axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-      setUser(loggedInUser); 
+      console.log("Logged in user:", loggedInUser);
+      setUser(loggedInUser);
       setIsLoggedIn(true);
     } catch (error) {
       console.error("Failed to login:", error);
@@ -69,7 +75,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const logout = async () => {
+  const logout = () => {
     try {
       removeToken();
       delete axiosInstance.defaults.headers.common["Authorization"];
