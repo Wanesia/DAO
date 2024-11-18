@@ -8,6 +8,7 @@ import { AuthPayloadDto } from './dto/auth.dto';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from 'src/user/user.service';
 import { JwtService } from '@nestjs/jwt';
+import { User, UserDocument } from 'src/user/schema/user.schema';
 
 @Injectable()
 export class AuthService {
@@ -61,9 +62,16 @@ export class AuthService {
       }
     }
   }
-  async login(user: any) {
-    const payload = { userId: user._doc._id };
+
+  async login(user: UserDocument): Promise<{ accessToken: string; user: Partial<User> }> {
+    const { password, ...userData } = user.toObject();
+    const payload = { userId: userData._id };
     const accessToken = this.jwtService.sign(payload);
-    return { accessToken};
+    return {
+      accessToken,
+      user: userData,
+    };
   }
+  
+  
 }
