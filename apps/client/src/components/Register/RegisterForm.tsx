@@ -1,6 +1,7 @@
 import styles from "./RegisterForm.module.css";
 import { useForm, SubmitHandler } from "react-hook-form";
-import axios from "axios";
+import { registerUser } from "../../api/authApi";
+import { useNavigate } from "@tanstack/react-router";
 
 type FormFields = {
   name: string;
@@ -22,25 +23,24 @@ export default function RegisterForm() {
       isSubscribedToNewsletter: false,
     },
   });
+
+  const navigate = useNavigate();
+
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
       const { acceptedTerms, ...submitData } = data;
-      const response = await axios.post(
-        "http://localhost:3000/auth/register",
-        submitData
-      );
-      console.log("Registered successfully:", response.data);
+      await registerUser(submitData); 
+      navigate({ to: "/login" });
+      console.log("Registered successfully");
     } catch (error: any) {
-      if (
-        error.response &&
-        error.response.data.message === "Email already in use"
-      ) {
+      if (error.response && error.response.data.message === "Email already in use") {
         setError("email", { message: "Email already exists" });
       } else {
         setError("root", { message: "Error during registration" });
       }
     }
   };
+
   return (
     <div className={styles.container}>
       <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>

@@ -22,13 +22,12 @@ export default function LoginForm() {
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      await login(data.email, data.password);
+      await login({ email: data.email, password: data.password });
       navigate({ to: "/profile" });
     } catch (error: any) {
       setError("root", { message: error.message || "Invalid email or password" });
     }
   };
-
 
   return (
     <div className={styles.container}>
