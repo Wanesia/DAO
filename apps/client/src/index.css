@@ -6,15 +6,10 @@
   margin: 100px auto;
 }
 
-.heading-container {
-    order: 1;
-}
-
 .heading {
   max-width: 600px;
   margin-bottom: 30px;
 }
-
 
 .img {
   width: 470px;
@@ -23,6 +18,10 @@
 
 .img img {
   width: 100%;
+}
+
+.welcome-img img{
+  width: 250px;
 }
 
 .buttons {

@@ -14,7 +14,18 @@ function RouteComponent() {
   return (
     <main>
       {isLoggedIn && user ? (
-        <h1>Welcome, {user?.name}</h1>
+        <section className="hero">
+          <div className="heading-container">
+            <h1>Welcome, {user?.name}</h1>
+            <div className="buttons">
+              <Button text="Skabe ensemble" color="white" link="/create-ensemble" />
+              <Button text="Færdiggør profil" color="blue" link="/profile" />
+            </div>
+          </div>
+          <div className="welcome-img">
+            <img src="/profile-welcome.svg" alt="welcome-illustration" />
+          </div>
+        </section>
       ) : (
         <>
           <section className="hero">
