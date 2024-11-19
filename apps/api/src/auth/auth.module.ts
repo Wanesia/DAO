@@ -11,6 +11,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalGuard } from './guards/local.guards';
 import { JwtAuthGuard } from './guards/jwt.guard';
 import { ConfigService } from '@nestjs/config';
+import { FacebookStrategy } from './strategies/facebook.strategy';
 
 @Module({
   imports: [
@@ -28,7 +29,7 @@ import { ConfigService } from '@nestjs/config';
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy, LocalGuard, JwtAuthGuard],
+  providers: [AuthService, LocalStrategy, JwtStrategy, LocalGuard, JwtAuthGuard, FacebookStrategy],
   exports: [AuthService],
 })
 export class AuthModule {}
