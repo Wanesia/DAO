@@ -52,7 +52,7 @@ export class AuthService {
   }) {
     try {
       return await this.userService.createUser({
-        ...userData
+        ...userData,
       });
     } catch (error) {
       console.error('Error creating Facebook user:', error);
@@ -84,6 +84,10 @@ export class AuthService {
     user: any,
   ): Promise<{ accessToken: string; user: Partial<User> }> {
     const { password, ...userData } = user._doc;
+    // Update lastSeen for the user whenever they log in
+    await this.userService.updateUser(userData._id, { 
+      lastSeen: new Date() 
+    });
     const payload = { userId: userData._id };
     const accessToken = this.jwtService.sign(payload);
     return {
