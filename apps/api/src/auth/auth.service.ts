@@ -30,6 +30,7 @@ export class AuthService {
       return await this.userService.createUser({
         ...userDto,
         password: hashedPassword,
+        authProvider: 'local',
       });
     } catch (error) {
       if (error instanceof ConflictException) {
@@ -40,6 +41,22 @@ export class AuthService {
       throw new Error(
         'An unexpected error occurred while registering the user',
       );
+    }
+  }
+  async createFacebookUser(userData: {
+    email: string;
+    name: string;
+    surname: string;
+    authProvider: string;
+    facebookId: string;
+  }) {
+    try {
+      return await this.userService.createUser({
+        ...userData
+      });
+    } catch (error) {
+      console.error('Error creating Facebook user:', error);
+      throw new Error('Failed to create Facebook user');
     }
   }
 
@@ -63,7 +80,9 @@ export class AuthService {
     }
   }
 
-  async login(user: any): Promise<{ accessToken: string; user: Partial<User> }> {
+  async login(
+    user: any,
+  ): Promise<{ accessToken: string; user: Partial<User> }> {
     const { password, ...userData } = user._doc;
     const payload = { userId: userData._id };
     const accessToken = this.jwtService.sign(payload);
@@ -72,6 +91,4 @@ export class AuthService {
       user: userData,
     };
   }
-  
-  
 }

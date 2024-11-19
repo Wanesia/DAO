@@ -7,6 +7,7 @@ import { UserModule } from './user/user.module';
 import { EnsembleModule } from './ensemble/ensemble.module';
 import { AuthModule } from './auth/auth.module';
 import * as bcrypt from 'bcrypt';
+import { FacebookStrategy } from './auth/strategies/facebook.strategy';
 
 @Module({
   imports: [
