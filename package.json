@@ -21,11 +21,8 @@
     "apps/*"
   ],
   "dependencies": {
-<<<<<<< HEAD
-    "jwt-decode": "^4.0.0"
-=======
+    "jwt-decode": "^4.0.0",
     "@mantine/core": "^7.14.1",
     "@mantine/hooks": "^7.14.1"
->>>>>>> 4e933a5 (add ensemble route)
   }
 }
