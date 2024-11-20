@@ -21,8 +21,10 @@
     "apps/*"
   ],
   "dependencies": {
-    "jwt-decode": "^4.0.0",
     "@mantine/core": "^7.14.1",
-    "@mantine/hooks": "^7.14.1"
+    "@mantine/hooks": "^7.14.1",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
+    "jwt-decode": "^4.0.0"
   }
 }

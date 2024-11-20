@@ -10,7 +10,7 @@ function RouteComponent() {
   return (
     <main className='main-form'>
         <h2>Opret ensemble</h2>
-        <EnsembleForm onSubmit={()=> {}}/>
+        <EnsembleForm />
     </main>
   )
 }

@@ -41,7 +41,6 @@ export type Ensemble = {
   practice_frequency: PracticeFrequency;
   genres: Genre[];
   type: EnsembleType[];
-  member_ids: Types.ObjectId[]; 
 };
 
 export type EnsembleDto = Omit<Ensemble, 'id'>;

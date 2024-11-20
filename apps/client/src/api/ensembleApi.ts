@@ -2,8 +2,13 @@ import axiosInstance from './axiosInstance';
 import { Ensemble, EnsembleDto } from '@shared/types';
 
 export const createEnsemble = async (ensemble: Ensemble): Promise<Ensemble> => {
-  const response = await axiosInstance.post<Ensemble>('/ensembles', ensemble);
-  return response.data; 
+  try {
+    const response = await axiosInstance.post<Ensemble>('/ensembles', ensemble);
+    return response.data;
+  } catch (error) {
+    console.error('Failed to create ensemble:', error);
+    throw new Error('Could not create ensemble. Please try again.');
+  }
 };
 
 export const getEnsembles = async (): Promise<Ensemble[]> => {

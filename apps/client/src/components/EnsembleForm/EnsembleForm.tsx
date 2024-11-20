@@ -8,6 +8,8 @@ import MultiSelect from "../form-components/MultiSelect/MultiSelect";
 import FormRadioGroup from "../form-components/FormRadioGroup/FormRadioGroup";
 import { Grid } from "@mantine/core";
 import styles from "./EnsembleForm.module.css";
+import { createEnsemble } from "../../api/ensembleApi";
+import { useState } from "react";
 
 export enum MusicianCount {
   ONE_TO_FOUR = "1-4 musikere",
@@ -40,38 +42,66 @@ export enum Genre {
   SYMFONISK = "Symfonisk",
 }
 
-interface EnsembleFormProps {
-  onSubmit: (data: any) => void;
-}
+const EnsembleForm: React.FC = () => {
+  const { control, handleSubmit } = useForm();
+  const [loading, setLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-const EnsembleForm: React.FC<EnsembleFormProps> = ({ onSubmit }) => {
-  const { control, handleSubmit } = useForm({});
-
-  const practiceFrequencyOptions = Object.entries(PracticeFrequency).map(
-    ([key, value]) => ({
-      value: key,
-      label: value,
-    })
-  );
-
-  const musicianCountOptions = Object.entries(MusicianCount).map(
-    ([key, value]) => ({
-      value: key,
-      label: value,
-    })
-  );
-
-  const genreOptions = Object.entries(Genre).map(([key, value]) => ({
-    value: key,
-    label: value,
+  const practiceFrequencyOptions = Object.keys(PracticeFrequency).map((key) => ({
+    value: PracticeFrequency[key as keyof typeof PracticeFrequency],
+    label: PracticeFrequency[key as keyof typeof PracticeFrequency], 
   }));
+  
 
-  const ensembleTypeOptions = Object.entries(EnsembleType).map(
-    ([key, value]) => ({
-      value: key,
-      label: value,
-    })
-  );
+  const musicianCountOptions = Object.keys(MusicianCount).map((key) => ({
+    value: MusicianCount[key as keyof typeof MusicianCount], 
+    label: MusicianCount[key as keyof typeof MusicianCount],
+  }));
+  
+  
+  const genreOptions = Object.keys(Genre).map((key) => ({
+    value: Genre[key as keyof typeof Genre],
+    label: Genre[key as keyof typeof Genre],
+  }));
+  
+  const ensembleTypeOptions = Object.keys(EnsembleType).map((key) => ({
+    value: EnsembleType[key as keyof typeof EnsembleType],
+    label: EnsembleType[key as keyof typeof EnsembleType],
+  }));
+  
+
+  const onSubmit = async (data: any) => {
+    setLoading(true);
+    setSuccessMessage("");
+    setErrorMessage("");
+
+    const newEnsemble = {
+      name: data.name,
+      description: data.description,
+      homepageUrl: data.homepage,
+      location: {
+        city: data.city,
+        postCode: data.postcode,
+      },
+      number_of_musicians: data.musicianCount,
+      practice_frequency: data.practiceFrequency,
+      genres: data.genres,
+      type: data.playType,
+    };
+
+    try {
+      await createEnsemble(newEnsemble);
+      setSuccessMessage("Ensemble created successfully!");
+    } catch (error: any) {
+      setErrorMessage(
+        error.response?.data?.message || "Failed to create ensemble."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
@@ -135,7 +165,13 @@ const EnsembleForm: React.FC<EnsembleFormProps> = ({ onSubmit }) => {
         options={genreOptions}
         label="Genrer"
       />
-      <Button color="blue" text="Opret ensemble" type="submit" />
+      <Button
+        color="blue"
+        text={loading ? "Opretter..." : "Opret ensemble"}
+        type="submit"
+      />
+      {successMessage && <p className={styles.success}>{successMessage}</p>}
+      {errorMessage && <p className={styles.error}>{errorMessage}</p>}
     </form>
   );
 };

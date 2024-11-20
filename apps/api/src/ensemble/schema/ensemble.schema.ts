@@ -39,17 +39,17 @@ export class Ensemble extends Document {
   @Prop({ type: Location, required: true })
   location: Location;
 
-  @Prop({ type: String, enum: MusicianCount, required: true })
+  @Prop({ type: String, enum: Object.values(MusicianCount), required: true })
   number_of_musicians: MusicianCount;
-
-  @Prop({ type: String, enum: PracticeFrequency, required: true })
+  
+  @Prop({ type: String, enum: Object.values(PracticeFrequency), required: true })
   practice_frequency: PracticeFrequency;
-
-  @Prop({ type: [String], enum: Genre, required: true })
+  
+  @Prop({ type: [String], enum: Object.values(Genre), required: true })
   genres: Genre[];
-
-  @Prop({ type: [String], enum: EnsembleType, required: true })
-  type: EnsembleType[];
+  
+  @Prop({ type: String, enum: Object.values(EnsembleType), required: true })
+  type: EnsembleType;
 
   @Prop({
     type: [{ type: Types.ObjectId, ref: 'User' }],
