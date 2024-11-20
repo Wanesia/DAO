@@ -12,12 +12,20 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "postcss": "^8.4.49",
+    "postcss-preset-mantine": "^1.17.0",
+    "postcss-simple-vars": "^7.0.1",
     "turbo": "^2.2.3"
   },
   "workspaces": [
     "apps/*"
   ],
   "dependencies": {
+<<<<<<< HEAD
     "jwt-decode": "^4.0.0"
+=======
+    "@mantine/core": "^7.14.1",
+    "@mantine/hooks": "^7.14.1"
+>>>>>>> 4e933a5 (add ensemble route)
   }
 }

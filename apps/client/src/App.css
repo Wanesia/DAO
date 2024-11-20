@@ -82,3 +82,9 @@ button {
   font-family: inherit;
   color: inherit;
 }
+
+.main-form {
+  max-width: 600px;
+  margin: 100px auto;
+}
+
