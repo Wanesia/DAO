@@ -1,3 +1,4 @@
+import React from 'react';
 import { Link } from '@tanstack/react-router';
 import styles from './Button.module.css';
 
@@ -6,10 +7,18 @@ interface ButtonProps {
   color?: 'blue' | 'white' | 'transparent';
   link?: string;
   onClick?: () => void;
-  children?: React.ReactNode; 
+  type?: 'button' | 'submit'
+  children?: React.ReactNode;
 }
 
-const Button: React.FC<ButtonProps> = ({ text, color = 'blue', link, onClick, children }) => {
+const Button: React.FC<ButtonProps> = ({
+  text,
+  color = 'blue',
+  link,
+  onClick,
+  type = 'button', 
+  children,
+}) => {
   const className = `${styles.btn} ${styles[color]}`;
 
   if (link) {
@@ -17,7 +26,13 @@ const Button: React.FC<ButtonProps> = ({ text, color = 'blue', link, onClick, ch
 
     if (isExternal) {
       return (
-        <a href={link} className={className} target="_blank" rel="noopener noreferrer" onClick={onClick}>
+        <a
+          href={link}
+          className={className}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={onClick}
+        >
           {children} {text}
         </a>
       );
@@ -33,13 +48,10 @@ const Button: React.FC<ButtonProps> = ({ text, color = 'blue', link, onClick, ch
   }
 
   return (
-    <button className={className} onClick={onClick}>
+    <button type={type} className={className} onClick={onClick}>
       {children} {text}
     </button>
   );
 };
 
 export default Button;
-
-
-  

@@ -1,4 +1,4 @@
-import { Input, InputProps } from '@mantine/core';
+import { Input, InputWrapper, InputProps, InputLabelProps } from '@mantine/core';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 
 interface FormInputProps<T extends FieldValues> {
@@ -8,29 +8,42 @@ interface FormInputProps<T extends FieldValues> {
   placeholder?: string;
   description?: string;
   required?: boolean;
-  inputProps?: InputProps; 
+  inputProps?: InputProps;
+  labelProps?: InputLabelProps;
 }
 
 const FormInput = <T extends FieldValues>({
   name,
   control,
+  label,
+  description,
   placeholder,
   required,
   inputProps,
 }: FormInputProps<T>) => {
   return (
-    <Controller
-      name={name}
-      control={control}
-      render={({ field }) => (
-        <Input
-          {...field}
-          placeholder={placeholder}
-          required={required}
-          {...inputProps}
-        />
-      )}
-    />
+    <InputWrapper
+      label={label}
+      description={description}
+      required={required}
+      labelProps={{
+        className: 'label',
+      }}
+    >
+      <Controller
+        name={name}
+        control={control}
+        render={({ field, fieldState: { error } }) => (
+          <Input
+            {...field}
+            placeholder={placeholder}
+            required={required}
+            error={error?.message} 
+            {...inputProps}
+          />
+        )}
+      />
+    </InputWrapper>
   );
 };
 

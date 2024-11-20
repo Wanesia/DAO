@@ -1,4 +1,6 @@
-<<<<<<< HEAD
+import { Types } from 'mongoose';
+import { MusicianCount, PracticeFrequency, EnsembleType, Genre } from './enums';
+
 export type User = {
   id: number;
   email: string;
@@ -23,10 +25,6 @@ export type RegisterUserPayload = {
   isSubscribedToNewsletter: boolean;
 };
 
-=======
-import { Types } from 'mongoose';
-import { MusicianCount, PracticeFrequency, EnsembleType, Genre } from './enums';
-
 export type Location = {
   city: string;
   postCode: string;
@@ -47,4 +45,4 @@ export type Ensemble = {
 };
 
 export type EnsembleDto = Omit<Ensemble, 'id'>;
->>>>>>> c195cf4 (add api calls and types)
+
