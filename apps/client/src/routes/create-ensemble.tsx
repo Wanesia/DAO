@@ -1,6 +1,7 @@
 
 import { createFileRoute } from '@tanstack/react-router'
 import EnsembleForm from '../components/EnsembleForm/EnsembleForm'
+import ProtectedRoute from '../components/ProtectedRoute';
 
 export const Route = createFileRoute('/create-ensemble')({
   component: RouteComponent,
@@ -8,9 +9,13 @@ export const Route = createFileRoute('/create-ensemble')({
 
 function RouteComponent() {
   return (
-    <main className='main-form'>
-        <h2>Opret ensemble</h2>
-        <EnsembleForm />
-    </main>
-  )
+    <ProtectedRoute>
+      <main className='main-form'>
+        <section>
+          <h2>Opret ensemble</h2>
+          <EnsembleForm />
+        </section>
+      </main>
+    </ProtectedRoute>
+  );
 }

@@ -10,6 +10,7 @@ import { Grid } from "@mantine/core";
 import styles from "./EnsembleForm.module.css";
 import { createEnsemble } from "../../api/ensembleApi";
 import { useState } from "react";
+import { useNavigate } from "@tanstack/react-router";
 
 export enum MusicianCount {
   ONE_TO_FOUR = "1-4 musikere",
@@ -47,6 +48,8 @@ const EnsembleForm: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
+  const navigate = useNavigate();
 
   const practiceFrequencyOptions = Object.keys(PracticeFrequency).map((key) => ({
     value: PracticeFrequency[key as keyof typeof PracticeFrequency],
@@ -93,6 +96,8 @@ const EnsembleForm: React.FC = () => {
     try {
       await createEnsemble(newEnsemble);
       setSuccessMessage("Ensemble created successfully!");
+      navigate({ to: "/profile" });
+      
     } catch (error: any) {
       setErrorMessage(
         error.response?.data?.message || "Failed to create ensemble."
