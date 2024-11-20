@@ -1,8 +1,8 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { AuthPayloadDto } from './dto/auth.dto';
 import * as bcrypt from 'bcrypt';
@@ -70,10 +70,10 @@ export class AuthService {
         return result;
       }
 
-      throw new UnauthorizedException('Invalid email or password');
+      throw new BadRequestException('Invalid email or password');
     } catch (error) {
       if (error instanceof NotFoundException) {
-        throw new UnauthorizedException('Invalid email or password');
+        throw new BadRequestException('Invalid email or password');
       } else {
         throw error;
       }
@@ -85,8 +85,8 @@ export class AuthService {
   ): Promise<{ accessToken: string; user: Partial<User> }> {
     const { password, ...userData } = user._doc;
     // Update lastSeen for the user whenever they log in
-    await this.userService.updateUser(userData._id, { 
-      lastSeen: new Date() 
+    await this.userService.updateUser(userData._id, {
+      lastSeen: new Date(),
     });
     const payload = { userId: userData._id };
     const accessToken = this.jwtService.sign(payload);
