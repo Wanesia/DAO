@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useUser } from '../context/UserContext';
+import { UserProvider, useUser } from '../context/UserContext';
 import ProfileInfo from '../components/Profile/ProfileInfo';
 
 export const Route = createFileRoute('/profile')({
@@ -8,6 +8,14 @@ export const Route = createFileRoute('/profile')({
 
 
 function RouteComponent() {
+  return (
+    <UserProvider>
+      <Profile />
+    </UserProvider>
+  );
+}
+
+function Profile() {
   const { user, loading } = useUser();
 
   if (loading) {
