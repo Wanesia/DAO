@@ -15,15 +15,11 @@ declare module "@tanstack/react-router" {
 
 function App() {
   return (
-<<<<<<< HEAD
     <AuthProvider>
-      <RouterProvider router={router} />
+      <MantineProvider>
+        <RouterProvider router={router} />
+      </MantineProvider>
     </AuthProvider>
-=======
-    <MantineProvider>
-      <RouterProvider router={router} />
-    </MantineProvider>
->>>>>>> 4e933a5 (add ensemble route)
   );
 }
 

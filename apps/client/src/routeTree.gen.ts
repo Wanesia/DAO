@@ -120,10 +120,16 @@ export interface FileRoutesById {
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/create-ensemble' | '/login' | '/register'
+  fullPaths: '/' | '/create-ensemble' | '/login' | '/profile' | '/register'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/create-ensemble' | '/login' | '/register'
-  id: '__root__' | '/' | '/create-ensemble' | '/login' | '/register'
+  to: '/' | '/create-ensemble' | '/login' | '/profile' | '/register'
+  id:
+    | '__root__'
+    | '/'
+    | '/create-ensemble'
+    | '/login'
+    | '/profile'
+    | '/register'
   fileRoutesById: FileRoutesById
 }
 
