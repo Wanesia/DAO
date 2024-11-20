@@ -1,13 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import axiosInstance from "../api/axiosInstance";
-
-interface UserProfile {
-  name: string;
-  surname: string;
-  profilePicture?: string | null;
-  createdAt: Date;
-  lastSeen: Date;
-}
+import {UserProfile} from "@shared/userProfile";
 
 interface UserContextValue {
   user: UserProfile | null;

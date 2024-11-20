@@ -1,12 +1,5 @@
 import styles from "./ProfileInfo.module.css";
-
-interface UserProfile {
-  name: string;
-  surname: string;
-  profilePicture?: string | null;
-  createdAt: Date;
-  lastSeen: Date;
-}
+import {UserProfile} from "@shared/userProfile.ts";
 
 interface ProfileInfoProps {
   user: UserProfile;
@@ -18,7 +11,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
       <div className={styles.info}>
         <img
           className={styles.picture}
-          src={user.profilePicture ?? "/public/profile1.jpg"}
+          src={user.profilePicture ?? "/public/profile.png"}
           alt={`${user.name}'s profile`}
         />
         <div className={styles.text}>
@@ -44,6 +37,14 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
       <div className={styles.buttons}>
         <button className="btn">Rediger profil</button>
         <button className="btn">Indstilinger</button>
+      </div>
+      <div className={styles['description-container']}>
+            <h2>Profiltekst</h2>
+            <p>{user.profileText}</p>
+      </div>
+      <div className={styles['instrument-container']}>
+            <h2>Mine instrumenter</h2>
+            <p>{}</p>
       </div>
     </div>
   );
