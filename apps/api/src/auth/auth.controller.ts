@@ -31,22 +31,21 @@ export class AuthController {
   @UseGuards(LocalGuard)
   async login(@Req() req: Request) {
     return this.authService.login(req.user);
-}
+  }
   @Get('status')
   @UseGuards(JwtAuthGuard)
-  status(@Req() req: Request){
-
+  status(@Req() req: Request) {
     return req.user;
   }
-  
-  @Get("/facebook")
-  @UseGuards(AuthGuard("facebook"))
+
+  @Get('/facebook')
+  @UseGuards(AuthGuard('facebook'))
   async facebookLogin(): Promise<any> {
     return HttpStatus.OK;
   }
 
-  @Get("/facebook/redirect")
-  @UseGuards(AuthGuard("facebook"))
+  @Get('/facebook/redirect')
+  @UseGuards(AuthGuard('facebook'))
   async facebookLoginRedirect(@Req() req: Request): Promise<any> {
     return {
       statusCode: HttpStatus.OK,
