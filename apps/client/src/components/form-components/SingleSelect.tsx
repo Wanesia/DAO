@@ -1,7 +1,7 @@
 import React from "react";
 import { Select, InputWrapper, SelectProps as MantineSelectProps } from "@mantine/core";
 import { Control, Controller, FieldValues, Path } from "react-hook-form";
-
+import styles from "./FormComponents.module.css";
 
 interface SingleSelectOption {
   value: string;
@@ -48,6 +48,9 @@ const SingleSelect = <T extends FieldValues>({
             data={options}
             value={field.value}
             onChange={field.onChange}
+            classNames={{
+              input: error ? styles.inputError : styles.select, 
+            }}
             error={fieldError?.message || error}
             {...selectProps}
           />

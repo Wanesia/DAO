@@ -87,9 +87,11 @@ button {
 .main-form {
   max-width: 600px;
   margin: 100px auto;
+  padding: 1rem;
 }
 
 .label {
   color: var(--primary-blue);
   font-weight: 600;
+  margin-bottom: 8px;
 }

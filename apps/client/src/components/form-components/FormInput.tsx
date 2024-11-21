@@ -1,5 +1,6 @@
 import { Input, InputWrapper, InputProps, InputLabelProps } from '@mantine/core';
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
+import styles from './FormComponents.module.css';
 
 interface FormInputProps<T extends FieldValues> {
   name: Path<T>;
@@ -26,6 +27,9 @@ const FormInput = <T extends FieldValues>({
       label={label}
       description={description}
       required={required}
+      classNames={{
+        description: styles.description, 
+      }}
       labelProps={{
         className: 'label',
       }}
@@ -36,6 +40,9 @@ const FormInput = <T extends FieldValues>({
         render={({ field, fieldState: { error } }) => (
           <Input
             {...field}
+            classNames={{
+              input: error ? styles.inputError : styles.input, 
+            }}
             placeholder={placeholder}
             required={required}
             error={error?.message} 

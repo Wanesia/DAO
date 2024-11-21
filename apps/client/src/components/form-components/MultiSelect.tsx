@@ -1,6 +1,7 @@
 import React from "react";
-import { MultiSelect, MultiSelectProps as MantineMultiSelectProps } from "@mantine/core";
+import { MultiSelect, MultiSelectProps as MantineMultiSelectProps, InputWrapper } from "@mantine/core";
 import { Control, Controller, FieldValues, Path } from "react-hook-form";
+import styles from "./FormComponents.module.css";
 
 interface MultiSelectOption {
   value: string;
@@ -16,6 +17,7 @@ interface MultiSelectProps<T extends FieldValues> {
   error?: string;
   selectProps?: Omit<MantineMultiSelectProps, "data" | "value" | "onChange">;
   required?: boolean;
+  labelProps?: React.LabelHTMLAttributes<HTMLLabelElement>; 
 }
 
 const FormMultiSelect = <T extends FieldValues>({
@@ -29,14 +31,23 @@ const FormMultiSelect = <T extends FieldValues>({
   required,
 }: MultiSelectProps<T>) => {
   return (
+    <InputWrapper
+    label={label}
+    description={description}
+    required={required}
+    error={error}
+    labelProps={{
+      className: 'label',
+    }}
+  >
     <Controller
       name={name}
       control={control}
       render={({ field, fieldState: { error: fieldError } }) => (
         <MultiSelect
-          label={label}
-          description={description}
-          required={required}
+          classNames={{
+            input: error ? styles.inputError : styles.multiselect, 
+          }}
           error={fieldError?.message || error}
           data={options}
           value={field.value || []} 
@@ -45,6 +56,7 @@ const FormMultiSelect = <T extends FieldValues>({
         />
       )}
     />
+    </InputWrapper>
   );
 };
 

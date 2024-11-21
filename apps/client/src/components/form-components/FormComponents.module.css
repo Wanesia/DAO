@@ -1,0 +1,40 @@
+.input, .select {
+  border: 1px solid var(--grey-border);
+  border-radius: 10px;
+  padding: 20px 15px;
+  transition: border-color 0.3s;
+  box-shadow: 0px 2px 4px #00000014; 
+}
+
+.textarea {
+    border: 1px solid var(--grey-border);
+    border-radius: 10px;
+    transition: border-color 0.3s;
+    box-shadow: 0px 2px 4px #00000014; 
+    padding: 15px;
+}
+
+.inputError {
+  border-color: #e74c3c;
+}
+
+.description {
+  font-size: 0.875rem;
+  color: #7f8c8d;
+  margin-top: 4px;
+}
+
+.multiselect {
+    border: 1px solid var(--grey-border);
+    border-radius: 10px;
+    box-shadow: 0px 2px 4px #00000014; 
+    padding: 10px;
+}
+
+.radioLabel {
+    font-size: 1rem;
+    color: var(--primary-blue);
+    margin-bottom: 10px;
+  }
+
+

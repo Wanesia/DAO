@@ -1,6 +1,7 @@
 import React from "react";
 import { FieldValues, Controller, Control, Path } from "react-hook-form";
 import { Textarea, TextareaProps as MantineTextareaProps, InputWrapper } from "@mantine/core";
+import styles from "./FormComponents.module.css";
 
 interface FormTextareaProps<T extends FieldValues> {
   name: Path<T>;
@@ -40,6 +41,9 @@ const FormTextarea = React.memo(<T extends FieldValues>({
         render={({ field, fieldState: { error } }) => (
           <Textarea
             {...field}
+            classNames={{
+              input: error ? styles.inputError : styles.textarea, 
+            }}
             placeholder={placeholder}
             required={required}
             error={error?.message}
