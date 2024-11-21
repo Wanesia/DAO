@@ -13,7 +13,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
       <div className={styles.info}>
         <img
           className={styles.picture}
-          src={user.profilePicture ?? "/public/profile.png"}
+          src={user.profilePicture ?? "/profile.png"}
           alt={`${user.name}'s profile`}
         />
         <div className={styles.text}>

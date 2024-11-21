@@ -7,28 +7,58 @@ import styles from "./ProfileSettings.module.css";
 import { Grid } from "@mantine/core";
 import DragAndDrop from "../DragAndDrop/DragAndDrop";
 import FormTextarea from "../form-components/Textarea";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axiosInstance from "../../api/axiosInstance";
+import axios from "axios";
 
 interface ProfileInfoProps {
   user: UserProfile;
 }
 const ProfileSettings: React.FC<ProfileInfoProps> = ({ user }) => {
   const navigate = useNavigate();
-  const { control, handleSubmit } = useForm<FieldValues>({
+  const { control, handleSubmit, setValue } = useForm<FieldValues>({
     defaultValues: {
-      name: user.name || '',
-      surname: user.surname || '',
-      email: user.email || '',
-      mobile: user.phone || '',
-      postcode: user.location?.postCode || '',
-      city: user.location?.city || '',
-      description: user.profileText || '',
-    }
-  });  const [isSeeking, setIsSeeking] = useState(user.isSeeking ?? false); // Initialize with user profile data
+      name: user.name || "",
+      surname: user.surname || "",
+      email: user.email || "",
+      phone: user.phone || "",
+      postcode: user.location?.postCode || "",
+      city: user.location?.city || "",
+      profileText: user.profileText || "",
+      isSeeking: user.isSeeking || false,
+    },
+  });
+  const [isSeeking, setIsSeeking] = useState(user.isSeeking ?? false);
 
+  // Update form when isSeeking changes
+  useEffect(() => {
+    setValue('isSeeking', isSeeking);
+  }, [isSeeking, setValue]);
+  
   const onSubmit = async (data: FieldValues) => {
-    console.log(data);
-    console.log("Form submitted");
+    try {
+      const updateData = {
+        name: data.name,
+        surname: data.surname,
+        email: data.email,
+        phone: data.phone,
+        location: {
+          postCode: data.postcode,
+          city: data.city
+        },
+        profileText: data.profileText,
+        isSeeking: data.isSeeking
+      };
+
+      await axiosInstance.patch(`/users/${user.email}`, updateData);
+      navigate({ to: "/profile" });
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        console.error('Profile update failed', error.response?.data);
+      } else {
+        console.error('An unexpected error occurred', error);
+      }
+    }
   };
 
   return (
@@ -54,10 +84,11 @@ const ProfileSettings: React.FC<ProfileInfoProps> = ({ user }) => {
           buttonLabel="Upload Cover Image"
         />
         <FormTextarea
-          name="description"
+          name="profileText"
           control={control}
           label="Profilbeskrivelse"
           placeholder="Skriv eventuelt kort om din musikalske erfaring eller hvad du søger..."
+          rows={8}
         />
         <Grid align="end">
           <Grid.Col span={6}>
@@ -88,8 +119,8 @@ const ProfileSettings: React.FC<ProfileInfoProps> = ({ user }) => {
             aria-describedby="contact-info"
           />
           <FormInput
-            name="mobile"
-            type="tel"
+            name="phone"
+            type="phone"
             control={control}
             placeholder="Mobilnummer"
             aria-describedby="contact-info"
@@ -107,14 +138,14 @@ const ProfileSettings: React.FC<ProfileInfoProps> = ({ user }) => {
               type="button"
               onClick={() => setIsSeeking(true)}
               text="Søger"
-              color={isSeeking ? 'blue' : 'white'}
+              color={isSeeking ? "blue" : "white"}
             />
 
             <Button
               type="button"
               onClick={() => setIsSeeking(false)}
               text="Søger ikke"
-              color={!isSeeking ? 'blue' : 'white'}
+              color={!isSeeking ? "blue" : "white"}
             />
           </div>
         </div>

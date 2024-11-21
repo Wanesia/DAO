@@ -1,7 +1,12 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './schema/user.schema';
+import { UpdateProfileDto } from './dto/updateProfile.dto';
 
 @Injectable()
 export class UsersService {
@@ -41,7 +46,10 @@ export class UsersService {
   }
   async findUserById(userId: string): Promise<any> {
     try {
-      const user = await this.userModel.findById(userId).select('-password -__v').lean();
+      const user = await this.userModel
+        .findById(userId)
+        .select('-password -__v')
+        .lean();
 
       if (!user) {
         throw new NotFoundException(`User with ID ${userId} not found`);
@@ -66,6 +74,27 @@ export class UsersService {
 
       if (!updatedUser) {
         throw new Error('User not found');
+      }
+
+      return updatedUser;
+    } catch (error) {
+      console.error('Error updating user:', error);
+      throw new Error('Failed to update user. Please try again later.');
+    }
+  }
+  async updateUserByEmail(email: string, userDto: UpdateProfileDto): Promise<User> {
+    try {
+      const updatedUser = await this.userModel.findOneAndUpdate(
+        { email: email },
+        userDto,
+        {
+          new: true,
+          runValidators: true, // run schema validators
+        },
+      );
+
+      if (!updatedUser) {
+        throw new NotFoundException(`User with email ${email} not found`);
       }
 
       return updatedUser;
