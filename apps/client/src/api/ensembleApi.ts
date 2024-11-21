@@ -1,7 +1,7 @@
 import axiosInstance from './axiosInstance';
 import { Ensemble, EnsembleDto } from '@shared/types';
 
-export const createEnsemble = async (ensemble: Ensemble): Promise<Ensemble> => {
+export const createEnsemble = async (ensemble: EnsembleDto): Promise<Ensemble> => {
   try {
     const response = await axiosInstance.post<Ensemble>('/ensembles', ensemble);
     return response.data;

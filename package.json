@@ -23,8 +23,11 @@
   "dependencies": {
     "@mantine/core": "^7.14.1",
     "@mantine/hooks": "^7.14.1",
+    "@types/multer": "^1.4.12",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
-    "jwt-decode": "^4.0.0"
+    "cloudinary": "^2.5.1",
+    "jwt-decode": "^4.0.0",
+    "streamifier": "^0.1.1"
   }
 }

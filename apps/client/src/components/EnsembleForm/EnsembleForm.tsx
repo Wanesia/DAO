@@ -1,11 +1,11 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import Button from "../Button/Button";
-import FormInput from "../form-components/FormInput/FormInput";
-import FormTextarea from "../form-components/Textarea/Textarea";
-import SingleSelect from "../form-components/SingleSelect/SingleSelect";
-import MultiSelect from "../form-components/MultiSelect/MultiSelect";
-import FormRadioGroup from "../form-components/FormRadioGroup/FormRadioGroup";
+import FormInput from "../form-components/FormInput";
+import FormTextarea from "../form-components/Textarea";
+import SingleSelect from "../form-components/SingleSelect";
+import MultiSelect from "../form-components/MultiSelect";
+import FormRadioGroup from "../form-components/FormRadioGroup";
 import { Grid } from "@mantine/core";
 import styles from "./EnsembleForm.module.css";
 import { createEnsemble } from "../../api/ensembleApi";
