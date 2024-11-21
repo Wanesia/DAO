@@ -1,19 +1,22 @@
-import axios from 'axios';
+import axios from "axios";
 
-const instance = axios.create({
-  baseURL: 'http://localhost:3000', 
-  timeout: 30000,
+const axiosInstance = axios.create({
+  baseURL: "http://localhost:3000", 
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
-
-instance.interceptors.request.use(
+// if there is token the config has header authorization
+axiosInstance.interceptors.request.use(
   (config) => {
-    const storedContext = JSON.parse(localStorage.getItem('access-token') || '{}');
-    const token = storedContext?.token;
-
+    const token = localStorage.getItem("access_token");
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers["Authorization"] = `Bearer ${token}`;
+      console.log("config with token");
+
     }
+    console.log("config returned");
 
     return config;
   },
@@ -22,17 +25,14 @@ instance.interceptors.request.use(
   }
 );
 
-instance.interceptors.response.use(
+// response interceptor (for handling 401 errors)
+axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-
-      localStorage.removeItem('access-token');
-
-      window.location.href = '/login';
+      console.log("401 Unauthorized - Redirecting");
+      window.location.href = "/unauthorized"; // Redirect to the unauthorized page
     }
     return Promise.reject(error);
   }
 );
-
-export default instance;

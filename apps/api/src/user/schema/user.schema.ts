@@ -1,54 +1,56 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+import { InstrumentName, Genre } from '@shared/enums';
 
 @Schema()
-class InstrumentLevel {
-  @Prop({ type: Number})
-  number: number;
+export class Instrument {
+  @Prop({ type: String, enum: InstrumentName, required: true })
+  name: InstrumentName;
 
-  @Prop({ type: String})
-  description: string;
-}
+  @Prop({ type: Number, min: 1, max: 6, required: true })
+  level: number;
 
-@Schema()
-class Instrument {
-  @Prop({ type: String})
-  name: string;
-
-  @Prop({ type: InstrumentLevel})
-  level: InstrumentLevel;
+  @Prop({ type: [String], enum: Genre})
+  genres: Genre[];
 }
 @Schema()
 export class Location {
   @Prop()
   city: string;
 
-  @Prop() 
+  @Prop()
   postCode: string;
 }
 @Schema({
   timestamps: true,
 })
 export class User extends Document {
-  @Prop({required: true })
+  @Prop({ required: true })
   name: string;
 
-  @Prop({required: true })
+  @Prop({ required: true })
   surname: string;
 
-  @Prop({required: true ,unique: true })
+  @Prop({ required: true, unique: true })
   email: string;
 
-  @Prop({required: true })
-  password: string;
+  @Prop({
+    required: function () {
+      return this.authProvider === 'local'; // Password ONLY required for local auth
+    },
+  })
+  password?: string;
+
+  @Prop({ default: 'local', enum: ['local', 'facebook'] })
+  authProvider: string;
 
   @Prop()
   phone: string;
 
-  @Prop({ type: Location})
+  @Prop({ type: Location })
   location: Location;
 
-  @Prop({default: Date.now, immutable: true })
+  @Prop({ default: Date.now, immutable: true })
   createdAt: Date;
 
   @Prop()
@@ -69,11 +71,14 @@ export class User extends Document {
   @Prop()
   isSubscribedToNewsletter: boolean;
 
-  @Prop({ type: Instrument})
+  @Prop({ type: Instrument })
   instrument: Instrument;
 
   @Prop({ type: [Types.ObjectId], ref: 'Ensemble' })
   ensembleIds: Types.ObjectId[];
+
+  @Prop()
+  facebookId?: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

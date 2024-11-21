@@ -11,6 +11,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as UnauthorizedImport } from './routes/unauthorized'
 import { Route as RegisterImport } from './routes/register'
 import { Route as ProfileImport } from './routes/profile'
 import { Route as LoginImport } from './routes/login'
@@ -18,6 +19,12 @@ import { Route as CreateEnsembleImport } from './routes/create-ensemble'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
+
+const UnauthorizedRoute = UnauthorizedImport.update({
+  id: '/unauthorized',
+  path: '/unauthorized',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const RegisterRoute = RegisterImport.update({
   id: '/register',
@@ -88,6 +95,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterImport
       parentRoute: typeof rootRoute
     }
+    '/unauthorized': {
+      id: '/unauthorized'
+      path: '/unauthorized'
+      fullPath: '/unauthorized'
+      preLoaderRoute: typeof UnauthorizedImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -99,6 +113,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
+  '/unauthorized': typeof UnauthorizedRoute
 }
 
 export interface FileRoutesByTo {
@@ -107,6 +122,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
+  '/unauthorized': typeof UnauthorizedRoute
 }
 
 export interface FileRoutesById {
@@ -116,20 +132,15 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
+  '/unauthorized': typeof UnauthorizedRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/create-ensemble' | '/login' | '/profile' | '/register'
+  fullPaths: '/' | '/login' | '/profile' | '/register' | '/unauthorized' | '/create-ensemble'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/create-ensemble' | '/login' | '/profile' | '/register'
-  id:
-    | '__root__'
-    | '/'
-    | '/create-ensemble'
-    | '/login'
-    | '/profile'
-    | '/register'
+  to: '/' | '/login' | '/profile' | '/register'
+  id: '__root__' | '/' | '/login' | '/profile' | '/register'| '/unauthorized' | '/create-ensemble'
   fileRoutesById: FileRoutesById
 }
 
@@ -139,6 +150,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
   RegisterRoute: typeof RegisterRoute
+  UnauthorizedRoute: typeof UnauthorizedRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -147,6 +159,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,
   RegisterRoute: RegisterRoute,
+  UnauthorizedRoute: UnauthorizedRoute,
 }
 
 export const routeTree = rootRoute
@@ -163,7 +176,8 @@ export const routeTree = rootRoute
         "/create-ensemble",
         "/login",
         "/profile",
-        "/register"
+        "/register",
+        "/unauthorized"
       ]
     },
     "/": {
@@ -180,6 +194,9 @@ export const routeTree = rootRoute
     },
     "/register": {
       "filePath": "register.tsx"
+    },
+    "/unauthorized": {
+      "filePath": "unauthorized.tsx"
     }
   }
 }

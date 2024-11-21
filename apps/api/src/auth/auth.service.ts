@@ -1,8 +1,8 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { AuthPayloadDto } from './dto/auth.dto';
 import * as bcrypt from 'bcrypt';
@@ -30,6 +30,7 @@ export class AuthService {
       return await this.userService.createUser({
         ...userDto,
         password: hashedPassword,
+        authProvider: 'local',
       });
     } catch (error) {
       if (error instanceof ConflictException) {
@@ -40,6 +41,22 @@ export class AuthService {
       throw new Error(
         'An unexpected error occurred while registering the user',
       );
+    }
+  }
+  async createFacebookUser(userData: {
+    email: string;
+    name: string;
+    surname: string;
+    authProvider: string;
+    facebookId: string;
+  }) {
+    try {
+      return await this.userService.createUser({
+        ...userData,
+      });
+    } catch (error) {
+      console.error('Error creating Facebook user:', error);
+      throw new Error('Failed to create Facebook user');
     }
   }
 
@@ -53,18 +70,24 @@ export class AuthService {
         return result;
       }
 
-      throw new UnauthorizedException('Invalid email or password');
+      throw new BadRequestException('Invalid email or password');
     } catch (error) {
       if (error instanceof NotFoundException) {
-        throw new UnauthorizedException('Invalid email or password');
+        throw new BadRequestException('Invalid email or password');
       } else {
         throw error;
       }
     }
   }
 
-  async login(user: any): Promise<{ accessToken: string; user: Partial<User> }> {
+  async login(
+    user: any,
+  ): Promise<{ accessToken: string; user: Partial<User> }> {
     const { password, ...userData } = user._doc;
+    // Update lastSeen for the user whenever they log in
+    await this.userService.updateUser(userData._id, {
+      lastSeen: new Date(),
+    });
     const payload = { userId: userData._id };
     const accessToken = this.jwtService.sign(payload);
     return {
@@ -72,6 +95,4 @@ export class AuthService {
       user: userData,
     };
   }
-  
-  
 }

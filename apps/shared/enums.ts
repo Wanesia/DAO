@@ -30,3 +30,18 @@ export enum Genre {
   SENROMANTISK = "Senromantisk",
   SYMFONISK = "Symfonisk",
 }
+
+export enum InstrumentName {
+  Violone = "Violone",
+  Violin = "Violin",
+  Viola = "Viola",
+  Viol = "Viol",
+  Vihuela = "Vihuela",
+  Trumpet = "Trumpet",
+  Theorbo = "Theorbo",
+  SlideTrumpet = "Slide trumpet",
+  Serpent = "Serpent",
+  Sackbut = "Sackbut",
+  NaturalTrumpet = "Natural trumpet",
+  NaturalHorn = "Natural Horn",
+}
