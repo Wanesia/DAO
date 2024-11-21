@@ -1,7 +1,9 @@
+import "@mantine/core/styles.css";
 import "./App.css";
 import { AuthProvider } from "./context/AuthContext";
 import { routeTree } from "./routeTree.gen";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
+import { MantineProvider } from "@mantine/core";
 
 const router = createRouter({ routeTree });
 
@@ -14,7 +16,9 @@ declare module "@tanstack/react-router" {
 function App() {
   return (
     <AuthProvider>
-      <RouterProvider router={router} />
+      <MantineProvider>
+        <RouterProvider router={router} />
+      </MantineProvider>
     </AuthProvider>
   );
 }

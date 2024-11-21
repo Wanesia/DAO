@@ -2,20 +2,36 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Ensemble } from './schema/ensemble.schema';
+import { CreateEnsembleDto } from './dto/ensemble.dto';
+import { Types } from 'mongoose';
+import { MusicianCount, PracticeFrequency, EnsembleType, Genre } from '@shared/enums';
 
 @Injectable()
 export class EnsembleService {
   constructor(@InjectModel(Ensemble.name) private ensembleModel: Model<Ensemble>) {}
 
-  async createEnsemble(ensembleDto: any): Promise<Ensemble> {
+  async createEnsemble(
+    ensembleDto: CreateEnsembleDto,
+    creatorId: string,
+  ): Promise<Ensemble> {
     try {
-      const newEnsemble = new this.ensembleModel(ensembleDto);
+      const ensembleData = {
+        ...ensembleDto,
+        creator: new Types.ObjectId(creatorId),
+        member_ids: [
+          new Types.ObjectId(creatorId),
+          ...(ensembleDto.member_ids || []).map((id) => new Types.ObjectId(id)),
+        ],
+      };
+
+      const newEnsemble = new this.ensembleModel(ensembleData);
       return await newEnsemble.save();
     } catch (error) {
       console.error('Error creating ensemble:', error);
       throw new Error('Failed to create ensemble.');
     }
   }
+
 
   async findAll(): Promise<Ensemble[]> {
     try {

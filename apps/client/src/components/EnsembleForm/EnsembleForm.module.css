@@ -1,0 +1,12 @@
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.address {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-end;
+}

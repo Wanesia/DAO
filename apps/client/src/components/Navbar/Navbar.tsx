@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import Button from "../Button/Button";
 import styles from "./Navbar.module.css";
 import { useState, useEffect } from "react";
@@ -9,6 +9,7 @@ const Navbar: React.FC = () => {
   const toggleMenu = () => setIsOpen(!isOpen);
   const handleCloseMenu = () => setIsOpen(false);
   const { isLoggedIn, logout } = useAuth();
+  const navigate = useNavigate();
 
   // Close hamburger menu when window is resized to desktop
   useEffect(() => {
@@ -24,6 +25,11 @@ const Navbar: React.FC = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  const handleLogout = () => {
+    logout();
+    navigate({ to: "/"
+  })};
 
   return (
     <nav className={styles.nav}>
@@ -69,7 +75,7 @@ const Navbar: React.FC = () => {
               text="Log ud"
               color="white"
               onClick={() => {
-                logout();
+                handleLogout();
                 handleCloseMenu();
               }}
             />

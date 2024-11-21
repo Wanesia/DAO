@@ -12,12 +12,22 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "postcss": "^8.4.49",
+    "postcss-preset-mantine": "^1.17.0",
+    "postcss-simple-vars": "^7.0.1",
     "turbo": "^2.2.3"
   },
   "workspaces": [
     "apps/*"
   ],
   "dependencies": {
-    "jwt-decode": "^4.0.0"
+    "@mantine/core": "^7.14.1",
+    "@mantine/hooks": "^7.14.1",
+    "@types/multer": "^1.4.12",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
+    "cloudinary": "^2.5.1",
+    "jwt-decode": "^4.0.0",
+    "streamifier": "^0.1.1"
   }
 }

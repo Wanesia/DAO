@@ -68,6 +68,7 @@ h2 {
   color: var(--primary-blue);
   line-height: calc(2.5rem + 0.125rem); 
   letter-spacing: calc(0.031rem + 0.0045rem);
+  margin-bottom: 1.5rem;
 }
 
 h3 {
@@ -81,4 +82,16 @@ button {
   cursor: pointer;
   font-family: inherit;
   color: inherit;
+}
+
+.main-form {
+  max-width: 600px;
+  margin: 100px auto;
+  padding: 1rem;
+}
+
+.label {
+  color: var(--primary-blue);
+  font-weight: 600;
+  margin-bottom: 8px;
 }
