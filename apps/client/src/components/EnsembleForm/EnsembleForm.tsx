@@ -122,7 +122,6 @@ const EnsembleForm: React.FC = () => {
         size="large"
         placeholderImage="/placeholder1.png"
         buttonLabel="Upload Cover Image"
-        required
       />
       <FormTextarea
         name="description"
@@ -134,6 +133,7 @@ const EnsembleForm: React.FC = () => {
 
       <FormInput
         name="homepage"
+        type="url"
         control={control}
         label="Hjemmeside"
         placeholder="Hjemmeside"
