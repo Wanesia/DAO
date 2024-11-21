@@ -14,8 +14,17 @@ interface ProfileInfoProps {
 }
 const ProfileSettings: React.FC<ProfileInfoProps> = ({ user }) => {
   const navigate = useNavigate();
-  const { control, handleSubmit } = useForm<FieldValues>();
-  const [isSeeking, setIsSeeking] = useState(user.isSeeking ?? false); // Initialize with user profile data
+  const { control, handleSubmit } = useForm<FieldValues>({
+    defaultValues: {
+      name: user.name || '',
+      surname: user.surname || '',
+      email: user.email || '',
+      mobile: user.phone || '',
+      postcode: user.location?.postCode || '',
+      city: user.location?.city || '',
+      description: user.profileText || '',
+    }
+  });  const [isSeeking, setIsSeeking] = useState(user.isSeeking ?? false); // Initialize with user profile data
 
   const onSubmit = async (data: FieldValues) => {
     console.log(data);
@@ -98,12 +107,14 @@ const ProfileSettings: React.FC<ProfileInfoProps> = ({ user }) => {
               type="button"
               onClick={() => setIsSeeking(true)}
               text="Søger"
+              color={isSeeking ? 'blue' : 'white'}
             />
 
             <Button
               type="button"
               onClick={() => setIsSeeking(false)}
               text="Søger ikke"
+              color={!isSeeking ? 'blue' : 'white'}
             />
           </div>
         </div>
