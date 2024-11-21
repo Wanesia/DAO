@@ -41,21 +41,13 @@ export class UsersService {
   }
   async findUserById(userId: string): Promise<any> {
     try {
-      const user = await this.userModel.findById(userId).exec();
+      const user = await this.userModel.findById(userId).select('-password -__v').lean();
 
       if (!user) {
         throw new NotFoundException(`User with ID ${userId} not found`);
       }
 
-      return {
-        id: user._id,
-        name: user.name,
-        surname: user.surname,
-        email: user.email,
-        profilePicture: user.profilePicture || null,
-        createdAt: user.createdAt,
-        lastSeen: user.lastSeen,
-      };
+      return user;
     } catch (error) {
       console.error(`Error finding user by ID: ${userId}`, error);
 
