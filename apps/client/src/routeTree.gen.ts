@@ -137,10 +137,29 @@ export interface FileRoutesById {
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/profile' | '/register' | '/unauthorized' | '/create-ensemble'
+  fullPaths:
+    | '/'
+    | '/create-ensemble'
+    | '/login'
+    | '/profile'
+    | '/register'
+    | '/unauthorized'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/profile' | '/register'
-  id: '__root__' | '/' | '/login' | '/profile' | '/register'| '/unauthorized' | '/create-ensemble'
+  to:
+    | '/'
+    | '/create-ensemble'
+    | '/login'
+    | '/profile'
+    | '/register'
+    | '/unauthorized'
+  id:
+    | '__root__'
+    | '/'
+    | '/create-ensemble'
+    | '/login'
+    | '/profile'
+    | '/register'
+    | '/unauthorized'
   fileRoutesById: FileRoutesById
 }
 

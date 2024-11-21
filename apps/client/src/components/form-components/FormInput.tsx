@@ -9,6 +9,7 @@ interface FormInputProps<T extends FieldValues> {
   placeholder?: string;
   description?: string;
   required?: boolean;
+  type?: React.HTMLInputTypeAttribute; 
   inputProps?: InputProps;
   labelProps?: InputLabelProps;
 }
@@ -20,6 +21,7 @@ const FormInput = <T extends FieldValues>({
   description,
   placeholder,
   required,
+  type = 'text', // default type is text
   inputProps,
 }: FormInputProps<T>) => {
   return (
@@ -28,7 +30,7 @@ const FormInput = <T extends FieldValues>({
       description={description}
       required={required}
       classNames={{
-        description: styles.description, 
+        description: styles.description,
       }}
       labelProps={{
         className: 'label',
@@ -40,12 +42,13 @@ const FormInput = <T extends FieldValues>({
         render={({ field, fieldState: { error } }) => (
           <Input
             {...field}
+            type={type} 
             classNames={{
-              input: error ? styles.inputError : styles.input, 
+              input: error ? styles.inputError : styles.input,
             }}
             placeholder={placeholder}
             required={required}
-            error={error?.message} 
+            error={error?.message}
             {...inputProps}
           />
         )}
