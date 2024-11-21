@@ -1,3 +1,4 @@
+import { useNavigate } from "@tanstack/react-router";
 import styles from "./ProfileInfo.module.css";
 import { UserProfile } from "@shared/userProfile.ts";
 
@@ -6,6 +7,7 @@ interface ProfileInfoProps {
 }
 
 const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
+  const navigate = useNavigate();
   return (
     <div className={styles.container}>
       <div className={styles.info}>
@@ -35,7 +37,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
         </div>
       </div>
       <div className={styles.buttons}>
-        <button className="btn">Rediger profil</button>
+        <button className="btn" onClick={() => navigate({ to: "/update-profile" })}>Rediger profil</button>
         <button className="btn">Indstilinger</button>
       </div>
       <div className={`${styles.container} ${styles["text-container"]}`}>

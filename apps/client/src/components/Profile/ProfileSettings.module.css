@@ -1,0 +1,27 @@
+.form {
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.title{
+    color: var(--primary-blue);
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: var(--input-label-size, var(--mantine-font-size-sm));
+}
+.info{
+    color: var(--text-dark-grey);
+    font-size: 0.75rem;
+    margin-bottom: 1rem;
+}
+.div>*{
+    margin-bottom: 1rem;
+}
+.status{
+    display: flex;
+    justify-content: space-between;
+}
+.status>*{
+    width: 45%;
+}
