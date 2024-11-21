@@ -7,6 +7,7 @@ import { UserModule } from './user/user.module';
 import { EnsembleModule } from './ensemble/ensemble.module';
 import { AuthModule } from './auth/auth.module';
 import * as bcrypt from 'bcrypt';
+import { ImageUploadModule } from './imageUpload/imageUpload.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import * as bcrypt from 'bcrypt';
     UserModule,
     EnsembleModule,
     AuthModule,
+    ImageUploadModule,
     ConfigModule.forRoot({
       isGlobal: true, // makes config available throughout the app
     })

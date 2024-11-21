@@ -15,6 +15,8 @@ interface FormTextareaProps<T extends FieldValues> {
   labelProps?: React.LabelHTMLAttributes<HTMLLabelElement>;
 }
 
+// TODO: label props can be deleted, if style for label is moved from app.css to this module, then we can use classnames, should be done for all form components
+
 const FormTextarea = React.memo(<T extends FieldValues>({
   name,
   control,
@@ -31,6 +33,9 @@ const FormTextarea = React.memo(<T extends FieldValues>({
       description={description}
       required={required}
       {...wrapperProps}
+      classNames={{
+        description: styles.description, 
+      }}
       labelProps={{
         className: 'label',
       }}

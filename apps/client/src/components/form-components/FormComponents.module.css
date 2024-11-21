@@ -19,9 +19,9 @@
 }
 
 .description {
-  font-size: 0.875rem;
-  color: #7f8c8d;
-  margin-top: 4px;
+  font-size: 14px;
+  color: var(--grey-text);
+  margin: 6px 0;
 }
 
 .multiselect {

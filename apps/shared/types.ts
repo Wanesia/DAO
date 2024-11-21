@@ -1,5 +1,6 @@
 import { Types } from 'mongoose';
 import { MusicianCount, PracticeFrequency, EnsembleType, Genre } from './enums';
+import { FieldValues } from 'react-hook-form';
 
 export type User = {
   id: number;
@@ -33,15 +34,25 @@ export type Location = {
 export type Ensemble = {
   id?: string;
   name: string;
-  imageUrl?: string;
+  image: File;
   description?: string;
   homepageUrl?: string;
   location: Location;
   number_of_musicians: MusicianCount;
   practice_frequency: PracticeFrequency;
   genres: Genre[];
-  type: EnsembleType[];
+  type: EnsembleType;
 };
 
-export type EnsembleDto = Omit<Ensemble, 'id'>;
+export type EnsembleDto = FieldValues & { 
+  name: string;
+  image: File; 
+  description?: string;
+  homepageUrl?: string;
+  location: Location;
+  number_of_musicians: MusicianCount;
+  practice_frequency: PracticeFrequency;
+  genres: Genre[];
+  type: EnsembleType;
+};
 

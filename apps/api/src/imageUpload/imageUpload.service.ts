@@ -1,15 +1,15 @@
-// image-upload.service.ts
-import { Injectable, BadRequestException, Inject, Logger } from '@nestjs/common';
-import { UploadApiResponse, UploadApiOptions } from 'cloudinary';
+import { Injectable, Logger, BadRequestException } from '@nestjs/common';
 import { v2 as cloudinary } from 'cloudinary';
 import * as streamifier from 'streamifier';
+import { CloudinaryProvider } from './cloudinary.provider';
+import { UploadApiResponse, UploadApiOptions } from 'cloudinary';
 
 @Injectable()
 export class ImageUploadService {
   private readonly logger = new Logger(ImageUploadService.name);
   private uploader: typeof cloudinary.uploader;
 
-  constructor(private readonly cloudinaryProvider) {
+  constructor(private readonly cloudinaryProvider: CloudinaryProvider) {
     this.uploader = this.cloudinaryProvider.getUploader();
   }
 
@@ -26,7 +26,7 @@ export class ImageUploadService {
       throw new BadRequestException('Unsupported file type.');
     }
 
-    const maxSizeInBytes = 5 * 1024 * 1024;
+    const maxSizeInBytes = 5 * 1024 * 1024; 
     if (file.size > maxSizeInBytes) {
       throw new BadRequestException('File size exceeds the allowed limit of 5MB.');
     }

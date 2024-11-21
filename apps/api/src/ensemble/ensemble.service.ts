@@ -23,6 +23,7 @@ export class EnsembleService {
           ...(ensembleDto.member_ids || []).map((id) => new Types.ObjectId(id)),
         ],
       };
+
       const newEnsemble = new this.ensembleModel(ensembleData);
       return await newEnsemble.save();
     } catch (error) {
@@ -30,7 +31,7 @@ export class EnsembleService {
       throw new Error('Failed to create ensemble.');
     }
   }
-  
+
 
   async findAll(): Promise<Ensemble[]> {
     try {

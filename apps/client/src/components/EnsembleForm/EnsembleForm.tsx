@@ -1,5 +1,5 @@
 import React from "react";
-import { useForm } from "react-hook-form";
+import { useForm, FieldValues } from "react-hook-form";
 import Button from "../Button/Button";
 import FormInput from "../form-components/FormInput";
 import FormTextarea from "../form-components/Textarea";
@@ -11,7 +11,10 @@ import styles from "./EnsembleForm.module.css";
 import { createEnsemble } from "../../api/ensembleApi";
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
+import DragAndDrop from "../DragAndDrop/DragAndDrop";
 
+
+// TODO: need to be moved to shared file again
 export enum MusicianCount {
   ONE_TO_FOUR = "1-4 musikere",
   FIVE_TO_NINE = "5-9 musikere",
@@ -44,61 +47,59 @@ export enum Genre {
 }
 
 const EnsembleForm: React.FC = () => {
-  const { control, handleSubmit } = useForm();
+  const { control, handleSubmit } = useForm<FieldValues>();
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
 
-  const practiceFrequencyOptions = Object.keys(PracticeFrequency).map((key) => ({
-    value: PracticeFrequency[key as keyof typeof PracticeFrequency],
-    label: PracticeFrequency[key as keyof typeof PracticeFrequency], 
-  }));
-  
+  const practiceFrequencyOptions = Object.keys(PracticeFrequency).map(
+    (key) => ({
+      value: PracticeFrequency[key as keyof typeof PracticeFrequency],
+      label: PracticeFrequency[key as keyof typeof PracticeFrequency],
+    })
+  );
 
   const musicianCountOptions = Object.keys(MusicianCount).map((key) => ({
-    value: MusicianCount[key as keyof typeof MusicianCount], 
+    value: MusicianCount[key as keyof typeof MusicianCount],
     label: MusicianCount[key as keyof typeof MusicianCount],
   }));
-  
-  
+
   const genreOptions = Object.keys(Genre).map((key) => ({
     value: Genre[key as keyof typeof Genre],
     label: Genre[key as keyof typeof Genre],
   }));
-  
+
   const ensembleTypeOptions = Object.keys(EnsembleType).map((key) => ({
     value: EnsembleType[key as keyof typeof EnsembleType],
     label: EnsembleType[key as keyof typeof EnsembleType],
   }));
-  
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: FieldValues) => {
+    // TODO: let's create a spinner component for loading
     setLoading(true);
     setSuccessMessage("");
     setErrorMessage("");
 
-    const newEnsemble = {
-      name: data.name,
-      description: data.description,
-      homepageUrl: data.homepage,
-      location: {
-        city: data.city,
-        postCode: data.postcode,
-      },
-      number_of_musicians: data.musicianCount,
-      practice_frequency: data.practiceFrequency,
-      genres: data.genres,
-      type: data.playType,
-    };
-
+    //TODO: find a way to make this look better
     try {
-      await createEnsemble(newEnsemble);
+      const formData = new FormData();
+      formData.append("name", data.name);
+      formData.append("description", data.description || "");
+      formData.append("homepageUrl", data.homepage || "");
+      formData.append("city", data.city || ""); 
+      formData.append("postcode", data.postcode || "");
+      formData.append("number_of_musicians", data.number_of_musicians);
+      formData.append("practice_frequency", data.practiceFrequency);
+      formData.append("genres", JSON.stringify(data.genres));
+      formData.append("type", data.playType);
+      formData.append("image", data.image);
+      await createEnsemble(formData);
       setSuccessMessage("Ensemble created successfully!");
       navigate({ to: "/profile" });
-      
     } catch (error: any) {
+      //TODO: let's create some standard error handling and success messages
       setErrorMessage(
         error.response?.data?.message || "Failed to create ensemble."
       );
@@ -107,13 +108,20 @@ const EnsembleForm: React.FC = () => {
     }
   };
 
-
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
       <FormInput
         name="name"
         control={control}
         placeholder="Ensemblets navn"
+        required
+      />
+      <DragAndDrop
+        name="image"
+        control={control}
+        size="large"
+        placeholderImage="/placeholder1.png"
+        buttonLabel="Upload Cover Image"
         required
       />
       <FormTextarea
@@ -145,7 +153,7 @@ const EnsembleForm: React.FC = () => {
         </Grid.Col>
       </Grid>
       <SingleSelect
-        name="musicianCount"
+        name="number_of_musicians"
         control={control}
         options={musicianCountOptions}
         label="Antal aktive musikere"
