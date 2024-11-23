@@ -10,6 +10,7 @@ import FormTextarea from "../form-components/Textarea";
 import { useEffect, useState } from "react";
 import axiosInstance from "../../api/axiosInstance";
 import axios from "axios";
+import { updateUserProfile } from "../../api/userApi";
 
 interface ProfileInfoProps {
   user: UserProfile;
@@ -37,27 +38,10 @@ const ProfileSettings: React.FC<ProfileInfoProps> = ({ user }) => {
   
   const onSubmit = async (data: FieldValues) => {
     try {
-      const updateData = {
-        name: data.name,
-        surname: data.surname,
-        email: data.email,
-        phone: data.phone,
-        location: {
-          postCode: data.postcode,
-          city: data.city
-        },
-        profileText: data.profileText,
-        isSeeking: data.isSeeking
-      };
-
-      await axiosInstance.patch(`/users/${user.email}`, updateData);
+      await updateUserProfile(user.email, data);
       navigate({ to: "/profile" });
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        console.error('Profile update failed', error.response?.data);
-      } else {
-        console.error('An unexpected error occurred', error);
-      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -79,7 +63,7 @@ const ProfileSettings: React.FC<ProfileInfoProps> = ({ user }) => {
         <DragAndDrop
           name="image"
           control={control}
-          size="large"
+          size="small"
           placeholderImage="/placeholder1.png"
           buttonLabel="Upload Cover Image"
         />
