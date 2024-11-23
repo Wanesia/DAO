@@ -10,27 +10,11 @@ export const getUserStatus = async (): Promise<User> => {
   return response.data;
 };
 
-export const updateUserProfile = async (userEmail: string, data: FieldValues): Promise<void> => {
+export const updateUserProfile = async (userEmail: string, formData: FormData): Promise<void> => {
   try {
-    const updateData = {
-      name: data.name,
-      surname: data.surname,
-      email: data.email,
-      phone: data.phone,
-      location: {
-        postCode: data.postcode,
-        city: data.city,
-      },
-      profileText: data.profileText,
-      isSeeking: data.isSeeking,
-      profilePicture: data.profilePicture,
-    };
-
-    console.log("Updating profile with data:", updateData);
-
-    const response = await axiosInstance.patch(`/users/${userEmail}`, updateData, {
+    const response = await axiosInstance.patch(`/users/${userEmail}`, formData, {
       headers: {
-        'Content-Type': 'multipart/form-data', 
+        "Content-Type": "multipart/form-data",
       },
     });
 
@@ -45,4 +29,6 @@ export const updateUserProfile = async (userEmail: string, data: FieldValues): P
     }
   }
 };
+
+
 

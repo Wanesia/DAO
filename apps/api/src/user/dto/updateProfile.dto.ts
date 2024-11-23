@@ -32,4 +32,8 @@ export class UpdateProfileDto {
   @IsOptional()
   @IsBoolean()
   isSeeking?: boolean;
+  
+  @IsOptional()
+  @IsString()
+  profilePicture?: string;
 }
