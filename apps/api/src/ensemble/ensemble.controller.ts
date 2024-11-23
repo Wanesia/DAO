@@ -62,8 +62,6 @@ export class EnsembleController {
       type: formData.type,
       image: imageUrl,
     };
-
-    console.log('ensembleDto', ensembleDto);
   
     try {
       return await this.ensembleService.createEnsemble(ensembleDto, creatorId);
