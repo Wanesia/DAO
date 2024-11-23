@@ -58,7 +58,7 @@ async create(
     },
     genres: Array.isArray(formData.genres) ? formData.genres : JSON.parse(formData.genres),
     type: formData.type,
-    image: imageUrl,
+    imageUrl: imageUrl,
   };
 
   return this.ensembleService.createEnsemble(ensembleDto, creatorId);
