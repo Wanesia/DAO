@@ -79,8 +79,8 @@ const ProfileSettings: React.FC<ProfileInfoProps> = ({ user }) => {
         <DragAndDrop
           name="image"
           control={control}
-          size="large"
-          placeholderImage="/placeholder1.png"
+          size="small"
+          placeholderImage="/profile.png"
           buttonLabel="Upload Cover Image"
         />
         <FormTextarea
