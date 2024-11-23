@@ -1,7 +1,6 @@
 import axios from "axios";
 import axiosInstance from "./axiosInstance";
 import { User } from "@shared/types";
-import { FieldValues } from "react-hook-form";
 
 // don't know
 export const getUserStatus = async (): Promise<User> => {

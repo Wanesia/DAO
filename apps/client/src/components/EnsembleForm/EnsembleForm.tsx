@@ -121,7 +121,7 @@ const EnsembleForm: React.FC = () => {
         control={control}
         size="large"
         placeholderImage="/placeholder1.png"
-        buttonLabel="Upload Cover Image"
+        buttonLabel="Upload coverbillede"
       />
       <FormTextarea
         name="description"
