@@ -79,6 +79,7 @@ export class EnsembleController {
     }
   }
 
+
   @Get()
   async findAll(): Promise<Ensemble[]> {
     return this.ensembleService.findAll();
