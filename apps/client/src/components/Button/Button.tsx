@@ -4,7 +4,7 @@ import styles from './Button.module.css';
 
 interface ButtonProps {
   text: string;
-  color?: 'blue' | 'white' | 'transparent';
+  color?: 'blue' | 'white' | 'transparent' | 'white-slim';
   link?: string;
   onClick?: () => void;
   type?: 'button' | 'submit'
