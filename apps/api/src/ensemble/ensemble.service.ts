@@ -14,6 +14,11 @@ export class EnsembleService {
     ensembleDto: CreateEnsembleDto,
     creatorId: string,
   ): Promise<Ensemble> {
+    const existingEnsemble = await this.ensembleModel.findOne({ name: ensembleDto.name });
+    if (existingEnsemble) {
+      throw new Error('Ensemble with this name already exists');
+    }
+
     try {
       const ensembleData = {
         ...ensembleDto,
@@ -23,6 +28,8 @@ export class EnsembleService {
           ...(ensembleDto.member_ids || []).map((id) => new Types.ObjectId(id)),
         ],
       };
+
+
 
       const newEnsemble = new this.ensembleModel(ensembleData);
       return await newEnsemble.save();

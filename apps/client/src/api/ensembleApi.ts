@@ -3,19 +3,22 @@ import { Ensemble, EnsembleDto } from '@shared/types';
 
 export const createEnsemble = async (formData: FormData): Promise<void> => {
   try {
-    console.log("in request", formData);
     const response = await axiosInstance.post('/ensembles', formData, {
       headers: {
-        'Content-Type': 'multipart/form-data', 
+        'Content-Type': 'multipart/form-data',
       },
     });
-  
+
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
+    if (error.response) {
+      throw error.response;
+    }
     console.error('Failed to create ensemble:', error);
-    throw new Error('Could not create ensemble. Please try again.');
+    throw new Error('An unexpected error occurred. Please try again.');
   }
 };
+
 
 export const getEnsembles = async (): Promise<Ensemble[]> => {
   const response = await axiosInstance.get<Ensemble[]>('/ensembles');
