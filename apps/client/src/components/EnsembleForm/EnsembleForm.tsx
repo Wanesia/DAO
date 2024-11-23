@@ -145,11 +145,12 @@ const EnsembleForm: React.FC = () => {
             name="postcode"
             control={control}
             label="Område"
+            required
             placeholder="Postnr."
           />
         </Grid.Col>
         <Grid.Col span={6}>
-          <FormInput name="city" control={control} placeholder="By" />
+          <FormInput name="city" control={control} placeholder="By" required/>
         </Grid.Col>
       </Grid>
       <SingleSelect
