@@ -37,4 +37,13 @@
     margin-bottom: 10px;
   }
 
+  .input:-webkit-autofill {
+    box-shadow: 0 0 0px 1000px white inset; 
+  }
+  
+  .input:focus, .select:focus, .textarea:focus, .input:-webkit-autofill:focus, .textarea:-webkit-autofill:focus {
+    box-shadow: 0 0 0px 1000px white inset;  
+    border: 1px solid var(--primary-blue);
+  }
+
 

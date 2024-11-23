@@ -7,6 +7,7 @@
   width: 20rem;
   margin: 0 auto;
   height: 80vh;
+  gap: 1rem;
 }
 input {
   color: var(--text-dark-grey);
