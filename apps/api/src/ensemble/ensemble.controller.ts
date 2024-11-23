@@ -32,36 +32,32 @@ export class EnsembleController {
   ) {}
 
   @UseGuards(JwtAuthGuard)
-  @Post()
-  @UseInterceptors(FileInterceptor('image'))
-  async create(
-    @UploadedFile() image: Express.Multer.File,
-    @Body() formData: any,
-    @Req() req: AuthenticatedRequest,
-  ): Promise<Ensemble> {
-    const creatorId = req.user.id;
-  
-    let imageUrl: string | undefined;
-    if (image) {
-      const uploadResult = await this.imageUploadService.uploadImage(
-        image,
-        'ensembles',
-      );
-      imageUrl = uploadResult.secure_url;
-    }
-  
-    const ensembleDto: CreateEnsembleDto = {
-      ...formData,
-      location: {
-        city: formData.city,
-        postCode: formData.postcode,
-      },
-      genres: Array.isArray(formData.genres)
-        ? formData.genres
-        : JSON.parse(formData.genres),
-      type: formData.type,
-      image: imageUrl,
-    };
+@Post()
+@UseInterceptors(FileInterceptor('image'))
+async create(
+  @UploadedFile() image: Express.Multer.File, 
+  @Body() formData: any, 
+  @Req() req: AuthenticatedRequest,
+): Promise<Ensemble> {
+
+  const creatorId = req.user.id;
+
+  let imageUrl: string | undefined;
+  if (image) {
+    const uploadResult = await this.imageUploadService.uploadImage(image, 'ensembles');
+    imageUrl = uploadResult.secure_url;
+  }
+
+  const ensembleDto: CreateEnsembleDto = {
+    ...formData,
+    location: {
+      city: formData.city,
+      postCode: formData.postcode,
+    },
+    genres: Array.isArray(formData.genres) ? formData.genres : JSON.parse(formData.genres),
+    type: formData.type,
+    imageUrl: imageUrl,
+  };
 
     console.log('ensembleDto', ensembleDto);
   
