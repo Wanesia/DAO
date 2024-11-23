@@ -170,6 +170,7 @@ const EnsembleForm: React.FC = () => {
       <FormRadioGroup
         name="playType"
         control={control}
+        required
         options={ensembleTypeOptions}
         label="Ensemblet spiller..."
       />
