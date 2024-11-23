@@ -112,6 +112,7 @@ const EnsembleForm: React.FC = () => {
     <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
       <FormInput
         name="name"
+        label="Ensemblets navn"
         control={control}
         placeholder="Ensemblets navn"
         required
@@ -179,6 +180,7 @@ const EnsembleForm: React.FC = () => {
         control={control}
         options={genreOptions}
         label="Genrer"
+        required
       />
       <Button
         color="blue"
