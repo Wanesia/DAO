@@ -41,22 +41,28 @@ export default function LoginForm() {
           type="email"
           placeholder="E-mail"
           control={control}
-          required
-          label="E-mail"
-          inputProps={{
-            error: errors.email?.message,
+          rules={{
+            required: "E-mail is required",
+            pattern: {
+              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+              message: "Invalid email format",
+            },
           }}
+          label="E-mail"
         />
         <FormInput
           name="password"
           type="password"
           placeholder="Adgangskode"
           control={control}
-          required
-          label="Adgangskode"
-          inputProps={{
-            error: errors.password?.message,
+          rules={{
+            required: "Password is required",
+            minLength: {
+              value: 8,
+              message: "Password must be at least 8 characters",
+            },
           }}
+          label="Adgangskode"
         />
 
         <Button type="submit" text="Log ind" color="blue" />

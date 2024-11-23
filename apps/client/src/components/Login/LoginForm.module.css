@@ -1,5 +1,6 @@
 .container {
   background-color: var(--bg-light-grey);
+  padding: 30px 0;
 }
 .form {
   display: flex;

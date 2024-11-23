@@ -9,6 +9,7 @@ interface ButtonProps {
   onClick?: () => void;
   type?: 'button' | 'submit'
   children?: React.ReactNode;
+  disabled?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -18,6 +19,7 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   type = 'button', 
   children,
+  disabled,
 }) => {
   const className = `${styles.btn} ${styles[color]}`;
 
@@ -39,7 +41,7 @@ const Button: React.FC<ButtonProps> = ({
     } else {
       return (
         <span onClick={onClick}>
-          <Link to={link} className={className}>
+          <Link to={link} className={className} disabled={disabled}>
             {children} {text}
           </Link>
         </span>
@@ -48,7 +50,7 @@ const Button: React.FC<ButtonProps> = ({
   }
 
   return (
-    <button type={type} className={className} onClick={onClick}>
+    <button type={type} className={className} onClick={onClick} disabled={disabled}>
       {children} {text}
     </button>
   );
