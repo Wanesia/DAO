@@ -14,7 +14,6 @@ export const createEnsemble = async (formData: FormData): Promise<void> => {
     if (error.response) {
       throw error.response;
     }
-    console.error('Failed to create ensemble:', error);
     throw new Error('An unexpected error occurred. Please try again.');
   }
 };
