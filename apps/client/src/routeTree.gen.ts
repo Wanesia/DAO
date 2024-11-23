@@ -11,6 +11,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as UpdateProfileImport } from './routes/update-profile'
 import { Route as UnauthorizedImport } from './routes/unauthorized'
 import { Route as RegisterImport } from './routes/register'
 import { Route as ProfileImport } from './routes/profile'
@@ -19,6 +20,12 @@ import { Route as CreateEnsembleImport } from './routes/create-ensemble'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
+
+const UpdateProfileRoute = UpdateProfileImport.update({
+  id: '/update-profile',
+  path: '/update-profile',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const UnauthorizedRoute = UnauthorizedImport.update({
   id: '/unauthorized',
@@ -102,6 +109,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UnauthorizedImport
       parentRoute: typeof rootRoute
     }
+    '/update-profile': {
+      id: '/update-profile'
+      path: '/update-profile'
+      fullPath: '/update-profile'
+      preLoaderRoute: typeof UpdateProfileImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -114,6 +128,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
   '/unauthorized': typeof UnauthorizedRoute
+  '/update-profile': typeof UpdateProfileRoute
 }
 
 export interface FileRoutesByTo {
@@ -123,6 +138,7 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
   '/unauthorized': typeof UnauthorizedRoute
+  '/update-profile': typeof UpdateProfileRoute
 }
 
 export interface FileRoutesById {
@@ -133,6 +149,7 @@ export interface FileRoutesById {
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
   '/unauthorized': typeof UnauthorizedRoute
+  '/update-profile': typeof UpdateProfileRoute
 }
 
 export interface FileRouteTypes {
@@ -144,6 +161,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/register'
     | '/unauthorized'
+    | '/update-profile'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -152,6 +170,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/register'
     | '/unauthorized'
+    | '/update-profile'
   id:
     | '__root__'
     | '/'
@@ -160,6 +179,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/register'
     | '/unauthorized'
+    | '/update-profile'
   fileRoutesById: FileRoutesById
 }
 
@@ -170,6 +190,7 @@ export interface RootRouteChildren {
   ProfileRoute: typeof ProfileRoute
   RegisterRoute: typeof RegisterRoute
   UnauthorizedRoute: typeof UnauthorizedRoute
+  UpdateProfileRoute: typeof UpdateProfileRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -179,6 +200,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfileRoute: ProfileRoute,
   RegisterRoute: RegisterRoute,
   UnauthorizedRoute: UnauthorizedRoute,
+  UpdateProfileRoute: UpdateProfileRoute,
 }
 
 export const routeTree = rootRoute
@@ -196,7 +218,8 @@ export const routeTree = rootRoute
         "/login",
         "/profile",
         "/register",
-        "/unauthorized"
+        "/unauthorized",
+        "/update-profile"
       ]
     },
     "/": {
@@ -216,6 +239,9 @@ export const routeTree = rootRoute
     },
     "/unauthorized": {
       "filePath": "unauthorized.tsx"
+    },
+    "/update-profile": {
+      "filePath": "update-profile.tsx"
     }
   }
 }

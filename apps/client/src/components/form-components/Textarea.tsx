@@ -13,6 +13,9 @@ interface FormTextareaProps<T extends FieldValues> {
   textareaprops?: Omit<MantineTextareaProps, "onChange" | "value">;
   wrapperProps?: React.ComponentPropsWithoutRef<typeof InputWrapper>;
   labelProps?: React.LabelHTMLAttributes<HTMLLabelElement>;
+  rows?: number;
+  minRows?: number;
+  maxRows?: number;
 }
 
 // TODO: label props can be deleted, if style for label is moved from app.css to this module, then we can use classnames, should be done for all form components
@@ -24,6 +27,7 @@ const FormTextarea = React.memo(<T extends FieldValues>({
   description,
   placeholder,
   required,
+  rows,
   textareaprops,
   wrapperProps,
 }: FormTextareaProps<T>) => {
@@ -51,6 +55,7 @@ const FormTextarea = React.memo(<T extends FieldValues>({
             }}
             placeholder={placeholder}
             required={required}
+            rows={rows}
             error={error?.message}
             {...textareaprops}
           />

@@ -1,3 +1,4 @@
+import { useNavigate } from "@tanstack/react-router";
 import styles from "./ProfileInfo.module.css";
 import { UserProfile } from "@shared/userProfile.ts";
 
@@ -6,12 +7,13 @@ interface ProfileInfoProps {
 }
 
 const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
+  const navigate = useNavigate();
   return (
     <div className={styles.container}>
       <div className={styles.info}>
         <img
           className={styles.picture}
-          src={user.profilePicture ?? "/public/profile.png"}
+          src={user.profilePicture ?? "/profile.png"}
           alt={`${user.name}'s profile`}
         />
         <div className={styles.text}>
@@ -35,7 +37,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
         </div>
       </div>
       <div className={styles.buttons}>
-        <button className="btn">Rediger profil</button>
+        <button className="btn" onClick={() => navigate({ to: "/update-profile" })}>Rediger profil</button>
         <button className="btn">Indstilinger</button>
       </div>
       <div className={`${styles.container} ${styles["text-container"]}`}>
