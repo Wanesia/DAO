@@ -10,7 +10,7 @@ export class Instrument {
   @Prop({ type: Number, min: 1, max: 6, required: true })
   level: number;
 
-  @Prop({ type: [String], enum: Genre})
+  @Prop({ type: [String], enum: Genre })
   genres: Genre[];
 }
 @Schema()
@@ -71,8 +71,8 @@ export class User extends Document {
   @Prop()
   isSubscribedToNewsletter: boolean;
 
-  @Prop({ type: Instrument })
-  instrument: Instrument;
+  @Prop({ type: [Instrument], default: [] })
+  instruments: Instrument[];
 
   @Prop({ type: [Types.ObjectId], ref: 'Ensemble' })
   ensembleIds: Types.ObjectId[];

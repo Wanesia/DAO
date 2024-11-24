@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User } from './schema/user.schema';
+import { Instrument, User } from './schema/user.schema';
 import { UpdateProfileDto } from './dto/updateProfile.dto';
 
 @Injectable()
@@ -82,7 +82,10 @@ export class UsersService {
       throw new Error('Failed to update user. Please try again later.');
     }
   }
-  async updateUserByEmail(email: string, userDto: UpdateProfileDto): Promise<User> {
+  async updateUserByEmail(
+    email: string,
+    userDto: UpdateProfileDto,
+  ): Promise<User> {
     try {
       const updatedUser = await this.userModel.findOneAndUpdate(
         { email: email },
@@ -115,4 +118,13 @@ export class UsersService {
       throw new Error('Failed to delete user. Please try again later.');
     }
   }
+  async addInstrument(email: string, newInstrument: Instrument): Promise<User> {
+    const user = await this.userModel.findOne({ email });
+    if (!user) {
+      throw new NotFoundException(`User with email ${email} not found`);
+    }
+    user.instruments.push(newInstrument);
+    return user.save();
+  }
+  
 }

@@ -14,10 +14,9 @@ import {
 import { UsersService } from './user.service';
 import { User } from './schema/user.schema';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
-import { Request } from 'express';
-import { UpdateProfileDto } from './dto/updateProfile.dto';
 import { ImageUploadService } from 'src/imageUpload/imageUpload.service';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { AddInstrumentDto } from './dto/add-instrument.dto';
 
 @Controller('users')
 export class UsersController {
@@ -71,7 +70,7 @@ export class UsersController {
       ...userDto,
       profilePicture: profilePictureUrl,
     };
-    console.log("Updated data:", updateData);
+    console.log('Updated data:', updateData);
     return this.usersService.updateUserByEmail(email, updateData);
   }
   @Patch(':id')
@@ -82,5 +81,13 @@ export class UsersController {
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<void> {
     return this.usersService.deleteUser(id);
+  }
+
+  @Patch('instruments/:email')
+  async addInstrument(
+    @Param('email') email: string,
+    @Body() instrument: AddInstrumentDto,
+  ) {
+    return this.usersService.addInstrument(email, instrument);
   }
 }
