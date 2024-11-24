@@ -1,5 +1,5 @@
 import { useController, Control } from "react-hook-form";
-import styles from "./InstrumentForm.module.css";
+import styles from "./LevelSelector.module.css";
 interface LevelSelectorProps {
   name: string;
   control: Control<any>;
@@ -26,27 +26,31 @@ const LevelSelector: React.FC<LevelSelectorProps> = ({ name, control }) => {
   };
 
   return (
-    <div>
-      <h3>Hvor øvet er du?</h3>
-      <div className={styles.level}>
-        <span>Niveau {field.value}</span>
-        <button
-          type="button"
-          onClick={() => changeLevel(-1)}
-          disabled={field.value === 1}
-        >
-          -
-        </button>
-        <button
-          type="button"
-          onClick={() => changeLevel(1)}
-          disabled={field.value === 6}
-        >
-          +
-        </button>
+    <>
+      <p className={styles.text}>Hvor øvet er du?</p>
+      <div className={styles.container}>
+        <div className={styles.level}>
+          <h2 className={styles.niveau}>Niveau {field.value}</h2>
+          <div className={styles.buttons}>
+            <button
+              type="button"
+              onClick={() => changeLevel(-1)}
+              disabled={field.value === 1}
+            >
+              -
+            </button>
+            <button
+              type="button"
+              onClick={() => changeLevel(1)}
+              disabled={field.value === 6}
+            >
+              +
+            </button>
+          </div>
+        </div>
+        <p>{levelText[field.value]}</p>
       </div>
-      <p>{levelText[field.value]}</p>
-    </div>
+    </>
   );
 };
 
