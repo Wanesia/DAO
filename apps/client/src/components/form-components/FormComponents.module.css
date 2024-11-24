@@ -16,6 +16,8 @@
 
 .inputError {
   border-color: #e74c3c;
+  border-radius: 10px;
+  padding: 20px 15px;
 }
 
 .description {
@@ -37,4 +39,18 @@
     margin-bottom: 10px;
   }
 
+  .input:-webkit-autofill {
+    box-shadow: 0 0 0px 1000px white inset; 
+  }
+  
+  .input:focus, .select:focus, .textarea:focus, .input:-webkit-autofill:focus, .textarea:-webkit-autofill:focus {
+    box-shadow: 0 0 0px 1000px white inset;  
+    border: 1px solid var(--primary-blue);
+  }
 
+  .label {
+    color: var(--primary-blue);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  

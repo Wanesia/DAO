@@ -15,7 +15,6 @@ interface FormRadioGroupProps<T extends FieldValues> {
   label?: string;
   description?: string;
   required?: boolean;
-  labelProps?: React.LabelHTMLAttributes<HTMLLabelElement>;
   inputProps?: React.ComponentPropsWithoutRef<typeof Radio>;
 }
 
@@ -40,9 +39,7 @@ const FormRadioGroup = <T extends FieldValues>({
           required={required}
           classNames={{
             description: styles.description,
-          }}
-          labelProps={{
-            className: "label",
+            label: styles.label,
           }}
         >
           {options.map((option) => (

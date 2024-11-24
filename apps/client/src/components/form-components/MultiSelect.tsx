@@ -17,7 +17,6 @@ interface MultiSelectProps<T extends FieldValues> {
   error?: string;
   selectProps?: Omit<MantineMultiSelectProps, "data" | "value" | "onChange">;
   required?: boolean;
-  labelProps?: React.LabelHTMLAttributes<HTMLLabelElement>; 
 }
 
 const FormMultiSelect = <T extends FieldValues>({
@@ -36,8 +35,9 @@ const FormMultiSelect = <T extends FieldValues>({
     description={description}
     required={required}
     error={error}
-    labelProps={{
-      className: 'label',
+    classNames={{
+      description: styles.description,
+      label: styles.label,
     }}
   >
     <Controller

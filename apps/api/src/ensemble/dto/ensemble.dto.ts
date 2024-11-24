@@ -24,7 +24,7 @@ export class CreateEnsembleDto {
 
   @IsOptional()
   @IsString()
-  homepageUrl?: string;
+  homepageUrl?: string | '';
 
   @ValidateNested()
   @Type(() => LocationDto)

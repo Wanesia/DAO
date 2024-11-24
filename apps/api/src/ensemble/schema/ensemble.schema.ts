@@ -18,7 +18,7 @@ export class Location {
 
 @Schema()
 export class Ensemble extends Document {
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   name: string;
 
   @Prop()
@@ -29,12 +29,14 @@ export class Ensemble extends Document {
 
   @Prop({
     validate: {
-      validator: (value: string) =>
-        /^https?:\/\/[\w\-]+(\.[\w\-]+)+[/#?]?.*$/.test(value),
+      validator: (value: string) => 
+        value === "" || /^https?:\/\/[\w\-]+(\.[\w\-]+)+[/#?]?.*$/.test(value),
       message: 'Invalid URL format',
     },
+    default: "", 
   })
   homepageUrl: string;
+  
 
   @Prop({ type: Location, required: true })
   location: Location;

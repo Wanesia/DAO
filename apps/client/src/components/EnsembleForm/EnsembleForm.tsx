@@ -15,7 +15,7 @@ import DragAndDrop from "../DragAndDrop/DragAndDrop";
 
 
 // TODO: need to be moved to shared file again
-export enum MusicianCount {
+enum MusicianCount {
   ONE_TO_FOUR = "1-4 musikere",
   FIVE_TO_NINE = "5-9 musikere",
   TEN_TO_TWENTY_FOUR = "10-24 musikere",
@@ -23,7 +23,7 @@ export enum MusicianCount {
   FIFTY_PLUS = "Mere end 50 musikere",
 }
 
-export enum PracticeFrequency {
+enum PracticeFrequency {
   MULTIPLE_TIMES_WEEK = "Flere gange om ugen",
   ONCE_A_WEEK = "1 gang om ugen",
   EVERY_OTHER_WEEK = "1 gang hver anden uge",
@@ -31,12 +31,12 @@ export enum PracticeFrequency {
   EVERY_OTHER_MONTH = "1 gang hver anden måned eller",
 }
 
-export enum EnsembleType {
+enum EnsembleType {
   CONTINUOUS = "Kontinuerligt",
   PROJECT_BASED = "Projektbaseret",
 }
 
-export enum Genre {
+enum Genre {
   BAROK = "Barok",
   FOLKEMUSIK = "Folkemusik",
   KAMMERMUSIK = "Kammermusik",
@@ -47,7 +47,7 @@ export enum Genre {
 }
 
 const EnsembleForm: React.FC = () => {
-  const { control, handleSubmit } = useForm<FieldValues>();
+  const { control, handleSubmit, setError } = useForm<FieldValues>();
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -77,41 +77,50 @@ const EnsembleForm: React.FC = () => {
   }));
 
   const onSubmit = async (data: FieldValues) => {
-    // TODO: let's create a spinner component for loading
     setLoading(true);
     setSuccessMessage("");
     setErrorMessage("");
-
-    //TODO: find a way to make this look better
+  
     try {
       const formData = new FormData();
       formData.append("name", data.name);
       formData.append("description", data.description || "");
       formData.append("homepageUrl", data.homepage || "");
-      formData.append("city", data.city || ""); 
+      formData.append("city", data.city || "");
       formData.append("postcode", data.postcode || "");
       formData.append("number_of_musicians", data.number_of_musicians);
       formData.append("practice_frequency", data.practiceFrequency);
       formData.append("genres", JSON.stringify(data.genres));
       formData.append("type", data.playType);
       formData.append("image", data.image);
+  
       await createEnsemble(formData);
+  
       setSuccessMessage("Ensemble created successfully!");
       navigate({ to: "/profile" });
     } catch (error: any) {
-      //TODO: let's create some standard error handling and success messages
-      setErrorMessage(
-        error.response?.data?.message || "Failed to create ensemble."
-      );
+      
+      const errorMessage = error?.data?.message || "Failed to create ensemble.";
+      if (errorMessage === "Ensemble name must be unique") {
+        setError("name", {
+          type: "manual",
+          message: "Et ensemble med dette navn findes allerede.",
+        });
+      } else {
+        setErrorMessage(errorMessage);
+      }
+
     } finally {
       setLoading(false);
     }
   };
+  
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
       <FormInput
         name="name"
+        label="Ensemblets navn"
         control={control}
         placeholder="Ensemblets navn"
         required
@@ -121,7 +130,7 @@ const EnsembleForm: React.FC = () => {
         control={control}
         size="large"
         placeholderImage="/placeholder1.png"
-        buttonLabel="Upload Cover Image"
+        buttonLabel="Upload coverbillede"
       />
       <FormTextarea
         name="description"
@@ -145,11 +154,12 @@ const EnsembleForm: React.FC = () => {
             name="postcode"
             control={control}
             label="Område"
+            required
             placeholder="Postnr."
           />
         </Grid.Col>
         <Grid.Col span={6}>
-          <FormInput name="city" control={control} placeholder="By" />
+          <FormInput name="city" control={control} placeholder="By" required/>
         </Grid.Col>
       </Grid>
       <SingleSelect
@@ -169,6 +179,7 @@ const EnsembleForm: React.FC = () => {
       <FormRadioGroup
         name="playType"
         control={control}
+        required
         options={ensembleTypeOptions}
         label="Ensemblet spiller..."
       />
@@ -177,6 +188,7 @@ const EnsembleForm: React.FC = () => {
         control={control}
         options={genreOptions}
         label="Genrer"
+        required
       />
       <Button
         color="blue"

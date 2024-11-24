@@ -2,6 +2,8 @@ import styles from "./RegisterForm.module.css";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { registerUser } from "../../api/authApi";
 import { useNavigate } from "@tanstack/react-router";
+import FormInput from "../form-components/FormInput";
+import Button from "../Button/Button";
 
 type FormFields = {
   name: string;
@@ -14,9 +16,10 @@ type FormFields = {
 
 export default function RegisterForm() {
   const {
-    register,
     handleSubmit,
     setError,
+    control,
+    register,
     formState: { errors, isSubmitting },
   } = useForm<FormFields>({
     defaultValues: {
@@ -29,14 +32,18 @@ export default function RegisterForm() {
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
       const { acceptedTerms, ...submitData } = data;
-      await registerUser(submitData); 
+      await registerUser(submitData);
       navigate({ to: "/login" });
-      console.log("Registered successfully");
     } catch (error: any) {
-      if (error.response && error.response.data.message === "Email already in use") {
-        setError("email", { message: "Email already exists" });
+      if (
+        error.response &&
+        error.response.data.message === "Email already in use"
+      ) {
+        setError("email", { message: "E-mailen findes allerede" });
       } else {
-        setError("root", { message: "Error during registration" });
+        setError("root", {
+          message: "Der opstod en fejl under registreringen",
+        });
       }
     }
   };
@@ -45,78 +52,74 @@ export default function RegisterForm() {
     <div className={styles.container}>
       <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
         <h1>Opret profil</h1>
-        <label htmlFor="name">Fornavn</label>
-        <input
-          {...register("name", {
-            required: "Name is required",
-            minLength: {
-              value: 2,
-              message: "Name must be at least 2 characters",
-            },
-          })}
-          type="text"
+        <FormInput
+          name="name"
+          control={control}
+          label="Fornavn"
+          required
           placeholder="Fornavn"
-        ></input>
-        {errors.name && (
-          <div className={styles.error}>{errors.name.message}</div>
-        )}
-        <label htmlFor="surname">Efternavn</label>
-        <input
-          {...register("surname", {
-            required: "Surname is required",
+          rules={{
+            required: "Fornavn er påkrævet",
             minLength: {
               value: 2,
-              message: "Surname must be at least 2 characters",
+              message: "Fornavn skal være mindst 2 tegn langt",
             },
-          })}
-          type="text"
-          placeholder="Efternavn"
-        ></input>
-        {errors.surname && (
-          <div className={styles.error}>{errors.surname.message}</div>
-        )}
-        <label htmlFor="email">E-mail</label>
-        <input
-          {...register("email", {
-            required: "Email is required",
-            validate: (value) => {
-              if (!value.includes("@")) {
-                return "Email must include @";
-              }
-              return true;
-            },
-          })}
-          type="text"
-          placeholder="E-mail"
+          }}
         />
-        {errors.email && (
-          <div className={styles.error}>{errors.email.message}</div>
-        )}
-        <label htmlFor="password">Adgangskode</label>
-        <input
-          {...register("password", {
-            required: "Password is required",
+        <FormInput
+          name="surname"
+          control={control}
+          label="Efternavn"
+          placeholder="Efternavn"
+          required
+          rules={{
+            required: "Efternavn er påkrævet",
+            minLength: {
+              value: 2,
+              message: "Efternavn skal være mindst 2 tegn langt",
+            },
+          }}
+        />
+        <FormInput
+          name="email"
+          type="email"
+          control={control}
+          label="E-mail"
+          required
+          placeholder="E-mail"
+          rules={{
+            required: "E-mail er påkrævet",
+            pattern: {
+              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+              message: "Ugyldigt e-mailformat",
+            },
+          }}
+        />
+        <FormInput
+          name="password"
+          type="password"
+          control={control}
+          label="Adgangskode"
+          required
+          placeholder="Adgangskode"
+          rules={{
+            required: "Adgangskode er påkrævet",
             minLength: {
               value: 8,
-              message: "Password must be at least 8 characters",
+              message: "Adgangskode skal være mindst 8 tegn lang",
             },
-          })}
-          type="password"
-          placeholder="Adgangskode"
+          }}
         />
-        {errors.password && (
-          <div className={styles.error}>{errors.password.message}</div>
-        )}
+
         <div className={styles.checkboxes}>
           <label className={styles.terms}>
             <input
               type="checkbox"
               {...register("acceptedTerms", {
-                required: "You must accept the terms and conditions",
+                required: "Du skal acceptere betingelserne",
               })}
             />
             Jeg accepterer betingelserne
-            
           </label>
           {errors.acceptedTerms && (
             <div className={styles.error}>{errors.acceptedTerms.message}</div>
@@ -126,9 +129,14 @@ export default function RegisterForm() {
             Tilmeld mig DAOS nyhedsbrev
           </label>
         </div>
-        <button className={styles.btn} disabled={isSubmitting} type="submit">
-          {isSubmitting ? "Loading..." : "Opret profil"}
-        </button>
+
+        <Button
+          type="submit"
+          text={isSubmitting ? "Indlæser..." : "Opret profil"}
+          color="blue"
+          onClick={() => navigate({ to: "/login" })}
+          disabled={isSubmitting}
+        />
         {errors.root && (
           <div className={styles.error}>{errors.root.message}</div>
         )}

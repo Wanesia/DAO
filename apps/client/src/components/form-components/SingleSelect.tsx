@@ -17,7 +17,6 @@ interface SingleSelectProps<T extends FieldValues> {
   error?: string;
   selectProps?: Omit<MantineSelectProps, "data" | "value" | "onChange">;
   required?: boolean;
-  labelProps?: React.LabelHTMLAttributes<HTMLLabelElement>; 
 }
 
 const SingleSelect = <T extends FieldValues>({
@@ -36,8 +35,9 @@ const SingleSelect = <T extends FieldValues>({
       description={description}
       required={required}
       error={error}
-      labelProps={{
-        className: 'label',
+      classNames={{
+        description: styles.description,
+        label: styles.label,
       }}
     >
       <Controller

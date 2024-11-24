@@ -67,7 +67,7 @@ const DragAndDrop = <T extends FieldValues>({
                 />
                 {size === "large" && !preview && (
                   <div className={styles.overlay}>
-                    <p>Drag & drop a file here or click below to upload</p>
+                    <p>Træk og slip en fil her eller klik nedenfor for at uploade</p>
                   </div>
                 )}
               </div>

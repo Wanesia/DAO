@@ -1,6 +1,7 @@
 import { useNavigate } from "@tanstack/react-router";
 import styles from "./ProfileInfo.module.css";
 import { UserProfile } from "@shared/userProfile.ts";
+import Button from "../Button/Button";
 
 interface ProfileInfoProps {
   user: UserProfile;
@@ -37,8 +38,8 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
         </div>
       </div>
       <div className={styles.buttons}>
-        <button className="btn" onClick={() => navigate({ to: "/update-profile" })}>Rediger profil</button>
-        <button className="btn">Indstilinger</button>
+        <Button text="Rediger profil" color="white-slim" onClick={() => navigate({ to: "/update-profile" })} />
+        <Button text="Indstilinger" color="white-slim" />
       </div>
       <div className={`${styles.container} ${styles["text-container"]}`}>
         <h2 className={styles.title}>Profiltekst</h2>
@@ -47,7 +48,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
       <div className={`${styles.container} ${styles["instrument-container"]}`}>
         <div className={styles.top}>
           <h2>Mine instrumenter</h2>
-          <button>Tilføj</button>
+          <Button text="Tilføj" color="white-slim" />
         </div>
         <div className={styles.content}>
           {user.instrument ? (

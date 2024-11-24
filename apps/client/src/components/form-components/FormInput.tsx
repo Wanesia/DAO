@@ -1,5 +1,5 @@
-import { Input, InputWrapper, InputProps, InputLabelProps } from '@mantine/core';
-import { Control, Controller, FieldValues, Path } from 'react-hook-form';
+import { Input, InputWrapper, InputProps } from '@mantine/core';
+import { Control, Controller, FieldValues, Path, RegisterOptions } from 'react-hook-form';
 import styles from './FormComponents.module.css';
 
 interface FormInputProps<T extends FieldValues> {
@@ -9,10 +9,12 @@ interface FormInputProps<T extends FieldValues> {
   placeholder?: string;
   description?: string;
   required?: boolean;
-  type?: React.HTMLInputTypeAttribute; 
-  inputProps?: InputProps;
-  labelProps?: InputLabelProps;
+  type?: React.HTMLInputTypeAttribute;
+  inputProps?: Omit<InputProps, 'error'>; 
+  rules?: RegisterOptions<T>; 
+  disabled?: boolean;
 }
+
 
 const FormInput = <T extends FieldValues>({
   name,
@@ -23,22 +25,25 @@ const FormInput = <T extends FieldValues>({
   required,
   type = 'text', // default type is text
   inputProps,
+  rules,
+  disabled,
 }: FormInputProps<T>) => {
   return (
     <InputWrapper
       label={label}
       description={description}
       required={required}
+      error={control.getFieldState(name)?.error?.message}
       classNames={{
         description: styles.description,
+        label: styles.label,
       }}
-      labelProps={{
-        className: 'label',
-      }}
+  
     >
       <Controller
         name={name}
         control={control}
+        rules={rules}
         render={({ field, fieldState: { error } }) => (
           <Input
             {...field}
@@ -46,9 +51,8 @@ const FormInput = <T extends FieldValues>({
             classNames={{
               input: error ? styles.inputError : styles.input,
             }}
+            disabled={disabled}
             placeholder={placeholder}
-            required={required}
-            error={error?.message}
             {...inputProps}
           />
         )}

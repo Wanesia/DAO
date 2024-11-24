@@ -14,10 +14,8 @@ import { Ensemble } from './schema/ensemble.schema';
 import { CreateEnsembleDto } from './dto/ensemble.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { ImageUploadService } from 'src/imageUpload/imageUpload.service';
-import { UseInterceptors } from '@nestjs/common';
+import { UseInterceptors, HttpException, HttpStatus, UploadedFile  } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { UploadedFile } from '@nestjs/common';
-import { ImageUploadModule } from 'src/imageUpload/imageUpload.module';
 
 interface AuthenticatedRequest extends Request {
   user: {
@@ -34,36 +32,52 @@ export class EnsembleController {
   ) {}
 
   @UseGuards(JwtAuthGuard)
-@Post()
-@UseInterceptors(FileInterceptor('image'))
-async create(
-  @UploadedFile() image: Express.Multer.File, 
-  @Body() formData: any, 
-  @Req() req: AuthenticatedRequest,
-): Promise<Ensemble> {
-
-  const creatorId = req.user.id;
-
-  let imageUrl: string | undefined;
-  if (image) {
-    const uploadResult = await this.imageUploadService.uploadImage(image, 'ensembles');
-    imageUrl = uploadResult.secure_url;
+  @Post()
+  @UseInterceptors(FileInterceptor('image'))
+  async create(
+    @UploadedFile() image: Express.Multer.File,
+    @Body() formData: any,
+    @Req() req: AuthenticatedRequest,
+  ): Promise<Ensemble> {
+    const creatorId = req.user.id;
+  
+    let imageUrl: string | undefined;
+    if (image) {
+      const uploadResult = await this.imageUploadService.uploadImage(
+        image,
+        'ensembles',
+      );
+      imageUrl = uploadResult.secure_url;
+    }
+  
+    const ensembleDto: CreateEnsembleDto = {
+      ...formData,
+      location: {
+        city: formData.city,
+        postCode: formData.postcode,
+      },
+      genres: Array.isArray(formData.genres)
+        ? formData.genres
+        : JSON.parse(formData.genres),
+      type: formData.type,
+      image: imageUrl,
+    };
+  
+    try {
+      return await this.ensembleService.createEnsemble(ensembleDto, creatorId);
+    } catch (error) {
+      if (error.message === 'Ensemble with this name already exists') {
+        throw new HttpException(
+          'Ensemble name must be unique',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      throw new HttpException(
+        'Failed to create ensemble',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
-
-  const ensembleDto: CreateEnsembleDto = {
-    ...formData,
-    location: {
-      city: formData.city,
-      postCode: formData.postcode,
-    },
-    genres: Array.isArray(formData.genres) ? formData.genres : JSON.parse(formData.genres),
-    type: formData.type,
-    imageUrl: imageUrl,
-  };
-
-  return this.ensembleService.createEnsemble(ensembleDto, creatorId);
-}
-
 
 
   @Get()
