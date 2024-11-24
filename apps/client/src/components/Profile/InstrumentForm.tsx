@@ -68,8 +68,9 @@ const InstrumentForm: React.FC<ProfileInfoProps> = ({ user }) => {
         text="Tilbage"
         onClick={() => navigate({ to: "/profile" })}
       />
+      <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
       <h2>Tilføj instrument</h2>
-      <form onSubmit={handleSubmit(onSubmit)}>
+
         <SingleSelect
           name="name"
           control={control}
