@@ -17,6 +17,7 @@ import { Route as RegisterImport } from './routes/register'
 import { Route as ProfileImport } from './routes/profile'
 import { Route as LoginImport } from './routes/login'
 import { Route as CreateEnsembleImport } from './routes/create-ensemble'
+import { Route as AddInstrumentImport } from './routes/add-instrument'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
@@ -57,6 +58,12 @@ const CreateEnsembleRoute = CreateEnsembleImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AddInstrumentRoute = AddInstrumentImport.update({
+  id: '/add-instrument',
+  path: '/add-instrument',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
@@ -72,6 +79,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/add-instrument': {
+      id: '/add-instrument'
+      path: '/add-instrument'
+      fullPath: '/add-instrument'
+      preLoaderRoute: typeof AddInstrumentImport
       parentRoute: typeof rootRoute
     }
     '/create-ensemble': {
@@ -123,6 +137,7 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/add-instrument': typeof AddInstrumentRoute
   '/create-ensemble': typeof CreateEnsembleRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
@@ -133,6 +148,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/add-instrument': typeof AddInstrumentRoute
   '/create-ensemble': typeof CreateEnsembleRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
@@ -144,6 +160,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/add-instrument': typeof AddInstrumentRoute
   '/create-ensemble': typeof CreateEnsembleRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
@@ -156,6 +173,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/add-instrument'
     | '/create-ensemble'
     | '/login'
     | '/profile'
@@ -165,6 +183,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/add-instrument'
     | '/create-ensemble'
     | '/login'
     | '/profile'
@@ -174,6 +193,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/add-instrument'
     | '/create-ensemble'
     | '/login'
     | '/profile'
@@ -185,6 +205,7 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AddInstrumentRoute: typeof AddInstrumentRoute
   CreateEnsembleRoute: typeof CreateEnsembleRoute
   LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
@@ -195,6 +216,7 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AddInstrumentRoute: AddInstrumentRoute,
   CreateEnsembleRoute: CreateEnsembleRoute,
   LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,
@@ -214,6 +236,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/add-instrument",
         "/create-ensemble",
         "/login",
         "/profile",
@@ -224,6 +247,9 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/add-instrument": {
+      "filePath": "add-instrument.tsx"
     },
     "/create-ensemble": {
       "filePath": "create-ensemble.tsx"

@@ -38,7 +38,11 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
         </div>
       </div>
       <div className={styles.buttons}>
-        <Button text="Rediger profil" color="white-slim" onClick={() => navigate({ to: "/update-profile" })} />
+        <Button
+          text="Rediger profil"
+          color="white-slim"
+          onClick={() => navigate({ to: "/update-profile" })}
+        />
         <Button text="Indstilinger" color="white-slim" />
       </div>
       <div className={`${styles.container} ${styles["text-container"]}`}>
@@ -48,29 +52,34 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
       <div className={`${styles.container} ${styles["instrument-container"]}`}>
         <div className={styles.top}>
           <h2>Mine instrumenter</h2>
-          <Button text="Tilføj" color="white-slim" />
+          <Button
+            text="Tilføj"
+            color="white-slim"
+            onClick={() => navigate({ to: "/add-instrument" })}
+          />
         </div>
-        <div className={styles.content}>
-          {user.instrument ? (
-            <>
-              {" "}
-              <div className={styles.top}>
-                <p className={styles.text}>{user.instrument.name}</p>
-                <p>
-                  Erfaring{" "}
-                  <span className={styles.level}>{user.instrument.level}</span>
-                </p>
+        {user.instruments && user.instruments.length > 0 ? (
+          user.instruments.map((instrument, index) => (
+            <div className={styles.content}>
+              <div key={index} className={styles.instrument}>
+                <div className={styles.top}>
+                  <p className={styles.text}>{instrument.name}</p>
+                  <p>
+                    Erfaring{" "}
+                    <span className={styles.level}>{instrument.level}</span>
+                  </p>
+                </div>
+                <ul className={styles.genres}>
+                  {instrument.genres.map((genre, i) => (
+                    <li key={i}>{genre}</li>
+                  ))}
+                </ul>
               </div>
-              <ul className={styles.genres}>
-                {user.instrument.genres.map((genre, index) => (
-                  <li key={index}>{genre}</li>
-                ))}
-              </ul>
-            </>
-          ) : (
-            <p>Ingen instrumenter registreret</p>
-          )}
-        </div>
+            </div>
+          ))
+        ) : (
+          <p>Ingen instrumenter registreret</p>
+        )}
       </div>
       <div className={`${styles.container} ${styles["ensembler-container"]}`}>
         <h2>Mine ensembler</h2>

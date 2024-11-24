@@ -26,7 +26,7 @@ export interface UserProfile {
   profilePicture?: string | null;
   isSeeking?: boolean;
   isSubscribedToNewsletter: boolean;
-  instrument?: Instrument;
+  instruments: Instrument[];
   ensembleIds?: string[];
   facebookId?: string;
 }
