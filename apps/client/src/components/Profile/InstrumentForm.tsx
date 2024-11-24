@@ -39,7 +39,15 @@ export enum InstrumentName {
 const InstrumentForm: React.FC<ProfileInfoProps> = ({ user }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const { control, handleSubmit } = useForm<FieldValues>();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FieldValues>({
+    mode: "onBlur", // to trigger validation on blur(when the input field loses focus.)
+  });
+
   const genreOptions = Object.keys(Genre).map((key) => ({
     value: Genre[key as keyof typeof Genre],
     label: Genre[key as keyof typeof Genre],
@@ -51,13 +59,26 @@ const InstrumentForm: React.FC<ProfileInfoProps> = ({ user }) => {
 
   const onSubmit = async (data: any) => {
     setLoading(true);
+    setErrorMessage(null);
     console.log("Submitting instrument:", data);
     try {
+      if (
+        !data.name ||
+        !data.level ||
+        !data.genres ||
+        data.genres.length === 0
+      ) {
+        setErrorMessage("Venligst vælg instrument, niveau og genrer.");
+        setLoading(false);
+        return;
+      }
       await addInstrument(user.email, data);
       console.log("Instrument added successfully");
       navigate({ to: "/profile" });
     } catch (error) {
       console.error("Error adding instrument:", error);
+      setErrorMessage("Der opstod en fejl. Prøv venligst igen.");
+      setLoading(false);
     }
   };
   return (
@@ -69,7 +90,7 @@ const InstrumentForm: React.FC<ProfileInfoProps> = ({ user }) => {
         onClick={() => navigate({ to: "/profile" })}
       />
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-      <h2>Tilføj instrument</h2>
+        <h2>Tilføj instrument</h2>
 
         <SingleSelect
           name="name"
@@ -77,7 +98,11 @@ const InstrumentForm: React.FC<ProfileInfoProps> = ({ user }) => {
           options={instrumentOptions}
           required
         />
+        {errors.name && <p className={styles.error}>Vælg et instrument</p>}
+
         <LevelSelector name="level" control={control} />
+        {errors.level && <p className={styles.error}>Vælg niveau</p>}
+
         <MultiSelect
           name="genres"
           control={control}
@@ -85,11 +110,15 @@ const InstrumentForm: React.FC<ProfileInfoProps> = ({ user }) => {
           label="Genrer"
           required
         />
+
         <Button
           color="blue"
           text={loading ? "Opretter..." : "Tilføj instrument"}
           type="submit"
         />
+        {errors.genres && <p className={styles.error}>Vælg mindst en genre</p>}
+
+        {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
       </form>
     </div>
   );
