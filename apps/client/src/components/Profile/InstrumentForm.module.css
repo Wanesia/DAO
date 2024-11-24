@@ -16,3 +16,6 @@
 h2{
   margin-bottom: 0rem;
 }
+.errorMessage  {
+  color: var(--primary-red);
+}
