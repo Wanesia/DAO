@@ -90,4 +90,11 @@ export class UsersController {
   ) {
     return this.usersService.addInstrument(email, instrument);
   }
+  @Patch('/:email/instruments/delete')
+  async deleteInstrumentByEmail(
+    @Param('email') email: string,
+    @Body() body: { index: number },
+  ) {
+    return this.usersService.deleteInstrument(email, body.index);
+  }
 }

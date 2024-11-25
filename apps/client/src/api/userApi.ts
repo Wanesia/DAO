@@ -29,26 +29,43 @@ export const updateUserProfile = async (userEmail: string, formData: FormData): 
   }
 };
 
-export const addInstrument = async (userEmail: string, instrumentData: { name: string; level: number; genres: string[] }): Promise<void> => {
+export const addInstrument = async (
+  userEmail: string,
+  instrumentData: { name: string; level: number; genres: string[] }
+): Promise<void> => {
   try {
     const response = await axiosInstance.patch(
       `/users/instruments/${userEmail}`,
-      instrumentData,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
+      instrumentData
     );
     console.log("Instrument added successfully:", response.data);
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error("Failed to add instrument:", error.response?.data);
-      throw new Error(error.response?.data?.message || "Could not add instrument. Please try again.");
+      throw new Error(
+        error.response?.data?.message || "Could not add instrument. Please try again."
+      );
     } else {
       console.error("An unexpected error occurred:", error);
       throw new Error("An unexpected error occurred. Please try again.");
     }
   }
 };
-
+export const deleteInstrument = async (email: string, index: number): Promise<any> => {
+  try {
+    const response = await axiosInstance.patch(`/users/${email}/instruments/delete`, {
+      index,
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Failed to delete instrument:", error.response?.data);
+      throw new Error(
+        error.response?.data?.message || "Failed to delete instrument. Please try again."
+      );
+    } else {
+      console.error("An unexpected error occurred:", error);
+      throw new Error("An unexpected error occurred. Please try again.");
+    }
+  }
+};
