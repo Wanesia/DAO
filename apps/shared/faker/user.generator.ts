@@ -3,6 +3,7 @@ import { Types } from "mongoose";
 import { FakeUser, Location, Instrument } from "../types";
 import { InstrumentName, Genre } from "../enums";
 import { LocationGenerator } from "./location.generator";
+import * as bcrypt from 'bcrypt';
 
 export class UserGenerator {
   static generateLocation(): Location {
@@ -26,12 +27,13 @@ export class UserGenerator {
     };
   }
 
-  static generate(count: number = 1): FakeUser[] {
+  static async generate(count: number = 1): Promise<FakeUser[]> {
     console.log("generating fake users");
 
     const users: FakeUser[] = [];
     const createdAt = faker.date.past({ years: 2 }); // A date within the past 2 years
     const lastSeen = faker.date.between({ from: createdAt, to: new Date() }); // Ensure lastSeen is after createdAt
+    const hashedPassword = await bcrypt.hash("password123", 10);
 
 
     for (let i = 0; i < count; i++) {
@@ -40,7 +42,7 @@ export class UserGenerator {
         name: faker.person.firstName(),
         surname: faker.person.lastName(),
         email: faker.internet.email(),
-        password: 'password123', // Default password for all fake users
+        password: hashedPassword, // Default password for all fake users
         authProvider: "local",
         phone: this.generatePhoneNumber(),
         location: this.generateLocation(),

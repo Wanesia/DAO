@@ -1,13 +1,15 @@
 import mongoose from 'mongoose';
 import { UserGenerator } from './user.generator';
 import { EnsembleGenerator } from './ensemble.generator';
-
+import 'dotenv/config';
+import * as dotenv from 'dotenv';
+dotenv.config({ path: 'apps/api/.env' });
 async function seedDatabase() {
   try {
     // Connect to MongoDB
-    await mongoose.connect('mongodb://localhost:27017/dao');
+    await mongoose.connect(process.env.DB_URI || 'mongodb://localhost:27017/dao');
 
-    const users = UserGenerator.generate(50); // Generate 50 users
+    const users = await UserGenerator.generate(50); // Generate 50 users
     const ensembles = EnsembleGenerator.generate(users, 10); // Generate 10 ensembles
 
     // Clear existing data
