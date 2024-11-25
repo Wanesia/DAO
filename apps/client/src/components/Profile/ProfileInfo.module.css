@@ -31,9 +31,8 @@
 .instrument-container,
 .ensembler-container,
 .text-container {
-    border-bottom: 1px solid var(--grey-border);
-    border-top: 1px solid var(--grey-border);
-
+  border-bottom: 1px solid var(--grey-border);
+  border-top: 1px solid var(--grey-border);
 }
 .level {
   display: inline-block;
@@ -41,35 +40,54 @@
   background-color: var(--primary-blue);
   color: white;
   border-radius: var(--large-radius);
+  margin-left: 0.5rem;
 }
 .top {
   display: flex;
   justify-content: space-between;
 }
-.content{
-    margin-top: 2rem;
-    border-radius: var(--large-radius);
-    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
-    padding: 1rem;
+.content {
+  margin-top: 2rem;
+  border-radius: var(--large-radius);
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  padding: 1rem;
 }
-.content>*{
-    color: var(--primary-blue);
-    font-weight: 700;
+.content > * {
+  color: var(--primary-blue);
+  font-weight: 700;
 }
-.text{
-    font-size: 1.5rem;
-    margin-bottom: 2rem;
+.text {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
 }
-.title{
-    margin-bottom: 1rem;
+.title {
+  margin-bottom: 1rem;
 }
-.genres{
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
+.genres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
-.genres>*{
-    padding: 0.5rem;
-    background-color: #F0F0F0;
-    border-radius: var(--small-radius);
+.genres > * {
+  padding: 0.5rem;
+  background-color: #f0f0f0;
+  border-radius: var(--small-radius);
+}
+.delete {
+  color: var(--primary-red);
+}
+.instrument {
+  position: relative;
+}
+.delete {
+  font-size: 1.25rem;
+  position: absolute;
+  top: 6rem;
+  right: 0.1rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.delete:hover {
+  color: red;
 }
