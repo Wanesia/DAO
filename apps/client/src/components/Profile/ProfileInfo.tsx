@@ -12,6 +12,7 @@ interface ProfileInfoProps {
 const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
   const navigate = useNavigate();
   const [isDeleting, setIsDeleting] = useState(false);
+  const [instruments, setInstruments] = useState(user.instruments);
 
   const handleDelete = async (index: number) => {
     if (isDeleting) return;
@@ -19,6 +20,9 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
     try {
       setIsDeleting(true);
       await deleteInstrument(user.email, index);
+      
+      // Update local state by removing the deleted instrument
+      setInstruments(prev => prev.filter((_, i) => i !== index));
     } catch (error) {
       console.error("Error deleting instrument:", error);
       alert(
@@ -78,8 +82,8 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
             onClick={() => navigate({ to: "/add-instrument" })}
           />
         </div>
-        {user.instruments && user.instruments.length > 0 ? (
-          user.instruments.map((instrument, index) => (
+        {instruments && user.instruments.length > 0 ? (
+         instruments.map((instrument, index) => (
             <div className={styles.content}>
               <div key={`instrument-${index}`} className={styles.instrument}>
                 <div className={styles.top}>
