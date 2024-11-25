@@ -4,6 +4,7 @@ import { UserProfile } from "@shared/userProfile.ts";
 import Button from "../Button/Button";
 import { deleteInstrument } from "../../api/userApi";
 import { useState } from "react";
+import { FaTrash } from "react-icons/fa";
 
 interface ProfileInfoProps {
   user: UserProfile;
@@ -20,9 +21,9 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
     try {
       setIsDeleting(true);
       await deleteInstrument(user.email, index);
-      
+
       // Update local state by removing the deleted instrument
-      setInstruments(prev => prev.filter((_, i) => i !== index));
+      setInstruments((prev) => prev.filter((_, i) => i !== index));
     } catch (error) {
       console.error("Error deleting instrument:", error);
       alert(
@@ -83,11 +84,12 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
           />
         </div>
         {instruments && user.instruments.length > 0 ? (
-         instruments.map((instrument, index) => (
+          instruments.map((instrument, index) => (
             <div className={styles.content}>
               <div key={`instrument-${index}`} className={styles.instrument}>
                 <div className={styles.top}>
                   <p className={styles.text}>{instrument.name}</p>
+
                   <p>
                     Erfaring
                     <span className={styles.level}>{instrument.level}</span>
@@ -98,9 +100,11 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
                     <li key={`genre-${index}-${i}`}>{genre}</li>
                   ))}
                 </ul>
-                <button onClick={() => handleDelete(index)}>
-                  {isDeleting ? "Sletter..." : "Slet"}{" "}
-                </button>
+                <FaTrash
+                  className={styles.delete}
+                  onClick={() => handleDelete(index)}
+                  title="Slet instrument"
+                />
               </div>
             </div>
           ))
