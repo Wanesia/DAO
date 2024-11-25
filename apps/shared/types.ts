@@ -1,6 +1,6 @@
-import { Types } from 'mongoose';
-import { MusicianCount, PracticeFrequency, EnsembleType, Genre } from './enums';
-import { FieldValues } from 'react-hook-form';
+import { Types } from "mongoose";
+import { MusicianCount, PracticeFrequency, EnsembleType, Genre, InstrumentName } from "./enums";
+import { FieldValues } from "react-hook-form";
 
 export type User = {
   id: number;
@@ -34,7 +34,7 @@ export type Location = {
 export type Ensemble = {
   id: string;
   name: string;
-  imageUrl: string 
+  imageUrl: string;
   description?: string;
   homepageUrl?: string;
   location: Location;
@@ -44,9 +44,9 @@ export type Ensemble = {
   type: EnsembleType;
 };
 
-export type EnsembleDto = FieldValues & { 
+export type EnsembleDto = FieldValues & {
   name: string;
-  image: File; 
+  image: File;
   description?: string;
   homepageUrl?: string;
   location: Location;
@@ -56,3 +56,41 @@ export type EnsembleDto = FieldValues & {
   type: EnsembleType;
 };
 
+export interface Instrument {
+  name: InstrumentName;
+  level: number;
+  genres: Genre[];
+}
+export interface FakeUser {
+  _id: Types.ObjectId;
+  name: string;
+  surname: string;
+  email: string;
+  password?: string;
+  authProvider: "local";
+  phone: string;
+  location: Location;
+  createdAt: Date;
+  lastSeen: Date;
+  dateOfBirth: Date;
+  profileText: string;
+  profilePicture: string;
+  isSeeking: boolean;
+  isSubscribedToNewsletter: boolean;
+  instruments: Instrument[];
+  ensembleIds: Types.ObjectId[];
+}
+export interface FakeEnsemble {
+  _id: Types.ObjectId;
+  name: string;
+  imageUrl: string;
+  description: string;
+  homepageUrl: string;
+  location: Location;
+  number_of_musicians: MusicianCount;
+  practice_frequency: PracticeFrequency;
+  genres: Genre[];
+  type: EnsembleType;
+  member_ids: Types.ObjectId[];
+  creator: Types.ObjectId;
+}
