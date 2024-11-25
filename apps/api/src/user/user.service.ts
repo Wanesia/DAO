@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -126,5 +127,17 @@ export class UsersService {
     user.instruments.push(newInstrument);
     return user.save();
   }
-  
+  async deleteInstrument(email: string, index: number): Promise<any> {
+    const user = await this.userModel.findOne({ email });
+    if (!user) {
+      throw new Error('User not found');
+    }
+    if (index < 0 || index >= user.instruments.length) {
+      throw new BadRequestException('Invalid instrument index');
+    }
+
+    user.instruments.splice(index, 1);
+    await user.save();
+    return user;
+  }
 }

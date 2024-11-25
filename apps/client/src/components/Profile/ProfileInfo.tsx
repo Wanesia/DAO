@@ -2,6 +2,8 @@ import { useNavigate } from "@tanstack/react-router";
 import styles from "./ProfileInfo.module.css";
 import { UserProfile } from "@shared/userProfile.ts";
 import Button from "../Button/Button";
+import { deleteInstrument } from "../../api/userApi";
+import { useState } from "react";
 
 interface ProfileInfoProps {
   user: UserProfile;
@@ -9,6 +11,24 @@ interface ProfileInfoProps {
 
 const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
   const navigate = useNavigate();
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDelete = async (index: number) => {
+    if (isDeleting) return;
+
+    try {
+      setIsDeleting(true);
+      await deleteInstrument(user.email, index);
+    } catch (error) {
+      console.error("Error deleting instrument:", error);
+      alert(
+        error instanceof Error ? error.message : "Failed to delete instrument"
+      );
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.info}>
@@ -22,14 +42,14 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
             {user.name} {user.surname}
           </h1>
           <p>
-            Medlem siden{" "}
+            Medlem siden
             {user.createdAt.toLocaleDateString("da-DK", {
               month: "long",
               year: "numeric",
             })}
           </p>
           <p>
-            Sidst logget ind{" "}
+            Sidst logget ind
             {user.lastSeen.toLocaleDateString("da-DK", {
               day: "numeric",
               month: "long",
@@ -61,19 +81,22 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
         {user.instruments && user.instruments.length > 0 ? (
           user.instruments.map((instrument, index) => (
             <div className={styles.content}>
-              <div key={index} className={styles.instrument}>
+              <div key={`instrument-${index}`} className={styles.instrument}>
                 <div className={styles.top}>
                   <p className={styles.text}>{instrument.name}</p>
                   <p>
-                    Erfaring{" "}
+                    Erfaring
                     <span className={styles.level}>{instrument.level}</span>
                   </p>
                 </div>
                 <ul className={styles.genres}>
                   {instrument.genres.map((genre, i) => (
-                    <li key={i}>{genre}</li>
+                    <li key={`genre-${index}-${i}`}>{genre}</li>
                   ))}
                 </ul>
+                <button onClick={() => handleDelete(index)}>
+                  {isDeleting ? "Sletter..." : "Slet"}{" "}
+                </button>
               </div>
             </div>
           ))
