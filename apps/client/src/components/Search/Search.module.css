@@ -1,0 +1,26 @@
+.inputWrapper {
+    position: relative;
+    max-width: 60%;
+    margin-bottom: 3rem;
+  }
+  
+.searchInput {
+    width: 100%;
+    padding: 10px 20px; 
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: var(--large-radius);
+    outline: none;
+    box-sizing: border-box;
+    box-shadow: var(--button-shadow);
+}
+
+.searchIcon {
+    position: absolute;
+    top: 50%;
+    right: 20px; 
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: var(--primary-blue);
+    pointer-events: none;
+  }

@@ -32,9 +32,9 @@ export type Location = {
 };
 
 export type Ensemble = {
-  id?: string;
+  id: string;
   name: string;
-  image: File;
+  imageUrl: string 
   description?: string;
   homepageUrl?: string;
   location: Location;

@@ -1,3 +1,4 @@
+import { Genre } from '@shared/enums';
 import axiosInstance from './axiosInstance';
 import { Ensemble, EnsembleDto } from '@shared/types';
 
@@ -18,11 +19,26 @@ export const createEnsemble = async (formData: FormData): Promise<void> => {
   }
 };
 
-
-export const getEnsembles = async (): Promise<Ensemble[]> => {
-  const response = await axiosInstance.get<Ensemble[]>('/ensembles');
-  return response.data; 
+export const getEnsembles = async (
+  searchTerm: string = '',
+  page: number = 1,
+  limit: number = 6,
+  filter?: Genre | null,
+): Promise<{ data: Ensemble[]; total: number }> => {
+  const response = await axiosInstance.get<{ data: Ensemble[]; total: number }>(
+    '/ensembles',
+    {
+      params: {
+        searchTerm,
+        page,
+        limit,
+        filter: filter || undefined,
+      },
+    },
+  );
+  return response.data;
 };
+
 
 export const updateEnsemble = async (id: string, ensembleDto: EnsembleDto): Promise<Ensemble> => {
   const response = await axiosInstance.patch<Ensemble>(`/ensembles/${id}`, ensembleDto);
