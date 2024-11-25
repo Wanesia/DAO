@@ -72,4 +72,4 @@ export const EnsembleSchema = SchemaFactory.createForClass(Ensemble);
 // should be modified for search functionality later
 EnsembleSchema.index({ name: "text" });
 EnsembleSchema.index({ name: 1 });
-EnsembleSchema.index({ 'location.city': 1 });
+EnsembleSchema.index({ genre: 1 });

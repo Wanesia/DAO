@@ -22,8 +22,8 @@ export const createEnsemble = async (formData: FormData): Promise<void> => {
 export const getEnsembles = async (
   searchTerm: string = '',
   page: number = 1,
-  limit: number = 6,
-  filter?: Genre | null,
+  limit: number = 6, // the number of results per page, default is 6
+  filters: { genre?: Genre } = {}, // we can add more filters here
 ): Promise<{ data: Ensemble[]; total: number }> => {
   const response = await axiosInstance.get<{ data: Ensemble[]; total: number }>(
     '/ensembles',
@@ -32,7 +32,7 @@ export const getEnsembles = async (
         searchTerm,
         page,
         limit,
-        filter: filter || undefined,
+        ...filters,
       },
     },
   );

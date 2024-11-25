@@ -26,19 +26,23 @@ const Pagination: React.FC<PaginationProps> = ({
     if (currentPage > 2) {
       buttons.push(1);
       if (currentPage > 3) {
-        buttons.push("..."); 
+        buttons.push("...");
       }
     }
 
-    for (let i = Math.max(1, currentPage - 1); i <= Math.min(currentPage + 1, totalPages); i++) {
+    for (
+      let i = Math.max(1, currentPage - 1);
+      i <= Math.min(currentPage + 1, totalPages);
+      i++
+    ) {
       buttons.push(i);
     }
 
     if (currentPage < totalPages - 1) {
       if (currentPage < totalPages - 2) {
-        buttons.push("..."); 
+        buttons.push("...");
       }
-      buttons.push(totalPages); 
+      buttons.push(totalPages);
     }
 
     return buttons;

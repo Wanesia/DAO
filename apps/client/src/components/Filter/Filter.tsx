@@ -1,11 +1,12 @@
 import { useState } from "react";
+import { Select } from "@mantine/core";
 import styles from "./Filter.module.css";
 
 interface FilterProps<F> {
   label: string;
-  options: F[]; 
-  onFilterChange: (value: F | null) => void; 
-  getOptionLabel: (option: F) => string; 
+  options: F[];
+  onFilterChange: (value: F | null) => void;
+  getOptionLabel: (option: F) => string;
 }
 
 const Filter = <F,>({
@@ -16,9 +17,10 @@ const Filter = <F,>({
 }: FilterProps<F>) => {
   const [selectedOption, setSelectedOption] = useState<F | null>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
-    const selected = options.find((option) => getOptionLabel(option) === value) || null;
+  const handleChange = (value: string | null) => {
+    const selected = value
+      ? options.find((option) => getOptionLabel(option) === value) || null
+      : null;
     setSelectedOption(selected);
     onFilterChange(selected);
   };
@@ -30,18 +32,28 @@ const Filter = <F,>({
 
   return (
     <div className={styles.filterWrapper}>
-      <label>{label}</label>
-      <button onClick={handleClear} className={styles.clearButton}>
-        Clear
-      </button>
-      <select value={selectedOption ? getOptionLabel(selectedOption) : ""} onChange={handleChange}>
-        <option value="">All</option>
-        {options.map((option, index) => (
-          <option key={index} value={getOptionLabel(option)}>
-            {getOptionLabel(option)}
-          </option>
-        ))}
-      </select>
+      <div className={styles.heading}>
+        <label className={styles.label}>{label}</label>
+        <button onClick={handleClear} className={styles.clearButton}>
+          Ryd
+        </button>
+      </div>
+
+      <Select
+        placeholder="Vælg"
+        value={selectedOption ? getOptionLabel(selectedOption) : null}
+        data={options.map((option) => ({
+          value: getOptionLabel(option),
+          label: getOptionLabel(option),
+        }))}
+        onChange={handleChange}
+        clearable
+        classNames={{
+          input: styles.input,
+          dropdown: styles.dropdown,
+
+        }}
+      />
     </div>
   );
 };

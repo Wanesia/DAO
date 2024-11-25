@@ -10,6 +10,7 @@ import {
   EnsembleType,
   Genre,
 } from '@shared/enums';
+import { filter } from 'rxjs';
 
 @Injectable()
 export class EnsembleService {
@@ -54,14 +55,17 @@ export class EnsembleService {
   ): Promise<{ data: Ensemble[]; total: number }> {
     let query: Record<string, any> = {};
 
-    // using regex to search for partial matches, options 'i' makes it case-insensitive
+    // using regex to search for partial match - parts of words, options 'i' makes it case-insensitive
     if (searchTerm && searchTerm.trim()) {
       query = { name: { $regex: searchTerm, $options: "i" } }
     }
 
+    // checking whether provided genre is in the genres array
     if (genre) {
-      query.genres = genre;
+      query.genres = { $in: [genre] };
     }
+
+    console.log("Query passed to search:", query);
 
     try {
       const total = await this.ensembleModel.countDocuments(query).exec();
