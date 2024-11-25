@@ -16,6 +16,7 @@ import { Route as UnauthorizedImport } from './routes/unauthorized'
 import { Route as RegisterImport } from './routes/register'
 import { Route as ProfileImport } from './routes/profile'
 import { Route as LoginImport } from './routes/login'
+import { Route as EnsemblerImport } from './routes/ensembler'
 import { Route as CreateEnsembleImport } from './routes/create-ensemble'
 import { Route as IndexImport } from './routes/index'
 
@@ -51,6 +52,12 @@ const LoginRoute = LoginImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const EnsemblerRoute = EnsemblerImport.update({
+  id: '/ensembler',
+  path: '/ensembler',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const CreateEnsembleRoute = CreateEnsembleImport.update({
   id: '/create-ensemble',
   path: '/create-ensemble',
@@ -79,6 +86,13 @@ declare module '@tanstack/react-router' {
       path: '/create-ensemble'
       fullPath: '/create-ensemble'
       preLoaderRoute: typeof CreateEnsembleImport
+      parentRoute: typeof rootRoute
+    }
+    '/ensembler': {
+      id: '/ensembler'
+      path: '/ensembler'
+      fullPath: '/ensembler'
+      preLoaderRoute: typeof EnsemblerImport
       parentRoute: typeof rootRoute
     }
     '/login': {
@@ -124,6 +138,7 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/create-ensemble': typeof CreateEnsembleRoute
+  '/ensembler': typeof EnsemblerRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
@@ -134,6 +149,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/create-ensemble': typeof CreateEnsembleRoute
+  '/ensembler': typeof EnsemblerRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
@@ -145,6 +161,7 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/create-ensemble': typeof CreateEnsembleRoute
+  '/ensembler': typeof EnsemblerRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
@@ -157,6 +174,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/create-ensemble'
+    | '/ensembler'
     | '/login'
     | '/profile'
     | '/register'
@@ -166,6 +184,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/create-ensemble'
+    | '/ensembler'
     | '/login'
     | '/profile'
     | '/register'
@@ -175,6 +194,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/create-ensemble'
+    | '/ensembler'
     | '/login'
     | '/profile'
     | '/register'
@@ -186,6 +206,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CreateEnsembleRoute: typeof CreateEnsembleRoute
+  EnsemblerRoute: typeof EnsemblerRoute
   LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
   RegisterRoute: typeof RegisterRoute
@@ -196,6 +217,7 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CreateEnsembleRoute: CreateEnsembleRoute,
+  EnsemblerRoute: EnsemblerRoute,
   LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,
   RegisterRoute: RegisterRoute,
@@ -215,6 +237,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/create-ensemble",
+        "/ensembler",
         "/login",
         "/profile",
         "/register",
@@ -227,6 +250,9 @@ export const routeTree = rootRoute
     },
     "/create-ensemble": {
       "filePath": "create-ensemble.tsx"
+    },
+    "/ensembler": {
+      "filePath": "ensembler.tsx"
     },
     "/login": {
       "filePath": "login.tsx"

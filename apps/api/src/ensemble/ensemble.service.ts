@@ -4,17 +4,26 @@ import { Model } from 'mongoose';
 import { Ensemble } from './schema/ensemble.schema';
 import { CreateEnsembleDto } from './dto/ensemble.dto';
 import { Types } from 'mongoose';
-import { MusicianCount, PracticeFrequency, EnsembleType, Genre } from '@shared/enums';
+import {
+  MusicianCount,
+  PracticeFrequency,
+  EnsembleType,
+  Genre,
+} from '@shared/enums';
 
 @Injectable()
 export class EnsembleService {
-  constructor(@InjectModel(Ensemble.name) private ensembleModel: Model<Ensemble>) {}
+  constructor(
+    @InjectModel(Ensemble.name) private ensembleModel: Model<Ensemble>,
+  ) {}
 
   async createEnsemble(
     ensembleDto: CreateEnsembleDto,
     creatorId: string,
   ): Promise<Ensemble> {
-    const existingEnsemble = await this.ensembleModel.findOne({ name: ensembleDto.name });
+    const existingEnsemble = await this.ensembleModel.findOne({
+      name: ensembleDto.name,
+    });
     if (existingEnsemble) {
       throw new Error('Ensemble with this name already exists');
     }
@@ -29,8 +38,6 @@ export class EnsembleService {
         ],
       };
 
-
-
       const newEnsemble = new this.ensembleModel(ensembleData);
       return await newEnsemble.save();
     } catch (error) {
@@ -39,22 +46,48 @@ export class EnsembleService {
     }
   }
 
+  async searchEnsembles(
+    searchTerm: string,
+    page: number,
+    limit: number,
+    genre?: Genre
+  ): Promise<{ data: Ensemble[]; total: number }> {
+    let query: Record<string, any> = {};
 
-  async findAll(): Promise<Ensemble[]> {
+    // using regex to search for partial matches, options 'i' makes it case-insensitive
+    if (searchTerm && searchTerm.trim()) {
+      query = { name: { $regex: searchTerm, $options: "i" } }
+    }
+
+    if (genre) {
+      query.genres = genre;
+    }
+
     try {
-      return await this.ensembleModel.find().exec();
+      const total = await this.ensembleModel.countDocuments(query).exec();
+      const data = await this.ensembleModel
+        .find(query)
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .exec();
+
+      return { data, total };
     } catch (error) {
-      console.error('Error retrieving ensembles:', error);
-      throw new Error('Failed to retrieve ensembles.');
+      console.error('Error searching ensembles:', error);
+      throw new Error('Failed to search ensembles.');
     }
   }
 
   async updateEnsemble(id: string, ensembleDto: any): Promise<Ensemble> {
     try {
-      const updatedEnsemble = await this.ensembleModel.findByIdAndUpdate(id, ensembleDto, {
-        new: true,
-        useFindAndModify: false,
-      });
+      const updatedEnsemble = await this.ensembleModel.findByIdAndUpdate(
+        id,
+        ensembleDto,
+        {
+          new: true,
+          useFindAndModify: false,
+        },
+      );
 
       if (!updatedEnsemble) {
         throw new Error('Ensemble not found');

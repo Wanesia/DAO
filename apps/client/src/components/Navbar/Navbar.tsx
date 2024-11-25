@@ -59,7 +59,7 @@ const Navbar: React.FC = () => {
         />
         <Button
           text="Find ensemble"
-          link="/ensemble"
+          link="/ensembler"
           color="transparent"
           onClick={handleCloseMenu}
         />

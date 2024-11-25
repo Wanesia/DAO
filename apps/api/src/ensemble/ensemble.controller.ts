@@ -14,8 +14,9 @@ import { Ensemble } from './schema/ensemble.schema';
 import { CreateEnsembleDto } from './dto/ensemble.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { ImageUploadService } from 'src/imageUpload/imageUpload.service';
-import { UseInterceptors, HttpException, HttpStatus, UploadedFile  } from '@nestjs/common';
+import { UseInterceptors, HttpException, HttpStatus, UploadedFile, Query  } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Genre } from '@shared/enums';
 
 interface AuthenticatedRequest extends Request {
   user: {
@@ -79,11 +80,16 @@ export class EnsembleController {
     }
   }
 
-
   @Get()
-  async findAll(): Promise<Ensemble[]> {
-    return this.ensembleService.findAll();
-  }
+  async findEnsembles(
+    @Query('searchTerm') searchTerm: string = '',
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 6,
+    @Query('genre') genre?: Genre
+  ): Promise<{ data: Ensemble[]; total: number }> {
+    return this.ensembleService.searchEnsembles(searchTerm, page, limit, genre);
+  };
+  
 
   @Patch(':id')
   async update(
@@ -97,4 +103,6 @@ export class EnsembleController {
   async remove(@Param('id') id: string): Promise<void> {
     return this.ensembleService.deleteEnsemble(id);
   }
+
+
 }
