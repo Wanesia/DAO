@@ -15,22 +15,23 @@
     width: 80px;
     height: 80px;
     margin: 10px;
-    border: 10px solid #fff;
-    border-color: #fff transparent transparent transparent;
+    border: 10px solid var(--primary-blue);
+    border-color: var(--primary-blue) transparent transparent transparent;
 }
 .ring.small div {
     width: 19px;
     height: 19px;
     margin: 3px;
-    border: 3px solid #fff;
-    border-color: #fff transparent transparent transparent;
+    border: 3px solid var(--primary-blue);
+    border-color: var(--primary-blue) transparent transparent transparent;
 }
+
 .ring div {
     box-sizing: border-box;
     display: block;
     position: absolute;
     border-radius: 50%;
-    animation: ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    animation: ring 1.8s cubic-bezier(0.5, 0, 0.5, 1) infinite;
 }
 .ring div:nth-child(1) {
     animation-delay: -0.45s;

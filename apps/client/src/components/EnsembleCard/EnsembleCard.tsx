@@ -11,7 +11,7 @@ const EnsembleCard: React.FC<EnsembleCardProps> = ({ ensemble }) => {
       <div className={styles.headingContainer}>
         {ensemble.imageUrl && (
           <div className={styles.image}>
-            <img src={ensemble.imageUrl} alt="ensemble-image" />
+            <img src={ensemble.imageUrl} alt="ensemble-image" loading="lazy"/>
           </div>
         )}
         <div className={styles.heading}>
