@@ -37,7 +37,7 @@ export default function RegisterForm() {
     } catch (error: any) {
       if (
         error.response &&
-        error.response.data.message === "Email already in use"
+        error.response.data.message === "E-mailen findes allerede"
       ) {
         setError("email", { message: "E-mailen findes allerede" });
       } else {

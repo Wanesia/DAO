@@ -8,5 +8,6 @@ export const loginUser = async (data: LoginPayload): Promise<LoginResponse> => {
 
 
 export const registerUser = async (data: RegisterUserPayload): Promise<void> => {
+  console.log("registerUser", data);
   await axiosInstance.post("/auth/register", data);
 };
