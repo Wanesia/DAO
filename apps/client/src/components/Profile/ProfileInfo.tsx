@@ -55,7 +55,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
           </p>
           <p>
             Sidst logget ind
-            {user.lastSeen.toLocaleDateString("da-DK", {
+            {" " + user.lastSeen.toLocaleDateString("da-DK", {
               day: "numeric",
               month: "long",
             })}
