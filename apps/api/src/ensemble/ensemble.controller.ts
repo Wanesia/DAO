@@ -32,8 +32,8 @@ export class EnsembleController {
     private readonly imageUploadService: ImageUploadService,
   ) {}
 
-  @UseGuards(JwtAuthGuard)
   @Post()
+  @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('image'))
   async create(
     @UploadedFile() image: Express.Multer.File,
@@ -81,6 +81,7 @@ export class EnsembleController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   async findEnsembles(
     @Query('searchTerm') searchTerm: string = '',
     @Query('page') page: number = 1,
@@ -92,6 +93,7 @@ export class EnsembleController {
   
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   async update(
     @Param('id') id: string,
     @Body() ensembleDto: any,
@@ -100,6 +102,7 @@ export class EnsembleController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   async remove(@Param('id') id: string): Promise<void> {
     return this.ensembleService.deleteEnsemble(id);
   }

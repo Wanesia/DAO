@@ -1,8 +1,16 @@
 
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 import EnsembleForm from '../components/EnsembleForm/EnsembleForm'
 
 export const Route = createFileRoute('/create-ensemble')({
+  beforeLoad: ({ context }) => {
+    if (!context.auth.isTokenValid()) {
+      throw redirect({
+        to: "/login",
+        search: { redirect: window.location.href },
+      });
+    }
+  },
   component: RouteComponent,
 })
 
