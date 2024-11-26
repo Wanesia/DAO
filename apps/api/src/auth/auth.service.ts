@@ -80,19 +80,19 @@ export class AuthService {
     }
   }
 
-  async login(
-    user: any,
-  ): Promise<{ accessToken: string; user: Partial<User> }> {
+  async login(user: any): Promise<{ accessToken: string }> {
     const { password, ...userData } = user._doc;
+    
     // Update lastSeen for the user whenever they log in
     await this.userService.updateUser(userData._id, {
       lastSeen: new Date(),
     });
+  
     const payload = { userId: userData._id };
     const accessToken = this.jwtService.sign(payload);
+  
     return {
       accessToken,
-      user: userData,
     };
   }
-}
+}  
