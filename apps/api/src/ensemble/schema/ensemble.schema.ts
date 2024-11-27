@@ -5,7 +5,16 @@ import {
   PracticeFrequency,
   EnsembleType,
   Genre,
+  JoinRequestStatus,
 } from '@shared/enums';
+
+@Schema()
+export class JoinRequest {
+  @Prop({ required: true }) userId: string;
+
+  @Prop({ type: String, enum: JoinRequestStatus, default: JoinRequestStatus.PENDING })
+  status: JoinRequestStatus;
+}
 
 @Schema()
 export class Location {
@@ -29,27 +38,30 @@ export class Ensemble extends Document {
 
   @Prop({
     validate: {
-      validator: (value: string) => 
-        value === "" || /^https?:\/\/[\w\-]+(\.[\w\-]+)+[/#?]?.*$/.test(value),
+      validator: (value: string) =>
+        value === '' || /^https?:\/\/[\w\-]+(\.[\w\-]+)+[/#?]?.*$/.test(value),
       message: 'Invalid URL format',
     },
-    default: "", 
+    default: '',
   })
   homepageUrl: string;
-  
 
   @Prop({ type: Location, required: true })
   location: Location;
 
   @Prop({ type: String, enum: Object.values(MusicianCount), required: true })
   number_of_musicians: MusicianCount;
-  
-  @Prop({ type: String, enum: Object.values(PracticeFrequency), required: true })
+
+  @Prop({
+    type: String,
+    enum: Object.values(PracticeFrequency),
+    required: true,
+  })
   practice_frequency: PracticeFrequency;
-  
+
   @Prop({ type: [String], enum: Object.values(Genre), required: true })
   genres: Genre[];
-  
+
   @Prop({ type: String, enum: Object.values(EnsembleType), required: true })
   type: EnsembleType;
 
@@ -64,12 +76,15 @@ export class Ensemble extends Document {
   member_ids: Types.ObjectId[];
 
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
-  creator: Types.ObjectId; 
+  creator: Types.ObjectId;
+
+  @Prop({ type: [JoinRequest], default: [] })
+  joinRequests: JoinRequest[];
 }
 
 export const EnsembleSchema = SchemaFactory.createForClass(Ensemble);
 
 // should be modified for search functionality later
-EnsembleSchema.index({ name: "text" });
+EnsembleSchema.index({ name: 'text' });
 EnsembleSchema.index({ name: 1 });
 EnsembleSchema.index({ genre: 1 });

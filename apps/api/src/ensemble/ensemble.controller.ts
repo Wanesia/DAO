@@ -16,7 +16,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { ImageUploadService } from 'src/imageUpload/imageUpload.service';
 import { UseInterceptors, HttpException, HttpStatus, UploadedFile, Query  } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Genre } from '@shared/enums';
+import { Genre, JoinRequestStatus } from '@shared/enums';
 
 interface AuthenticatedRequest extends Request {
   user: {
@@ -104,5 +104,31 @@ export class EnsembleController {
     return this.ensembleService.deleteEnsemble(id);
   }
 
+  @Post('join/:ensembleId')
+  async createJoinRequest(@Param('ensembleId') ensembleId: string, @Body('userId') userId: string) {
+    return this.ensembleService.createJoinRequest(ensembleId, userId);
+  }
+
+  @Get('join/:ensembleId')
+  async getJoinRequests(@Param('ensembleId') ensembleId: string) {
+    return this.ensembleService.getJoinRequests(ensembleId);
+  }
+
+  @Patch('join/:ensembleId/:userId')
+  async updateJoinRequestStatus(
+    @Param('ensembleId') ensembleId: string,
+    @Param('userId') userId: string,
+    @Body('status') status: JoinRequestStatus,
+  ) {
+    return this.ensembleService.updateJoinRequestStatus(ensembleId, userId, status);
+  }
+
+  @Delete('join/:ensembleId/:userId')
+  async deleteJoinRequest(
+    @Param('ensembleId') ensembleId: string,
+    @Param('userId') userId: string
+  ): Promise<void> {
+    await this.ensembleService.deleteJoinRequest(ensembleId, userId);
+  }
 
 }
