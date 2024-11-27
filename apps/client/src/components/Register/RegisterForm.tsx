@@ -5,7 +5,7 @@ import { useNavigate } from "@tanstack/react-router";
 import FormInput from "../form-components/FormInput";
 import Button from "../Button/Button";
 
-type FormFields = {
+interface FormFields {
   name: string;
   surname: string;
   email: string;

@@ -5,7 +5,7 @@ import { useAuth } from "../../context/AuthContext";
 import FormInput from "../form-components/FormInput";
 import Button from "../Button/Button";
 
-type FormFields = {
+interface FormFields {
   email: string;
   password: string;
 };
