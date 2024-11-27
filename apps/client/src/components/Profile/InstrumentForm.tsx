@@ -8,34 +8,12 @@ import { UserProfile } from "@shared/userProfile";
 import React, { useState } from "react";
 import LevelSelector from "./LevelSelector";
 import { addInstrument } from "../../api/userApi";
+import { Genre, InstrumentName } from "../../constants/enums";
 
 interface ProfileInfoProps {
   user: UserProfile;
 }
-enum Genre {
-  BAROK = "Barok",
-  FOLKEMUSIK = "Folkemusik",
-  KAMMERMUSIK = "Kammermusik",
-  ROMANTISK = "Romantisk",
-  SENMODERNE = "Senmoderne",
-  SENROMANTISK = "Senromantisk",
-  SYMFONISK = "Symfonisk",
-}
 
-export enum InstrumentName {
-  Violone = "Violone",
-  Violin = "Violin",
-  Viola = "Viola",
-  Viol = "Viol",
-  Vihuela = "Vihuela",
-  Trumpet = "Trumpet",
-  Theorbo = "Theorbo",
-  SlideTrumpet = "Slide trumpet",
-  Serpent = "Serpent",
-  Sackbut = "Sackbut",
-  NaturalTrumpet = "Natural trumpet",
-  NaturalHorn = "Natural Horn",
-}
 const InstrumentForm: React.FC<ProfileInfoProps> = ({ user }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
