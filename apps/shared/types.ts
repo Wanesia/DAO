@@ -2,23 +2,23 @@ import { Types } from "mongoose";
 import { MusicianCount, PracticeFrequency, EnsembleType, Genre, InstrumentName } from "./enums";
 import { FieldValues } from "react-hook-form";
 
-export type User = {
+export interface User {
   id: number;
   email: string;
   name: string;
 };
 
-export type LoginResponse = {
+export interface LoginResponse {
   accessToken: string;
   user: User;
 };
 
-export type LoginPayload = {
+export interface LoginPayload {
   email: string;
   password: string;
 };
 
-export type RegisterUserPayload = {
+export interface RegisterUserPayload {
   name: string;
   surname: string;
   email: string;
@@ -26,7 +26,7 @@ export type RegisterUserPayload = {
   isSubscribedToNewsletter: boolean;
 };
 
-export type Location = {
+export interface Location {
   city: string;
   postCode: string;
 };
@@ -45,7 +45,7 @@ export type Ensemble = {
   type: EnsembleType;
 };
 
-export type EnsembleDto = FieldValues & {
+export interface EnsembleDto extends FieldValues {
   name: string;
   image: File;
   description?: string;
@@ -55,7 +55,7 @@ export type EnsembleDto = FieldValues & {
   practice_frequency: PracticeFrequency;
   genres: Genre[];
   type: EnsembleType;
-};
+}
 
 export interface Instrument {
   name: InstrumentName;

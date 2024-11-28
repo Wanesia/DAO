@@ -13,8 +13,8 @@ import {
 import { EnsembleService } from './ensemble.service';
 import { Ensemble } from './schema/ensemble.schema';
 import { CreateEnsembleDto } from './dto/ensemble.dto';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
-import { ImageUploadService } from 'src/imageUpload/imageUpload.service';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import { ImageUploadService } from '../imageUpload/imageUpload.service';
 import { UseInterceptors, HttpException, HttpStatus, UploadedFile, Query  } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Genre, JoinRequestStatus } from '@shared/enums';
@@ -33,8 +33,8 @@ export class EnsembleController {
     private readonly imageUploadService: ImageUploadService,
   ) {}
 
-  @UseGuards(JwtAuthGuard)
   @Post()
+  @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('image'))
   async create(
     @UploadedFile() image: Express.Multer.File,
@@ -82,6 +82,7 @@ export class EnsembleController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   async findEnsembles(
     @Query('searchTerm') searchTerm: string = '',
     @Query('page') page: number = 1,
@@ -93,6 +94,7 @@ export class EnsembleController {
   
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   async update(
     @Param('id') id: string,
     @Body() ensembleDto: any,
@@ -101,6 +103,7 @@ export class EnsembleController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   async remove(@Param('id') id: string): Promise<void> {
     return this.ensembleService.deleteEnsemble(id);
   }

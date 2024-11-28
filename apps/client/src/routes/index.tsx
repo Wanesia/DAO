@@ -10,13 +10,13 @@ export const Route = createFileRoute("/")({
 });
 
 function RouteComponent() {
-  const { user, isLoggedIn } = useAuth();
+  const { isLoggedIn } = useAuth();
   return (
     <main>
-      {isLoggedIn && user ? (
+      {isLoggedIn ? (
         <section className="hero">
           <div className="heading-container">
-            <h1>Welcome, {user?.name}</h1>
+            <h1>Welcome</h1>
             <div className="buttons">
               <Button text="Opret ensemble" color="white" link="/create-ensemble" />
               <Button text="Færdiggør profil" color="blue" link="/profile" />

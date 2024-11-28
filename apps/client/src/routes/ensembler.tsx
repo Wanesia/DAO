@@ -1,10 +1,18 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import Search from "../components/Search/Search";
 import { getEnsembles } from "../api/ensembleApi";
 import EnsembleCard from "../components/EnsembleCard/EnsembleCard";
 import JoinButton from "../components/Button/JoinButton";
 
 export const Route = createFileRoute("/ensembler")({
+  beforeLoad: ({ context }) => {
+    if (!context.auth.isTokenValid()) {
+      throw redirect({
+        to: "/login",
+        search: { redirect: window.location.href },
+      });
+    }
+  },
   component: RouteComponent,
 });
 

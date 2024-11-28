@@ -7,7 +7,8 @@ export default {
       "^.+\\.(t|j)s$": "ts-jest"
     },
     moduleNameMapper: {
-      "^@shared/(.*)$": "<rootDir>/../shared/$1"
+      "^@shared/(.*)$": "<rootDir>/../shared/$1",
+      '^src/(.*)$': '<rootDir>/src/$1'
     },
     collectCoverageFrom: ["**/*.(t|j)s"],
     coverageDirectory: "../coverage"

@@ -2,7 +2,7 @@ import { useState, DragEvent, ChangeEvent } from "react";
 import styles from "./DragAndDrop.module.css";
 import { Controller, Control, FieldValues, Path } from "react-hook-form";
 
-type DragDropProps<T extends FieldValues> = {
+interface DragDropProps<T extends FieldValues> {
   name: Path<T>;
   control: Control<T>;
   label?: string;

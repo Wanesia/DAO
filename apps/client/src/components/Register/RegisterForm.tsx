@@ -5,7 +5,7 @@ import { useNavigate } from "@tanstack/react-router";
 import FormInput from "../form-components/FormInput";
 import Button from "../Button/Button";
 
-type FormFields = {
+interface FormFields {
   name: string;
   surname: string;
   email: string;
@@ -32,18 +32,17 @@ export default function RegisterForm() {
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
       const { acceptedTerms, ...submitData } = data;
-      await registerUser(submitData);
-      navigate({ to: "/login" });
+      await registerUser(submitData); 
+      navigate({ to: "/login" }); 
     } catch (error: any) {
-      if (
-        error.response &&
-        error.response.data.message === "Email already in use"
-      ) {
-        setError("email", { message: "E-mailen findes allerede" });
-      } else {
-        setError("root", {
-          message: "Der opstod en fejl under registreringen",
-        });
+      if (error.field) {
+        setError(error.field, { message: error.message });
+      } else if (error.email) {
+        setError("email", { message: error.email });
+      } else if (error.password) {
+        setError("password", { message: error.password });
+      } else if (error.message) {
+        setError("root", { message: error.message });
       }
     }
   };
@@ -134,7 +133,6 @@ export default function RegisterForm() {
           type="submit"
           text={isSubmitting ? "Indlæser..." : "Opret profil"}
           color="blue"
-          onClick={() => navigate({ to: "/login" })}
           disabled={isSubmitting}
         />
         {errors.root && (
