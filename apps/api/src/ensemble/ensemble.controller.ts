@@ -12,8 +12,8 @@ import {
 import { EnsembleService } from './ensemble.service';
 import { Ensemble } from './schema/ensemble.schema';
 import { CreateEnsembleDto } from './dto/ensemble.dto';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
-import { ImageUploadService } from 'src/imageUpload/imageUpload.service';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import { ImageUploadService } from '../imageUpload/imageUpload.service';
 import { UseInterceptors, HttpException, HttpStatus, UploadedFile, Query  } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Genre } from '@shared/enums';
