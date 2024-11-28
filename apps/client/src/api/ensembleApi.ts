@@ -70,3 +70,20 @@ export const getEnsemblesByIds = async (ensembleIds: string[]): Promise<Ensemble
     }
   }
 };
+export const getEnsembleById = async (ensembleId: string): Promise<Ensemble> => {
+  try {
+    const response = await axiosInstance.get<Ensemble>(`/ensembles/find/${ensembleId}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Failed to fetch ensemble:", error.response?.data);
+      throw new Error(
+        error.response?.data?.message || "Failed to fetch ensemble. Please try again."
+      );
+    } else {
+      console.error("An unexpected error occurred:", error);
+      throw new Error("An unexpected error occurred. Please try again.");
+    }
+  }
+};
+

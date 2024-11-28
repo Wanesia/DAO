@@ -115,7 +115,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
       </div>
       <div className={`${styles.container} ${styles["ensembler-container"]}`}>
         <h2>Mine ensembler</h2>
-        <EnsembleList ensembleIds={user.ensembleIds} />
+        <EnsembleList ensembleIds={user.ensembleIds ?? []} />
         </div>
     </div>
   );

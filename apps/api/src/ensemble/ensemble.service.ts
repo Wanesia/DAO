@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Ensemble } from './schema/ensemble.schema';
@@ -182,4 +182,25 @@ export class EnsembleService {
       );
     }
   }
+  async addMember(ensembleId: string, userId: string): Promise<Ensemble> {
+    const ensemble = await this.ensembleModel.findById(ensembleId);
+    if (!ensemble) {
+      throw new NotFoundException(`Ensemble with ID ${ensembleId} not found`);
+    }
+    const userIdAsObjectId = new Types.ObjectId(userId);
+
+    // Check if user is already a member to avoid duplicates
+    if (ensemble.member_ids.includes(userIdAsObjectId)) {
+      throw new BadRequestException(`User is already a member of this ensemble`);
+    }
+    // Add userId to member_ids and remove from joinRequests
+    ensemble.member_ids.push(userIdAsObjectId);
+    ensemble.joinRequests = ensemble.joinRequests.filter(
+      (request) => request.userId !== userId,
+    );
+  
+    await ensemble.save();
+    return ensemble;
+  }
+  
 }

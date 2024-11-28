@@ -8,6 +8,7 @@ import {
   Delete,
   Req,
   UseGuards,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { EnsembleService } from './ensemble.service';
 import { Ensemble } from './schema/ensemble.schema';
@@ -133,5 +134,21 @@ export class EnsembleController {
   @Get('find/:ensembleId')
   async findById(@Param('ensembleId') ensembleId: string): Promise<void>{
     return await this.ensembleService.findById(ensembleId);
+  }
+
+  @Patch('/join/accept/:ensembleId/:userId')
+  async acceptJoinRequest(
+    @Param('ensembleId') ensembleId: string,
+    @Param('userId') userId: string,
+  ) {
+    try {
+      const ensemble = await this.ensembleService.addMember(ensembleId, userId);
+      return ensemble;
+    } catch (error) {
+      console.error('Error accepting join request:', error);
+      throw new InternalServerErrorException(
+        'Failed to accept join request. Please try again.',
+      );
+    }
   }
 }

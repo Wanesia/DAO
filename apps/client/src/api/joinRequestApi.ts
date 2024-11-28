@@ -80,3 +80,24 @@ export const fetchUserId = async (): Promise<string> => {
       throw new Error("Could not fetch user ID. Please try again.");
     }
   };
+
+  export async function acceptJoinRequest(ensembleId: string, userId: string) {
+    try {
+      const response = await axiosInstance.patch(
+        `/ensembles/join/accept/${ensembleId}/${userId}`,
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error("Failed to accept join request:", error.response?.data);
+        throw new Error(
+          error.response?.data?.message ||
+            "Failed to accept join request. Please try again."
+        );
+      } else {
+        console.error("An unexpected error occurred:", error);
+        throw new Error("An unexpected error occurred. Please try again.");
+      }
+    }
+  }
+  

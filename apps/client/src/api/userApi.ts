@@ -69,3 +69,20 @@ export const deleteInstrument = async (email: string, index: number): Promise<an
     }
   }
 };
+
+export const getUserById = async (id: string): Promise<any> => {
+  try {
+    const response = await axiosInstance.get(`/users/${id}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Failed to fetch user:", error.response?.data);
+      throw new Error(
+        error.response?.data?.message || "Failed to fetch user. Please try again."
+      );
+    } else {
+      console.error("An unexpected error occurred:", error);
+      throw new Error("An unexpected error occurred. Please try again.");
+    }
+  }
+};
