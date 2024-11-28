@@ -13,8 +13,8 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './user.service';
 import { User } from './schema/user.schema';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
-import { ImageUploadService } from 'src/imageUpload/imageUpload.service';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import { ImageUploadService } from '../imageUpload/imageUpload.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AddInstrumentDto } from './dto/add-instrument.dto';
 
@@ -58,7 +58,6 @@ export class UsersController {
     let profilePictureUrl: string | undefined;
 
     if (image) {
-      console.log('image detected');
       const uploadResult = await this.imageUploadService.uploadImage(
         image,
         'profile',
@@ -70,7 +69,6 @@ export class UsersController {
       ...userDto,
       profilePicture: profilePictureUrl,
     };
-    console.log('Updated data:', updateData);
     return this.usersService.updateUserByEmail(email, updateData);
   }
   @Patch(':id')

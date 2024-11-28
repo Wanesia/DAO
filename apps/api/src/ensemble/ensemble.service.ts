@@ -5,12 +5,8 @@ import { Ensemble } from './schema/ensemble.schema';
 import { CreateEnsembleDto } from './dto/ensemble.dto';
 import { Types } from 'mongoose';
 import {
-  MusicianCount,
-  PracticeFrequency,
-  EnsembleType,
   Genre,
 } from '@shared/enums';
-import { filter } from 'rxjs';
 
 @Injectable()
 export class EnsembleService {
@@ -28,7 +24,7 @@ export class EnsembleService {
     if (existingEnsemble) {
       throw new Error('Ensemble with this name already exists');
     }
-
+  
     try {
       const ensembleData = {
         ...ensembleDto,
@@ -38,14 +34,15 @@ export class EnsembleService {
           ...(ensembleDto.member_ids || []).map((id) => new Types.ObjectId(id)),
         ],
       };
-
-      const newEnsemble = new this.ensembleModel(ensembleData);
-      return await newEnsemble.save();
+  
+      const newEnsemble = await this.ensembleModel.create(ensembleData);
+      return newEnsemble;
     } catch (error) {
       console.error('Error creating ensemble:', error);
       throw new Error('Failed to create ensemble.');
     }
   }
+  
 
   async searchEnsembles(
     searchTerm: string,
