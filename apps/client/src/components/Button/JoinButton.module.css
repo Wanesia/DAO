@@ -1,7 +1,7 @@
 .button {
   display: flex;
   margin: auto;
-  margin-top: 1rem;
+  margin-top: -0.5rem;
   border-radius: var(--small-radius);
   color: black;
   transition: background-color 0.3s;

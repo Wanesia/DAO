@@ -91,3 +91,6 @@
 .delete:hover {
   color: red;
 }
+.ensembles>*{
+  margin-top: 1rem;
+}

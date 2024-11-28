@@ -1,6 +1,7 @@
 import { Genre } from '@shared/enums';
 import axiosInstance from './axiosInstance';
 import { Ensemble, EnsembleDto } from '@shared/types';
+import axios from 'axios';
 
 export const createEnsemble = async (formData: FormData): Promise<void> => {
   try {
@@ -47,4 +48,25 @@ export const updateEnsemble = async (id: string, ensembleDto: EnsembleDto): Prom
 
 export const deleteEnsemble = async (id: string): Promise<void> => {
   await axiosInstance.delete(`/ensembles/${id}`);
+};
+export const getEnsemblesByIds = async (ensembleIds: string[]): Promise<Ensemble[]> => {
+  try {
+    const ensemblePromises = ensembleIds.map(async (ensembleId) => {
+      const response = await axiosInstance.get(`/ensembles/find/${ensembleId}`);
+      return response.data;
+    });
+
+    const fetchedEnsembles = await Promise.all(ensemblePromises);
+    return fetchedEnsembles;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Failed to fetch ensembles:", error.response?.data);
+      throw new Error(
+        error.response?.data?.message || "Failed to fetch ensembles. Please try again."
+      );
+    } else {
+      console.error("An unexpected error occurred:", error);
+      throw new Error("An unexpected error occurred. Please try again.");
+    }
+  }
 };

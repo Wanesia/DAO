@@ -130,5 +130,8 @@ export class EnsembleController {
   ): Promise<void> {
     await this.ensembleService.deleteJoinRequest(ensembleId, userId);
   }
-
+  @Get('find/:ensembleId')
+  async findById(@Param('ensembleId') ensembleId: string): Promise<void>{
+    return await this.ensembleService.findById(ensembleId);
+  }
 }

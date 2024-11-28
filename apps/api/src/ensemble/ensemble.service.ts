@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Ensemble } from './schema/ensemble.schema';
@@ -165,6 +165,21 @@ export class EnsembleService {
 
     if (result.modifiedCount === 0) {
       throw new NotFoundException('Join request not found or already deleted.');
+    }
+  }
+  async findById(ensembleId: string): Promise<any> {
+    try {
+      const ensemble = await this.ensembleModel.findById(ensembleId);
+
+      if (!ensemble) {
+        throw new NotFoundException(`Ensemble with ID ${ensembleId} not found`);
+      }
+      return ensemble;
+    } catch (error) {
+      console.error(`Error finding ensemble by ID: ${ensembleId}`, error);
+      throw new InternalServerErrorException(
+        'An error occurred while retrieving the ensemble.',
+      );
     }
   }
 }

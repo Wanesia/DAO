@@ -32,6 +32,7 @@ export type Location = {
 };
 
 export type Ensemble = {
+  _id: string;
   id: string;
   name: string;
   imageUrl: string;
