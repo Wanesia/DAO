@@ -45,3 +45,7 @@ export enum InstrumentName {
   NaturalTrumpet = "Natural trumpet",
   NaturalHorn = "Natural Horn",
 }
+export enum JoinRequestStatus {
+  PENDING = 'PENDING',
+  ACCEPTED = 'ACCEPTED',
+}

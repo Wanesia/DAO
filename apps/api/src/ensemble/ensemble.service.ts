@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Ensemble } from './schema/ensemble.schema';
@@ -6,6 +6,7 @@ import { CreateEnsembleDto } from './dto/ensemble.dto';
 import { Types } from 'mongoose';
 import {
   Genre,
+  JoinRequestStatus,
 } from '@shared/enums';
 
 @Injectable()
@@ -48,13 +49,13 @@ export class EnsembleService {
     searchTerm: string,
     page: number,
     limit: number,
-    genre?: Genre
+    genre?: Genre,
   ): Promise<{ data: Ensemble[]; total: number }> {
     let query: Record<string, any> = {};
 
     // using regex to search for partial match - parts of words, options 'i' makes it case-insensitive
     if (searchTerm && searchTerm.trim()) {
-      query = { name: { $regex: searchTerm, $options: "i" } }
+      query = { name: { $regex: searchTerm, $options: 'i' } };
     }
 
     // checking whether provided genre is in the genres array
@@ -62,7 +63,7 @@ export class EnsembleService {
       query.genres = { $in: [genre] };
     }
 
-    console.log("Query passed to search:", query);
+    console.log('Query passed to search:', query);
 
     try {
       const total = await this.ensembleModel.countDocuments(query).exec();
@@ -112,4 +113,91 @@ export class EnsembleService {
       throw new Error('Failed to delete ensemble. Please try again later.');
     }
   }
+  async createJoinRequest(ensembleId: string, userId: string) {
+    const ensemble = await this.ensembleModel.findById(ensembleId);
+    if (!ensemble) throw new NotFoundException('Ensemble not found');
+
+    // Check if there's already a pending request
+    const existingRequest = ensemble.joinRequests.find(
+      (request) => request.userId === userId,
+    );
+    if (existingRequest) {
+      throw new Error('Join request already exists');
+    }
+
+    // Add the join request
+    ensemble.joinRequests.push({ userId, status: JoinRequestStatus.PENDING });
+    await ensemble.save();
+    return { message: 'Join request created successfully' };
+  }
+
+  async getJoinRequests(ensembleId: string) {
+    const ensemble = await this.ensembleModel.findById(ensembleId);
+    if (!ensemble) throw new NotFoundException('Ensemble not found');
+    return ensemble.joinRequests;
+  }
+  async updateJoinRequestStatus(
+    ensembleId: string,
+    userId: string,
+    status: JoinRequestStatus,
+  ) {
+    const ensemble = await this.ensembleModel.findById(ensembleId);
+    if (!ensemble) throw new NotFoundException('Ensemble not found');
+
+    const joinRequest = ensemble.joinRequests.find(
+      (request) => request.userId === userId,
+    );
+    if (!joinRequest) throw new NotFoundException('Join request not found');
+
+    // Update the status
+    joinRequest.status = status;
+    await ensemble.save();
+    return { message: `Join request ${status.toLowerCase()} successfully` };
+  }
+  async deleteJoinRequest(ensembleId: string, userId: string): Promise<void> {
+    const result = await this.ensembleModel.updateOne(
+      { _id: ensembleId },
+      { $pull: { joinRequests: { userId } } },
+    );
+
+    if (result.modifiedCount === 0) {
+      throw new NotFoundException('Join request not found or already deleted.');
+    }
+  }
+  async findById(ensembleId: string): Promise<any> {
+    try {
+      const ensemble = await this.ensembleModel.findById(ensembleId);
+
+      if (!ensemble) {
+        throw new NotFoundException(`Ensemble with ID ${ensembleId} not found`);
+      }
+      return ensemble;
+    } catch (error) {
+      console.error(`Error finding ensemble by ID: ${ensembleId}`, error);
+      throw new InternalServerErrorException(
+        'An error occurred while retrieving the ensemble.',
+      );
+    }
+  }
+  async addMember(ensembleId: string, userId: string): Promise<Ensemble> {
+    const ensemble = await this.ensembleModel.findById(ensembleId);
+    if (!ensemble) {
+      throw new NotFoundException(`Ensemble with ID ${ensembleId} not found`);
+    }
+    const userIdAsObjectId = new Types.ObjectId(userId);
+
+    // Check if user is already a member to avoid duplicates
+    if (ensemble.member_ids.includes(userIdAsObjectId)) {
+      throw new BadRequestException(`User is already a member of this ensemble`);
+    }
+    // Add userId to member_ids and remove from joinRequests
+    ensemble.member_ids.push(userIdAsObjectId);
+    ensemble.joinRequests = ensemble.joinRequests.filter(
+      (request) => request.userId !== userId,
+    );
+  
+    await ensemble.save();
+    return ensemble;
+  }
+  
 }

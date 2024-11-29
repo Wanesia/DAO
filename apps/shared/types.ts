@@ -31,7 +31,8 @@ export interface Location {
   postCode: string;
 };
 
-export interface Ensemble {
+export type Ensemble = {
+  _id: string;
   id: string;
   name: string;
   imageUrl: string;

@@ -8,6 +8,7 @@ import {
   Delete,
   Req,
   UseGuards,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { EnsembleService } from './ensemble.service';
 import { Ensemble } from './schema/ensemble.schema';
@@ -16,7 +17,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { ImageUploadService } from '../imageUpload/imageUpload.service';
 import { UseInterceptors, HttpException, HttpStatus, UploadedFile, Query  } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Genre } from '@shared/enums';
+import { Genre, JoinRequestStatus } from '@shared/enums';
 
 interface AuthenticatedRequest extends Request {
   user: {
@@ -107,5 +108,50 @@ export class EnsembleController {
     return this.ensembleService.deleteEnsemble(id);
   }
 
+  @Post('join/:ensembleId')
+  async createJoinRequest(@Param('ensembleId') ensembleId: string, @Body('userId') userId: string) {
+    return this.ensembleService.createJoinRequest(ensembleId, userId);
+  }
 
+  @Get('join/:ensembleId')
+  async getJoinRequests(@Param('ensembleId') ensembleId: string) {
+    return this.ensembleService.getJoinRequests(ensembleId);
+  }
+
+  @Patch('join/:ensembleId/:userId')
+  async updateJoinRequestStatus(
+    @Param('ensembleId') ensembleId: string,
+    @Param('userId') userId: string,
+    @Body('status') status: JoinRequestStatus,
+  ) {
+    return this.ensembleService.updateJoinRequestStatus(ensembleId, userId, status);
+  }
+
+  @Delete('join/:ensembleId/:userId')
+  async deleteJoinRequest(
+    @Param('ensembleId') ensembleId: string,
+    @Param('userId') userId: string
+  ): Promise<void> {
+    await this.ensembleService.deleteJoinRequest(ensembleId, userId);
+  }
+  @Get('find/:ensembleId')
+  async findById(@Param('ensembleId') ensembleId: string): Promise<void>{
+    return await this.ensembleService.findById(ensembleId);
+  }
+
+  @Patch('/join/accept/:ensembleId/:userId')
+  async acceptJoinRequest(
+    @Param('ensembleId') ensembleId: string,
+    @Param('userId') userId: string,
+  ) {
+    try {
+      const ensemble = await this.ensembleService.addMember(ensembleId, userId);
+      return ensemble;
+    } catch (error) {
+      console.error('Error accepting join request:', error);
+      throw new InternalServerErrorException(
+        'Failed to accept join request. Please try again.',
+      );
+    }
+  }
 }

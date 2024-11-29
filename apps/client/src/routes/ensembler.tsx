@@ -2,6 +2,7 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 import Search from "../components/Search/Search";
 import { getEnsembles } from "../api/ensembleApi";
 import EnsembleCard from "../components/EnsembleCard/EnsembleCard";
+import JoinButton from "../components/Button/JoinButton";
 
 export const Route = createFileRoute("/ensembler")({
   beforeLoad: ({ context }) => {
@@ -47,6 +48,7 @@ function RouteComponent() {
           renderItem={(ensemble) => (
             <div className="gridItem">
               <EnsembleCard key={ensemble.id} ensemble={ensemble} />
+              <JoinButton ensembleId={ensemble._id} />
             </div>
           )}
           // Filter options define what filters will be available in the search component

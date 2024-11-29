@@ -95,4 +95,9 @@ export class UsersController {
   ) {
     return this.usersService.deleteInstrument(email, body.index);
   }
+  @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  async getUserById(@Param('id') id: string) {
+    return await this.usersService.findUserById(id);
+  }
 }

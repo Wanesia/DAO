@@ -5,6 +5,7 @@ import Button from "../Button/Button";
 import { deleteInstrument } from "../../api/userApi";
 import { useState } from "react";
 import { FaTrash } from "react-icons/fa";
+import EnsembleList from "./EnsembleList";
 
 interface ProfileInfoProps {
   user: UserProfile;
@@ -114,9 +115,8 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
       </div>
       <div className={`${styles.container} ${styles["ensembler-container"]}`}>
         <h2>Mine ensembler</h2>
-        {/* todo get ensembles info*/}
-        <p>{"Ingen ensembler registreret"}</p>
-      </div>
+        <EnsembleList ensembleIds={user.ensembleIds ?? []} />
+        </div>
     </div>
   );
 };
