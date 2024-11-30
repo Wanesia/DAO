@@ -116,15 +116,15 @@ button {
   min-height: 50vw;
 }
 
-
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  grid-gap: 20px;
+  grid-gap: 30px;
   margin: 60px 0;
 }
 
 .gridItem {
   width: 100%;
+  min-height: 250px;
 }
 
