@@ -24,7 +24,7 @@ export const getEnsembles = async (
   searchTerm: string = '',
   page: number = 1,
   limit: number = 6, // the number of results per page, default is 6
-  filters: { genre?: Genre } = {}, // we can add more filters here
+  filters: { genre?: Genre, location?: Location } = {}, // we can add more filters here
 ): Promise<{ data: Ensemble[]; total: number }> => {
   const response = await axiosInstance.get<{ data: Ensemble[]; total: number }>(
     '/ensembles',
@@ -79,6 +79,23 @@ export const getEnsembleById = async (ensembleId: string): Promise<Ensemble> => 
       console.error("Failed to fetch ensemble:", error.response?.data);
       throw new Error(
         error.response?.data?.message || "Failed to fetch ensemble. Please try again."
+      );
+    } else {
+      console.error("An unexpected error occurred:", error);
+      throw new Error("An unexpected error occurred. Please try again.");
+    }
+  }
+};
+
+export const getEnsemblesByCreator = async (): Promise<Ensemble[]> => {
+  try {
+    const response = await axiosInstance.get<Ensemble[]>(`/ensembles/creator`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Failed to fetch ensembles:", error.response?.data);
+      throw new Error(
+        error.response?.data?.message || "Failed to fetch ensembles. Please try again."
       );
     } else {
       console.error("An unexpected error occurred:", error);

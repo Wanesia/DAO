@@ -1,17 +1,21 @@
-.input, .select {
+.input,
+.select {
   border: 1px solid var(--grey-border);
   border-radius: 10px;
   padding: 20px 15px;
   transition: border-color 0.3s;
-  box-shadow: 0px 2px 4px #00000014; 
+  box-shadow: 0px 2px 4px #00000014;
+  color: var(--primary-blue);
+  font-weight: 500;
+  font-family: "Montserrat", sans-serif;
 }
 
 .textarea {
-    border: 1px solid var(--grey-border);
-    border-radius: 10px;
-    transition: border-color 0.3s;
-    box-shadow: 0px 2px 4px #00000014; 
-    padding: 15px;
+  border: 1px solid var(--grey-border);
+  border-radius: 10px;
+  transition: border-color 0.3s;
+  box-shadow: 0px 2px 4px #00000014;
+  padding: 15px;
 }
 
 .inputError {
@@ -27,30 +31,38 @@
 }
 
 .multiselect {
-    border: 1px solid var(--grey-border);
-    border-radius: 10px;
-    box-shadow: 0px 2px 4px #00000014; 
-    padding: 10px;
+  border: 1px solid var(--grey-border);
+  border-radius: 10px;
+  box-shadow: 0px 2px 4px #00000014;
+  padding: 10px;
 }
 
 .radioLabel {
-    font-size: 1rem;
-    color: var(--primary-blue);
-    margin-bottom: 10px;
-  }
+  font-size: 1rem;
+  color: var(--primary-blue);
+  margin-bottom: 10px;
+}
 
-  .input:-webkit-autofill {
-    box-shadow: 0 0 0px 1000px white inset; 
-  }
-  
-  .input:focus, .select:focus, .textarea:focus, .input:-webkit-autofill:focus, .textarea:-webkit-autofill:focus {
-    box-shadow: 0 0 0px 1000px white inset;  
-    border: 1px solid var(--primary-blue);
-  }
+.input:-webkit-autofill {
+  box-shadow: 0 0 0px 1000px white inset;
+}
 
-  .label {
-    color: var(--primary-blue);
-    font-weight: 600;
-    margin-bottom: 8px;
-  }
-  
+.input:focus,
+.select:focus,
+.textarea:focus,
+.input:-webkit-autofill:focus,
+.textarea:-webkit-autofill:focus {
+  box-shadow: 0 0 0px 1000px white inset;
+  border: 1px solid var(--primary-blue);
+}
+
+.label {
+  color: var(--primary-blue);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.dropdown {
+  font-weight: 500;
+  color: var(--primary-blue);
+}

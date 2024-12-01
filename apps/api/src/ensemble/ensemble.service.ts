@@ -29,12 +29,12 @@ export class EnsembleService {
     try {
       const ensembleData = {
         ...ensembleDto,
-        creator: new Types.ObjectId(creatorId),
+        creator: creatorId,
         member_ids: [
-          new Types.ObjectId(creatorId),
-          ...(ensembleDto.member_ids || []).map((id) => new Types.ObjectId(id)),
+          creatorId,
         ],
       };
+      console.log('Ensemble data:', ensembleData);
   
       const newEnsemble = await this.ensembleModel.create(ensembleData);
       return newEnsemble;
@@ -50,6 +50,7 @@ export class EnsembleService {
     page: number,
     limit: number,
     genre?: Genre,
+    location?: string,
   ): Promise<{ data: Ensemble[]; total: number }> {
     let query: Record<string, any> = {};
 
@@ -61,6 +62,14 @@ export class EnsembleService {
     // checking whether provided genre is in the genres array
     if (genre) {
       query.genres = { $in: [genre] };
+    }
+
+    if (location && location.trim()) {
+      if (/^\d+$/.test(location)) {
+        query['location.postCode'] = location;
+      } else {
+        query['location.city'] = { $regex: new RegExp(location, 'i') }; 
+      }
     }
 
     console.log('Query passed to search:', query);
@@ -199,5 +208,23 @@ export class EnsembleService {
     await ensemble.save();
     return ensemble;
   }
+
+  async findByCreator(creatorId: string): Promise<Ensemble[]> {
+    try {
+      const ensembles = await this.ensembleModel.find({ creator: creatorId }).exec();
+  
+      if (!ensembles || ensembles.length === 0) {
+        throw new NotFoundException('No ensembles found for this creator');
+      }
+  
+      return ensembles;
+    } catch (error) {
+      console.error(`Error finding ensembles by creator ID: ${creatorId}`, error);
+      throw new InternalServerErrorException(
+        'An error occurred while retrieving the ensembles.',
+      );
+    }
+  }
+  
   
 }

@@ -94,3 +94,9 @@
 .ensembles>*{
   margin-top: 1rem;
 }
+
+.ensembleHeading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}

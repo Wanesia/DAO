@@ -3,6 +3,7 @@ import Search from "../components/Search/Search";
 import { getEnsembles } from "../api/ensembleApi";
 import EnsembleCard from "../components/EnsembleCard/EnsembleCard";
 import JoinButton from "../components/Button/JoinButton";
+import { Genre } from "../constants/enums";
 
 export const Route = createFileRoute("/ensembler")({
   beforeLoad: ({ context }) => {
@@ -16,15 +17,6 @@ export const Route = createFileRoute("/ensembler")({
   component: RouteComponent,
 });
 
-enum Genre {
-  BAROK = "Barok",
-  FOLKEMUSIK = "Folkemusik",
-  KAMMERMUSIK = "Kammermusik",
-  ROMANTISK = "Romantisk",
-  SENMODERNE = "Senmoderne",
-  SENROMANTISK = "Senromantisk",
-  SYMFONISK = "Symfonisk",
-}
 
 function RouteComponent() {
   const genreOptions = Object.values(Genre);
@@ -57,6 +49,7 @@ function RouteComponent() {
           // You can define more filters by adding more objects to the filterOptions array
           filterOptions={[
             { label: "Genre", options: genreOptions, key: "genre" },
+            { label: "Location", key: "location" },
           ]}
           getFilterLabel={(filter) => {
             if (typeof filter === "string") {

@@ -56,10 +56,11 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
           </p>
           <p>
             Sidst logget ind
-            {" " + user.lastSeen.toLocaleDateString("da-DK", {
-              day: "numeric",
-              month: "long",
-            })}
+            {" " +
+              user.lastSeen.toLocaleDateString("da-DK", {
+                day: "numeric",
+                month: "long",
+              })}
           </p>
         </div>
       </div>
@@ -114,9 +115,13 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
         )}
       </div>
       <div className={`${styles.container} ${styles["ensembler-container"]}`}>
+        <div className={styles.ensembleHeading}>
         <h2>Mine ensembler</h2>
-        <EnsembleList ensembleIds={user.ensembleIds ?? []} />
+        <Button text="Opret" color="white-slim"  onClick={() => navigate({ to: "/create-ensemble" })}/>
         </div>
+      
+          <EnsembleList />
+      </div>
     </div>
   );
 };

@@ -14,7 +14,7 @@ interface SearchProps<T, F> {
   ) => Promise<{ data: T[]; total: number }>;
   renderItem: (item: T) => JSX.Element;
   limit?: number;
-  filterOptions?: { label: string; options: F[keyof F][]; key: keyof F }[];
+  filterOptions?: { label: string; options?: F[keyof F][]; key: keyof F }[];
   getFilterLabel: (filter: F[keyof F]) => string;
 }
 
@@ -65,6 +65,7 @@ const Search = <T, F>({
 
   // Fetch data whenever searchTerm, page, or filters change
   useEffect(() => {
+    console.log(filters);
     fetchResults(searchTerm, page, filters);
     return () => fetchResults.cancel();
   }, [searchTerm, page, filters, fetchResults]);
@@ -97,16 +98,21 @@ const Search = <T, F>({
           <FaSearch className={styles.searchIcon} />
         </div>
 
-        {filterOptions &&
-          filterOptions.map(({ label, options, key }) => (
-            <Filter
-              key={key as string}
-              label={label}
-              options={options}
-              onFilterChange={(value) => updateFilter(key, value)}
-              getOptionLabel={getFilterLabel}
-            />
-          ))}
+        <div className={styles.filters}>
+          {filterOptions &&
+            filterOptions.map(({ label, options, key }) => (
+              <Filter
+                key={key as string}
+                label={label}
+                options={options} // Optional for text-based filters
+                onFilterChange={(value) =>
+                  updateFilter(key, value as F[keyof F] | null)
+                }
+                getOptionLabel={getFilterLabel} // Optional for text-based filters
+                filterType={key === "location" ? "text" : "dropdown"} // Decide type based on filter key
+              />
+            ))}
+        </div>
       </div>
 
       <section className="grey-wrapper">
