@@ -17,6 +17,7 @@ const EnsembleList: React.FC = () => {
 
       try {
         const ensemblesByCreator = await getEnsemblesByCreator();
+        console.log("ensembles", ensemblesByCreator);
         setEnsembles(ensemblesByCreator);
       } catch (err) {
         console.error("Failed to fetch ensembles", err);
@@ -41,10 +42,7 @@ const EnsembleList: React.FC = () => {
         <div
           key={ensemble._id}
           onClick={() =>
-            navigate({
-              to: "/ensemble",
-              state: { ensemble },
-            })
+            navigate({ to: `/ensembles/${ensemble._id}`, state: { ensemble: ensemble as Ensemble } })
           }
         >
           <div className="gridItem">

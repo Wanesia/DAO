@@ -117,7 +117,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
       <div className={`${styles.container} ${styles["ensembler-container"]}`}>
         <div className={styles.ensembleHeading}>
         <h2>Mine ensembler</h2>
-        <Button text="Opret" color="white-slim"  onClick={() => navigate({ to: "/create-ensemble" })}/>
+        <Button text="Opret" color="white-slim"  onClick={() => navigate({ to: "/ensembles/create-ensemble" })}/>
         </div>
       
           <EnsembleList />

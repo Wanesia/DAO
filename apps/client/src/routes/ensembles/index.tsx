@@ -1,11 +1,11 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import Search from "../components/Search/Search";
-import { getEnsembles } from "../api/ensembleApi";
-import EnsembleCard from "../components/EnsembleCard/EnsembleCard";
-import JoinButton from "../components/Button/JoinButton";
-import { Genre } from "../constants/enums";
+import Search from "../../components/Search/Search";
+import { getEnsembles } from "../../api/ensembleApi";
+import EnsembleCard from "../../components/EnsembleCard/EnsembleCard";
+import JoinButton from "../../components/Button/JoinButton";
+import { Genre } from "../../constants/enums";
 
-export const Route = createFileRoute("/ensembler")({
+export const Route = createFileRoute("/ensembles/")({
   beforeLoad: ({ context }) => {
     if (!context.auth.isTokenValid()) {
       throw redirect({
@@ -16,7 +16,6 @@ export const Route = createFileRoute("/ensembler")({
   },
   component: RouteComponent,
 });
-
 
 function RouteComponent() {
   const genreOptions = Object.values(Genre);

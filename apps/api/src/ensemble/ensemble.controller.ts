@@ -69,7 +69,7 @@ export class EnsembleController {
         ? formData.genres
         : JSON.parse(formData.genres),
       type: formData.type,
-      image: imageUrl,
+      imageUrl: imageUrl,
     };
 
     try {

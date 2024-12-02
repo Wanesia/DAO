@@ -1,0 +1,11 @@
+
+.img {
+    width: 100vw;
+    height: 400px;
+    object-fit: cover;
+}
+
+section {
+    max-width: 1400px;
+    margin: 0 auto;
+}

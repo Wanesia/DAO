@@ -72,6 +72,8 @@ export const getEnsemblesByIds = async (ensembleIds: string[]): Promise<Ensemble
 };
 export const getEnsembleById = async (ensembleId: string): Promise<Ensemble> => {
   try {
+    console.log("ensembleId", ensembleId);
+    
     const response = await axiosInstance.get<Ensemble>(`/ensembles/find/${ensembleId}`);
     return response.data;
   } catch (error) {

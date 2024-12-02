@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import { MusicianCount, PracticeFrequency, EnsembleType, Genre, InstrumentName } from "./enums";
+import { MusicianCount, PracticeFrequency, EnsembleType, Genre, InstrumentName, JoinRequestStatus } from "./enums";
 import { FieldValues } from "react-hook-form";
 
 export interface User {
@@ -31,11 +31,18 @@ export interface Location {
   postCode: string;
 };
 
+export interface JoinRequest {
+  userId: string;
+  status: JoinRequestStatus;
+  _id: string;
+};
+
+
 export type Ensemble = {
   _id: string;
   id: string;
   name: string;
-  imageUrl: string;
+  imageUrl?: string;
   description?: string;
   homepageUrl?: string;
   location: Location;
@@ -43,6 +50,9 @@ export type Ensemble = {
   practice_frequency: PracticeFrequency;
   genres: Genre[];
   type: EnsembleType;
+  member_ids: string[];
+  creator: string;
+  joinRequests: JoinRequest[];
 };
 
 export interface EnsembleDto extends FieldValues {
