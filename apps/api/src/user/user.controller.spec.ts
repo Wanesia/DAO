@@ -35,7 +35,11 @@ const mockInstrument = {
 const mockUploadResult = {
   secure_url: 'http://example.com/profile.jpg',
 };
-
+describe('Intentional Failure Test', () => {
+  it('should fail deliberately', () => {
+    expect(true).toBe(false); // This will fail to test github actions
+  });
+});
 describe('UsersController', () => {
   let usersController: UsersController;
   let usersService: UsersService;
