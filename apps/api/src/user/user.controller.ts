@@ -17,8 +17,10 @@ import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { ImageUploadService } from '../imageUpload/imageUpload.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AddInstrumentDto } from './dto/add-instrument.dto';
+import { LastSeenInterceptor } from 'src/interceptors/lastSeen.interceptor';
 
 @Controller('users')
+@UseInterceptors(LastSeenInterceptor)
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
