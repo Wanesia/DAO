@@ -18,6 +18,7 @@ import { ImageUploadService } from '../imageUpload/imageUpload.service';
 import { UseInterceptors, HttpException, HttpStatus, UploadedFile, Query  } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Genre, JoinRequestStatus } from '@shared/enums';
+import { LastSeenInterceptor } from '../interceptors/lastSeen.interceptor';
 
 interface AuthenticatedRequest extends Request {
   user: {
@@ -27,6 +28,7 @@ interface AuthenticatedRequest extends Request {
 }
 
 @Controller('ensembles')
+@UseInterceptors(LastSeenInterceptor)
 export class EnsembleController {
   constructor(
     private readonly ensembleService: EnsembleService,
@@ -109,16 +111,19 @@ export class EnsembleController {
   }
 
   @Post('join/:ensembleId')
+  @UseGuards(JwtAuthGuard)
   async createJoinRequest(@Param('ensembleId') ensembleId: string, @Body('userId') userId: string) {
     return this.ensembleService.createJoinRequest(ensembleId, userId);
   }
 
   @Get('join/:ensembleId')
+  @UseGuards(JwtAuthGuard)
   async getJoinRequests(@Param('ensembleId') ensembleId: string) {
     return this.ensembleService.getJoinRequests(ensembleId);
   }
 
   @Patch('join/:ensembleId/:userId')
+  @UseGuards(JwtAuthGuard)
   async updateJoinRequestStatus(
     @Param('ensembleId') ensembleId: string,
     @Param('userId') userId: string,
@@ -128,6 +133,7 @@ export class EnsembleController {
   }
 
   @Delete('join/:ensembleId/:userId')
+  @UseGuards(JwtAuthGuard)
   async deleteJoinRequest(
     @Param('ensembleId') ensembleId: string,
     @Param('userId') userId: string
@@ -135,11 +141,13 @@ export class EnsembleController {
     await this.ensembleService.deleteJoinRequest(ensembleId, userId);
   }
   @Get('find/:ensembleId')
+  @UseGuards(JwtAuthGuard)
   async findById(@Param('ensembleId') ensembleId: string): Promise<void>{
     return await this.ensembleService.findById(ensembleId);
   }
 
   @Patch('/join/accept/:ensembleId/:userId')
+  @UseGuards(JwtAuthGuard)
   async acceptJoinRequest(
     @Param('ensembleId') ensembleId: string,
     @Param('userId') userId: string,

@@ -5,9 +5,11 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Ensemble, EnsembleSchema } from './schema/ensemble.schema';
 import { EnsembleService } from './ensemble.service';
 import { ImageUploadModule } from 'src/imageUpload/imageUpload.module';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
   imports: [
+    UserModule,
     MongooseModule.forFeature([{ name: Ensemble.name, schema: EnsembleSchema }]),
     ImageUploadModule,
   ],
