@@ -8,7 +8,7 @@ import { ImageUploadService } from 'src/imageUpload/imageUpload.service';
 
 interface AuthenticatedRequest extends Request {
   user: {
-    id: string;
+    userId: string;
     accessToken: string;
   };
 }
@@ -91,7 +91,7 @@ describe('EnsembleController', () => {
       };
 
       const mockRequest: AuthenticatedRequest = {
-        user: { id: 'creatorId' },
+        user: { userId: 'creatorId' },
       } as AuthenticatedRequest;
 
       jest.spyOn(mockEnsembleService, 'createEnsemble').mockResolvedValue(mockEnsemble);
