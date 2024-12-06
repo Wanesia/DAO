@@ -64,9 +64,14 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
           alt={`${user.name}'s profile`}
         />
         <div className={styles.text}>
-          <h1>
-            {user.name} {user.surname}
-          </h1>
+          <div className={styles.top}>
+            <h1>
+              {user.name} {user.surname}
+            </h1>
+            {user.isSeeking && (
+              <div className={styles.seeking}>SØGENDE</div>
+            )}          
+          </div>
           <p>
             Medlem siden
             {" " + user.createdAt.toLocaleDateString("da-DK", {
