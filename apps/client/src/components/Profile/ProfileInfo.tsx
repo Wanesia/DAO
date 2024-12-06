@@ -4,7 +4,7 @@ import { UserProfile } from "@shared/userProfile.ts";
 import Button from "../Button/Button";
 import { deleteInstrument } from "../../api/userApi";
 import { useState } from "react";
-import { FaTrash } from "react-icons/fa";
+import { FaCircle, FaTrash } from "react-icons/fa";
 import EnsembleList from "./EnsembleList";
 
 interface ProfileInfoProps {
@@ -75,9 +75,15 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
             })}
           </p>
           <p>
-            {getUserStatus(user.lastSeen) === "Online"
-              ? "Online"
-              : `Sidst logget ind ${getUserStatus(user.lastSeen)}`}          </p>
+            {getUserStatus(user.lastSeen) === "Online" ? (
+              <>
+                <FaCircle className={styles.online} />
+                Online
+              </>
+            ) : (
+              `Sidst logget ind ${getUserStatus(user.lastSeen)}`
+            )}
+          </p>
         </div>
       </div>
       <div className={styles.buttons}>

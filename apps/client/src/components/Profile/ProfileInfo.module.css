@@ -94,3 +94,8 @@
 .ensembles>*{
   margin-top: 1rem;
 }
+.online {
+  font-size: 1rem;
+  color: green;
+  margin-right: 0.5rem;
+}
