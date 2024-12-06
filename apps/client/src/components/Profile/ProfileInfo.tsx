@@ -34,6 +34,26 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
       setIsDeleting(false);
     }
   };
+  function getUserStatus(lastSeen: string | Date): string {
+    const now = new Date();
+    const lastSeenDate = new Date(lastSeen);
+    const diffInMs = now.getTime() - lastSeenDate.getTime();
+    const diffInSeconds = Math.floor(diffInMs / 1000);
+  
+    if (diffInSeconds < 60) {
+      return "Online"; // User is online if lastSeen is less than 1 minute ago
+    } else if (diffInSeconds < 3600) {
+      const minutes = Math.floor(diffInSeconds / 60);
+      return `${minutes} minut${minutes > 1 ? "ter" : ""} siden`;
+    } else if (diffInSeconds < 86400) {
+      const hours = Math.floor(diffInSeconds / 3600);
+      return `${hours} time${hours > 1 ? "r" : ""} siden`;
+    } else {
+      const days = Math.floor(diffInSeconds / 86400);
+      return `${days} dag${days > 1 ? "e" : ""} siden`;
+    }
+  }
+  
 
   return (
     <div className={styles.container}>
@@ -49,19 +69,15 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
           </h1>
           <p>
             Medlem siden
-            {user.createdAt.toLocaleDateString("da-DK", {
+            {" " + user.createdAt.toLocaleDateString("da-DK", {
               month: "long",
               year: "numeric",
             })}
           </p>
           <p>
-            Sidst logget ind
-            {" " +
-              user.lastSeen.toLocaleDateString("da-DK", {
-                day: "numeric",
-                month: "long",
-              })}
-          </p>
+            {getUserStatus(user.lastSeen) === "Online"
+              ? "Online"
+              : `Sidst logget ind ${getUserStatus(user.lastSeen)}`}          </p>
         </div>
       </div>
       <div className={styles.buttons}>

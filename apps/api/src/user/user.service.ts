@@ -151,4 +151,15 @@ export class UsersService {
     await user.save();
     return user;
   }
+  
+  async updateLastSeen(userId: string): Promise<void> {
+    try {
+      await this.userModel.findByIdAndUpdate(userId, {
+        lastSeen: new Date(),
+      });
+    } catch (error) {
+      console.error(`Failed to update lastSeen for user ${userId}:`, error);
+      throw new Error('Could not update lastSeen');
+    }
+  }
 }
