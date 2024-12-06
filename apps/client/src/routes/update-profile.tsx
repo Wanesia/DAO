@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import ProfileSettings from "../components/Profile/ProfileSettings";
+import ProfileEdit from "../components/Profile/ProfileEdit";
 import { UserProvider, useUser } from "../context/UserContext";
 
 export const Route = createFileRoute("/update-profile")({
@@ -27,5 +27,5 @@ function UpdateForm() {
     return <div>No user data available.</div>;
   }
 
-  return <ProfileSettings user={user} />;
+  return <ProfileEdit user={user} />;
 }
