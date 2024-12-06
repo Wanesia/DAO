@@ -123,7 +123,7 @@ describe('EnsembleController', () => {
           ...formData,
           location: { city: 'Copenhagen', postCode: '1000' },
           genres: ['ROCK'],
-          image: 'http://example.com/image.jpg',
+          imageUrl: 'http://example.com/image.jpg',
         },
         'creatorId',
       );
@@ -140,7 +140,8 @@ describe('EnsembleController', () => {
 
       expect(result).toEqual(mockResponse);
 
-      expect(mockEnsembleService.searchEnsembles).toHaveBeenCalledWith('test', 1, 6, 'ROCK');
+      expect(mockEnsembleService.searchEnsembles).toHaveBeenCalledWith('test', 1, 6, 'ROCK', undefined);
+
     });
 
     it('should handle empty search term and default values', async () => {
@@ -152,7 +153,8 @@ describe('EnsembleController', () => {
 
       expect(result).toEqual(mockResponse);
 
-      expect(mockEnsembleService.searchEnsembles).toHaveBeenCalledWith('', 1, 6, undefined);
+      expect(mockEnsembleService.searchEnsembles).toHaveBeenCalledWith('', 1, 6, undefined, undefined);
+
     });
   });
 });
