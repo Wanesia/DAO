@@ -20,7 +20,7 @@ import { AddInstrumentDto } from './dto/add-instrument.dto';
 import { LastSeenInterceptor } from 'src/interceptors/lastSeen.interceptor';
 
 @Controller('users')
-@UseInterceptors(LastSeenInterceptor)
+// @UseInterceptors(LastSeenInterceptor)
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
