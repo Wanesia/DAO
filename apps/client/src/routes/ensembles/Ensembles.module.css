@@ -1,3 +1,6 @@
+.ensemblePage {
+    padding: 0 2rem;
+}
 
 .img {
     width: 100vw;
@@ -5,7 +8,49 @@
     object-fit: cover;
 }
 
-section {
-    max-width: 1400px;
-    margin: 0 auto;
+.ensembleSection {
+    max-width: 900px;
+    margin: 3rem auto;
+
+}
+
+.info {
+    margin-bottom: 2rem;
+}
+
+.ensembleSection h2 {
+    color: var(--primary-red);
+}
+
+.creator {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+
+}
+
+.buttons {
+    display: flex;
+    gap: 1rem;
+
+}
+
+.buttons svg {
+    font-size: 1rem;
+}
+
+.requests {
+    margin: 2rem 0;
+}
+
+.heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 3rem 0 1rem 0;
+}
+
+.membersHeading {
+    display: flex;
+    justify-content: space-between;
 }

@@ -131,7 +131,7 @@ const Search = <T, F>({
         {!isLoading && !error && results.length > 0 && (
           <>
             <div className="content">
-              <ul className="grid">{renderedResults}</ul>
+              <ul className="gridLarge">{renderedResults}</ul>
             </div>
             <Pagination
               total={total}

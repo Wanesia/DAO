@@ -97,7 +97,13 @@ export class EnsembleController {
     @Query('genre') genre?: Genre,
     @Query('location') location?: string,
   ): Promise<{ data: Ensemble[]; total: number }> {
-    return this.ensembleService.searchEnsembles(searchTerm, page, limit, genre, location);
+    return this.ensembleService.searchEnsembles(
+      searchTerm,
+      page,
+      limit,
+      genre,
+      location,
+    );
   }
 
   @Patch(':id')
@@ -112,6 +118,7 @@ export class EnsembleController {
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   async remove(@Param('id') id: string): Promise<void> {
+    console.log('delete ensemble');
     return this.ensembleService.deleteEnsemble(id);
   }
 
@@ -170,11 +177,13 @@ export class EnsembleController {
   }
 
   @Get('creator')
-  @UseGuards(JwtAuthGuard) 
-  async getEnsemblesByCreator(@Req() req: AuthenticatedRequest): Promise<Ensemble[]> {
+  @UseGuards(JwtAuthGuard)
+  async getEnsemblesByCreator(
+    @Req() req: AuthenticatedRequest,
+  ): Promise<Ensemble[]> {
     try {
-      const creatorId = req.user.userId; 
-      const ensembles = await this.ensembleService.findByCreator(creatorId); 
+      const creatorId = req.user.userId;
+      const ensembles = await this.ensembleService.findByCreator(creatorId);
       return ensembles;
     } catch (error) {
       console.error('Error fetching ensembles by creator:', error);
@@ -183,5 +192,4 @@ export class EnsembleController {
       );
     }
   }
-  
 }

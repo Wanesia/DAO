@@ -37,20 +37,23 @@ const EnsembleList: React.FC = () => {
   if (ensembles.length === 0) return <p>No ensembles found</p>;
 
   return (
-    <div className="grid">
-      {ensembles.map((ensemble) => (
-        <div
-          key={ensemble._id}
-          onClick={() =>
-            navigate({ to: `/ensembles/${ensemble._id}`, state: { ensemble: ensemble as Ensemble } })
-          }
-        >
-          <div className="gridItem">
-            <EnsembleCard ensemble={ensemble} />
+      <ul className="gridLarge">
+        {ensembles.map((ensemble) => (
+          <div
+            key={ensemble._id}
+            onClick={() =>
+              navigate({
+                to: `/ensembles/${ensemble._id}`,
+                state: { ensemble: ensemble as Ensemble },
+              })
+            }
+          >
+            <div className="gridItemLarge">
+              <EnsembleCard ensemble={ensemble} />
+            </div>
           </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </ul>
   );
 };
 

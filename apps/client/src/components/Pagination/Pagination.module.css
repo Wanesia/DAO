@@ -3,7 +3,8 @@
   justify-content: center;
   align-items: center;
   gap: 10px;
-  padding-bottom: 30px;
+  padding: 5rem 0;
+
 }
 
 .pageButton {

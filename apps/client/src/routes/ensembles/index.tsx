@@ -4,6 +4,7 @@ import { getEnsembles } from "../../api/ensembleApi";
 import EnsembleCard from "../../components/EnsembleCard/EnsembleCard";
 import JoinButton from "../../components/Button/JoinButton";
 import { Genre } from "../../constants/enums";
+import { useNavigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/ensembles/")({
   beforeLoad: ({ context }) => {
@@ -19,6 +20,7 @@ export const Route = createFileRoute("/ensembles/")({
 
 function RouteComponent() {
   const genreOptions = Object.values(Genre);
+  const navigate = useNavigate();
 
   return (
     <main>
@@ -37,7 +39,16 @@ function RouteComponent() {
           // For each ensemble, it renders an `EnsembleCard` wrapped in a grid item
           // gridItem class is defined in global css so it can be used in any grid layout
           renderItem={(ensemble) => (
-            <div className="gridItem">
+            <div
+              className="gridItemLarge"
+              key={ensemble._id}
+              onClick={() =>
+                navigate({
+                  to: `/ensembles/${ensemble._id}`,
+                  state: { ensemble }, 
+                })
+              }
+            >
               <EnsembleCard key={ensemble.id} ensemble={ensemble} />
               <JoinButton ensembleId={ensemble._id} />
             </div>

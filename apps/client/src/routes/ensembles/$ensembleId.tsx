@@ -4,16 +4,26 @@ import {
   useParams,
   useLocation,
 } from "@tanstack/react-router";
-import { getEnsembleById } from "../../api/ensembleApi";
+import { getEnsembleById, deleteEnsemble } from "../../api/ensembleApi";
 import { getUserById } from "../../api/userApi";
 import { acceptJoinRequest, cancelJoinRequest } from "../../api/joinRequestApi";
-import { Ensemble, User } from "@shared/types";
+import { Ensemble } from "@shared/types";
 import { JoinRequest } from "@shared/types";
 import styles from "./Ensembles.module.css";
 import Button from "../../components/Button/Button";
+import GenreTags from "../../components/general-components/GenreTags";
+import UserCard from "../../components/UserCard/UserCard";
+import { UserProfile } from "@shared/userProfile";
+import { UserProvider, useUser } from "../../context/UserContext";
+import { FaTrash } from "react-icons/fa";
+import { useNavigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/ensembles/$ensembleId")({
-  component: EnsembleInfo,
+  component: () => (
+    <UserProvider>
+      <EnsembleInfo />
+    </UserProvider>
+  ),
 });
 
 declare module "@tanstack/react-router" {
@@ -23,7 +33,7 @@ declare module "@tanstack/react-router" {
 }
 
 interface UserDataMapping {
-  [userId: string]: User;
+  [userId: string]: UserProfile;
 }
 
 function EnsembleInfo() {
@@ -31,9 +41,11 @@ function EnsembleInfo() {
     from: "/ensembles/$ensembleId",
     strict: true,
   }) as { ensembleId: string };
+  const navigate = useNavigate();
 
   const location = useLocation();
   const ensembleFromState = location.state?.ensemble as Ensemble | undefined;
+  const { user } = useUser();
 
   const [ensemble, setEnsemble] = useState<Ensemble | null>(
     ensembleFromState || null
@@ -43,6 +55,7 @@ function EnsembleInfo() {
   const [joinRequests, setJoinRequests] = useState<JoinRequest[]>([]);
   const [loading, setLoading] = useState(!ensemble);
   const [error, setError] = useState<string | null>(null);
+  const [showAllMembers, setShowAllMembers] = useState(false);
 
   // Fallback fetching if the ensemble is not passed via state
   useEffect(() => {
@@ -162,10 +175,21 @@ function EnsembleInfo() {
     }
   };
 
+  const handleDeleteEnsemble = async (id: string) => {
+    try {
+      console.log("delete ensemble", id);
+      await deleteEnsemble(id);
+      navigate({ to: "/profile" })
+    } catch (error) {
+      console.error("Error deleting ensemble:", error);
+    }
+  };
+
   if (loading) return <div>Loading ensemble...</div>;
   if (error) return <div>Error: {error}</div>;
   if (!ensemble) return <div>Ensemble not found</div>;
 
+  const isCreator = user?.email === memberData[ensemble.creator]?.email;
   return (
     <main>
       {ensemble.imageUrl && (
@@ -175,61 +199,123 @@ function EnsembleInfo() {
           className={styles.img}
         />
       )}
-      <section>
-        <h2>{ensemble.name}</h2>
-        <p>
+      <div className={styles.ensemblePage}>
+      <section className={styles.ensembleSection}>
+        <div className={styles.heading}>
+          <h2>{ensemble.name}</h2>
+          {ensemble.homepageUrl && (
+            <Button
+              color="white"
+              text="Besøg hjemmeside"
+              link={ensemble.homepageUrl}
+            />
+          )}
+        </div>
+
+        <p className={styles.info}>
           {ensemble.location.city} {ensemble.location.postCode}
         </p>
+        {/* edit buttons */}
+        {isCreator && (
+          <>
+            <div className={styles.buttons}>
+              <Button color="white-slim" text="Rediger info" />
+              <Button
+                color="white-slim"
+                text="Slet ensemble"
+                children={<FaTrash />}
+                onClick={() => handleDeleteEnsemble(ensemble._id)}
+              />
+            </div>
+            {/* requests */}
+            <section className={styles.requests}>
+              <h3>Requests to Join</h3>
+              {joinRequests.length > 0 ? (
+                joinRequests.map((request: JoinRequest) => (
+                  <div key={request._id}>
+                    <p>
+                      {`${userData[request.userId]?.name || "Loading..."} wants to join ${ensemble.name}`}
+                    </p>
+                    <button onClick={() => handleAccept(request.userId)}>
+                      Accept
+                    </button>
+                    <button onClick={() => handleDecline(request.userId)}>
+                      Decline
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <p>No requests at the moment</p>
+              )}
+            </section>
+          </>
+        )}
+        {/* general info */}
         <label>Beskrivelse</label>
-        <p>{ensemble.description}</p>
+        <p className={styles.info}>{ensemble.description}</p>
         <label>Antal aktive musikere</label>
-        <p>{ensemble.number_of_musicians}</p>
+        <p className={styles.info}>{ensemble.number_of_musicians}</p>
         <label>Øvefrekvens</label>
-        <p>{ensemble.practice_frequency}</p>
+        <p className={styles.info}>{ensemble.practice_frequency}</p>
         <label>Ensemblet spiller</label>
-        <p>{ensemble.type}</p>
+        <p className={styles.info}>{ensemble.type}</p>
         <label>Genres</label>
-        <p>{ensemble.genres.join(", ")}</p>
-        <label>Kontaktperson</label>
-        <div>
-          {/* add creator name, link to their profile */}
-          <p>creator</p>
-          <Button color="white-slim" text="Vis profil" />
+        <div className={styles.info}>
+          <GenreTags genres={ensemble.genres} />
         </div>
-        {ensemble.homepageUrl && (
-          <Button
-            color="white"
-            text="Besøg hjemmeside"
-            link={ensemble.homepageUrl}
-          />
+        {!isCreator && (
+          <>
+            <label>Kontaktperson</label>
+            <div>
+              {memberData[ensemble.creator] ? (
+                <div className={styles.creator}>
+                  <p className={styles.info}>
+                    {memberData[ensemble.creator].name}{" "}
+                    {memberData[ensemble.creator].surname}
+                  </p>
+                  <Button color="extra-small" text="Vis profil" />
+                </div>
+              ) : (
+                <p>Loading creator information...</p>
+              )}
+            </div>
+          </>
         )}
       </section>
-      <section>
-        <h3>Requests to Join</h3>
-        {joinRequests.map((request: JoinRequest) => (
-          <div key={request._id}>
-            <p>
-              {`${userData[request.userId]?.name || "Loading..."} wants to join ${ensemble.name}`}
-            </p>
-            <button onClick={() => handleAccept(request.userId)}>Accept</button>
-            <button onClick={() => handleDecline(request.userId)}>
-              Decline
-            </button>
-          </div>
-        ))}
-      </section>
-
-      <section>
-        <h3>Members</h3>
-        {ensemble.member_ids?.map((id: string) => (
-          <p key={id}>{memberData[id]?.name || "Loading..."}</p>
-        ))}
-        <p>members card</p>
-      </section>
-      <section>
+      {/* posts */}
+      <section className={styles.ensembleSection}>
         <h3>Posts</h3>
         <p>posts card</p>
       </section>
+      {/* members */}
+      <section className={styles.ensembleSection}>
+        <div className={styles.membersHeading}>
+          <h3>Members</h3>
+          {ensemble.member_ids && ensemble.member_ids.length > 8 && (
+            <Button
+              color="extra-small"
+              text={showAllMembers ? "Vis mindre" : "Vis Alle"}
+              onClick={() => setShowAllMembers((prev) => !prev)}
+            />
+          )}
+        </div>
+
+        <div className="gridSmall">
+          {ensemble.member_ids
+            ?.slice(0, showAllMembers ? undefined : 8)
+            .map((id: string) => {
+              const member = memberData[id];
+              return member ? (
+                <div className="gridItemSmall" key={id}>
+                  <UserCard user={member} size="small" />
+                </div>
+              ) : (
+                <p key={id}>Loading...</p>
+              );
+            })}
+        </div>
+      </section>
+      </div>
     </main>
   );
 }

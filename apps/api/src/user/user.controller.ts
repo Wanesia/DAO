@@ -56,7 +56,6 @@ export class UsersController {
     @Body() userDto: any,
   ): Promise<User> {
     let profilePictureUrl: string | undefined;
-
     if (image) {
       const uploadResult = await this.imageUploadService.uploadImage(
         image,

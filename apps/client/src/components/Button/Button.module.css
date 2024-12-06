@@ -38,6 +38,17 @@
     font-weight: 700;
     max-height: 40px;
   }
+
+  .extra-small {
+    padding: 0.5rem 0.7rem;
+    max-height: 36px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    background-color: var(--white);
+    color: var(--primary-blue);
+    border-radius: var(--small-radius);
+    
+  }
   
   .white:hover {
     background-color: #F2F2F2;

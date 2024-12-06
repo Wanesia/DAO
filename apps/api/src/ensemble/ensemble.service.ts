@@ -1,13 +1,15 @@
-import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Ensemble } from './schema/ensemble.schema';
 import { CreateEnsembleDto } from './dto/ensemble.dto';
 import { Types } from 'mongoose';
-import {
-  Genre,
-  JoinRequestStatus,
-} from '@shared/enums';
+import { Genre, JoinRequestStatus } from '@shared/enums';
 
 @Injectable()
 export class EnsembleService {
@@ -25,17 +27,15 @@ export class EnsembleService {
     if (existingEnsemble) {
       throw new Error('Ensemble with this name already exists');
     }
-  
+
     try {
       const ensembleData = {
         ...ensembleDto,
         creator: creatorId,
-        member_ids: [
-          creatorId,
-        ],
+        member_ids: [creatorId],
       };
       console.log('Ensemble data:', ensembleData);
-  
+
       const newEnsemble = await this.ensembleModel.create(ensembleData);
       return newEnsemble;
     } catch (error) {
@@ -43,7 +43,6 @@ export class EnsembleService {
       throw new Error('Failed to create ensemble.');
     }
   }
-  
 
   async searchEnsembles(
     searchTerm: string,
@@ -68,7 +67,7 @@ export class EnsembleService {
       if (/^\d+$/.test(location)) {
         query['location.postCode'] = location;
       } else {
-        query['location.city'] = { $regex: new RegExp(location, 'i') }; 
+        query['location.city'] = { $regex: new RegExp(location, 'i') };
       }
     }
 
@@ -197,34 +196,35 @@ export class EnsembleService {
 
     // Check if user is already a member to avoid duplicates
     if (ensemble.member_ids.includes(userIdAsObjectId)) {
-      throw new BadRequestException(`User is already a member of this ensemble`);
+      throw new BadRequestException(
+        `User is already a member of this ensemble`,
+      );
     }
     // Add userId to member_ids and remove from joinRequests
     ensemble.member_ids.push(userIdAsObjectId);
     ensemble.joinRequests = ensemble.joinRequests.filter(
       (request) => request.userId !== userId,
     );
-  
+
     await ensemble.save();
     return ensemble;
   }
 
   async findByCreator(creatorId: string): Promise<Ensemble[]> {
     try {
-      const ensembles = await this.ensembleModel.find({ creator: creatorId }).exec();
-  
-      if (!ensembles || ensembles.length === 0) {
-        throw new NotFoundException('No ensembles found for this creator');
-      }
-  
+      const ensembles = await this.ensembleModel
+        .find({ creator: creatorId })
+        .exec();
+
       return ensembles;
     } catch (error) {
-      console.error(`Error finding ensembles by creator ID: ${creatorId}`, error);
+      console.error(
+        `Error finding ensembles by creator ID: ${creatorId}`,
+        error,
+      );
       throw new InternalServerErrorException(
         'An error occurred while retrieving the ensembles.',
       );
     }
   }
-  
-  
 }
