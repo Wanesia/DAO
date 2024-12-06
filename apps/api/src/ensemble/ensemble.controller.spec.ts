@@ -5,6 +5,8 @@ import { Ensemble } from './schema/ensemble.schema';
 import { Types } from 'mongoose';
 import { Genre, EnsembleType, PracticeFrequency, MusicianCount} from '@shared/enums';
 import { ImageUploadService } from 'src/imageUpload/imageUpload.service';
+import { UsersService } from 'src/user/user.service';
+import { LastSeenInterceptor } from 'src/interceptors/lastSeen.interceptor';
 
 interface AuthenticatedRequest extends Request {
   user: {
@@ -16,6 +18,7 @@ interface AuthenticatedRequest extends Request {
 describe('EnsembleController', () => {
   let controller: EnsembleController;
   let service: EnsembleService;
+  let usersService: UsersService;
 
   const mockEnsembleService = {
     createEnsemble: jest.fn(),
@@ -58,11 +61,24 @@ describe('EnsembleController', () => {
           provide: ImageUploadService,
           useValue: mockImageUploadService,
         },
+        {
+          provide: UsersService,
+          useValue: {
+            updateLastSeen: jest.fn().mockResolvedValue(true)
+          }
+        },
+        {
+          provide: LastSeenInterceptor,
+          useFactory: (usersService: UsersService) => 
+            new LastSeenInterceptor(usersService),
+          inject: [UsersService]
+        }
       ],
     }).compile();
 
     controller = module.get<EnsembleController>(EnsembleController);
     service = module.get<EnsembleService>(EnsembleService);
+    usersService = module.get<UsersService>(UsersService);
   });
 
   // Clear all mocks after each test
