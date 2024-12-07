@@ -27,6 +27,8 @@ const ProfileEdit: React.FC<ProfileInfoProps> = ({ user }) => {
       isSeeking: user.isSeeking || false,
     },
   });
+
+  console.log("user", user);
   const [isSeeking, setIsSeeking] = useState(user.isSeeking ?? false);
 
   // Update form when isSeeking changes

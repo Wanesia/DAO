@@ -5,10 +5,12 @@ import { Ensemble } from './schema/ensemble.schema';
 import { Types } from 'mongoose';
 import { Genre, EnsembleType, PracticeFrequency, MusicianCount} from '@shared/enums';
 import { ImageUploadService } from 'src/imageUpload/imageUpload.service';
+import { UsersService } from 'src/user/user.service';
+import { LastSeenInterceptor } from 'src/interceptors/lastSeen.interceptor';
 
 interface AuthenticatedRequest extends Request {
   user: {
-    id: string;
+    userId: string;
     accessToken: string;
   };
 }
@@ -16,6 +18,7 @@ interface AuthenticatedRequest extends Request {
 describe('EnsembleController', () => {
   let controller: EnsembleController;
   let service: EnsembleService;
+  let usersService: UsersService;
 
   const mockEnsembleService = {
     createEnsemble: jest.fn(),
@@ -58,11 +61,24 @@ describe('EnsembleController', () => {
           provide: ImageUploadService,
           useValue: mockImageUploadService,
         },
+        {
+          provide: UsersService,
+          useValue: {
+            updateLastSeen: jest.fn().mockResolvedValue(true)
+          }
+        },
+        {
+          provide: LastSeenInterceptor,
+          useFactory: (usersService: UsersService) => 
+            new LastSeenInterceptor(usersService),
+          inject: [UsersService]
+        }
       ],
     }).compile();
 
     controller = module.get<EnsembleController>(EnsembleController);
     service = module.get<EnsembleService>(EnsembleService);
+    usersService = module.get<UsersService>(UsersService);
   });
 
   // Clear all mocks after each test
@@ -91,7 +107,7 @@ describe('EnsembleController', () => {
       };
 
       const mockRequest: AuthenticatedRequest = {
-        user: { id: 'creatorId' },
+        user: { userId: 'creatorId' },
       } as AuthenticatedRequest;
 
       jest.spyOn(mockEnsembleService, 'createEnsemble').mockResolvedValue(mockEnsemble);
@@ -107,7 +123,7 @@ describe('EnsembleController', () => {
           ...formData,
           location: { city: 'Copenhagen', postCode: '1000' },
           genres: ['ROCK'],
-          image: 'http://example.com/image.jpg',
+          imageUrl: 'http://example.com/image.jpg',
         },
         'creatorId',
       );
@@ -124,7 +140,8 @@ describe('EnsembleController', () => {
 
       expect(result).toEqual(mockResponse);
 
-      expect(mockEnsembleService.searchEnsembles).toHaveBeenCalledWith('test', 1, 6, 'ROCK');
+      expect(mockEnsembleService.searchEnsembles).toHaveBeenCalledWith('test', 1, 6, 'ROCK', undefined);
+
     });
 
     it('should handle empty search term and default values', async () => {
@@ -136,7 +153,8 @@ describe('EnsembleController', () => {
 
       expect(result).toEqual(mockResponse);
 
-      expect(mockEnsembleService.searchEnsembles).toHaveBeenCalledWith('', 1, 6, undefined);
+      expect(mockEnsembleService.searchEnsembles).toHaveBeenCalledWith('', 1, 6, undefined, undefined);
+
     });
   });
 });

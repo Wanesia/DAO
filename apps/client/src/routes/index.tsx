@@ -18,7 +18,7 @@ function RouteComponent() {
           <div className="heading-container">
             <h1>Welcome</h1>
             <div className="buttons">
-              <Button text="Opret ensemble" color="white" link="/create-ensemble" />
+              <Button text="Opret ensemble" color="white" link="/ensembles/create-ensemble" />
               <Button text="Færdiggør profil" color="blue" link="/profile" />
             </div>
           </div>

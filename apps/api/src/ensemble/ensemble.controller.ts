@@ -15,14 +15,20 @@ import { Ensemble } from './schema/ensemble.schema';
 import { CreateEnsembleDto } from './dto/ensemble.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { ImageUploadService } from '../imageUpload/imageUpload.service';
-import { UseInterceptors, HttpException, HttpStatus, UploadedFile, Query  } from '@nestjs/common';
+import {
+  UseInterceptors,
+  HttpException,
+  HttpStatus,
+  UploadedFile,
+  Query,
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Genre, JoinRequestStatus } from '@shared/enums';
 import { LastSeenInterceptor } from '../interceptors/lastSeen.interceptor';
 
 interface AuthenticatedRequest extends Request {
   user: {
-    id: string;
+    userId: string;
     accessToken: string;
   };
 }
@@ -43,8 +49,8 @@ export class EnsembleController {
     @Body() formData: any,
     @Req() req: AuthenticatedRequest,
   ): Promise<Ensemble> {
-    const creatorId = req.user.id;
-  
+    const creatorId = req.user.userId;
+
     let imageUrl: string | undefined;
     if (image) {
       const uploadResult = await this.imageUploadService.uploadImage(
@@ -53,7 +59,7 @@ export class EnsembleController {
       );
       imageUrl = uploadResult.secure_url;
     }
-  
+
     const ensembleDto: CreateEnsembleDto = {
       ...formData,
       location: {
@@ -64,9 +70,9 @@ export class EnsembleController {
         ? formData.genres
         : JSON.parse(formData.genres),
       type: formData.type,
-      image: imageUrl,
+      imageUrl: imageUrl,
     };
-  
+
     try {
       return await this.ensembleService.createEnsemble(ensembleDto, creatorId);
     } catch (error) {
@@ -89,11 +95,17 @@ export class EnsembleController {
     @Query('searchTerm') searchTerm: string = '',
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 6,
-    @Query('genre') genre?: Genre
+    @Query('genre') genre?: Genre,
+    @Query('location') location?: string,
   ): Promise<{ data: Ensemble[]; total: number }> {
-    return this.ensembleService.searchEnsembles(searchTerm, page, limit, genre);
-  };
-  
+    return this.ensembleService.searchEnsembles(
+      searchTerm,
+      page,
+      limit,
+      genre,
+      location,
+    );
+  }
 
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
@@ -107,6 +119,7 @@ export class EnsembleController {
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   async remove(@Param('id') id: string): Promise<void> {
+    console.log('delete ensemble');
     return this.ensembleService.deleteEnsemble(id);
   }
 
@@ -129,14 +142,18 @@ export class EnsembleController {
     @Param('userId') userId: string,
     @Body('status') status: JoinRequestStatus,
   ) {
-    return this.ensembleService.updateJoinRequestStatus(ensembleId, userId, status);
+    return this.ensembleService.updateJoinRequestStatus(
+      ensembleId,
+      userId,
+      status,
+    );
   }
 
   @Delete('join/:ensembleId/:userId')
   @UseGuards(JwtAuthGuard)
   async deleteJoinRequest(
     @Param('ensembleId') ensembleId: string,
-    @Param('userId') userId: string
+    @Param('userId') userId: string,
   ): Promise<void> {
     await this.ensembleService.deleteJoinRequest(ensembleId, userId);
   }
@@ -159,6 +176,23 @@ export class EnsembleController {
       console.error('Error accepting join request:', error);
       throw new InternalServerErrorException(
         'Failed to accept join request. Please try again.',
+      );
+    }
+  }
+
+  @Get('creator')
+  @UseGuards(JwtAuthGuard)
+  async getEnsemblesByCreator(
+    @Req() req: AuthenticatedRequest,
+  ): Promise<Ensemble[]> {
+    try {
+      const creatorId = req.user.userId;
+      const ensembles = await this.ensembleService.findByCreator(creatorId);
+      return ensembles;
+    } catch (error) {
+      console.error('Error fetching ensembles by creator:', error);
+      throw new InternalServerErrorException(
+        'Failed to fetch ensembles by creator. Please try again.',
       );
     }
   }

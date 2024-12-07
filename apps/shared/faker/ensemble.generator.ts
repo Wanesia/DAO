@@ -17,7 +17,7 @@ export class EnsembleGenerator {
     
     for (let i = 0; i < count; i++) {
       // Select random users for this ensemble
-      const memberCount = faker.number.int({ min: 2, max: Math.min(8, users.length) });
+      const memberCount = faker.number.int({ min: 2, max: Math.min(15, users.length) });
       const selectedUsers = faker.helpers.arrayElements(users, memberCount);
       const creator = selectedUsers[0];
 

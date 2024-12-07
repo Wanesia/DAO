@@ -40,3 +40,8 @@
     color: var(--primary-blue);
     font-size: 1.2rem;
 }
+
+.filters {
+    display: flex;
+    gap: 30px;
+}
