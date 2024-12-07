@@ -1,0 +1,91 @@
+.userCard {
+  border: 1px solid var(--grey-border);
+  border-radius: var(--large-radius);
+  box-shadow: var(--button-shadow);
+  background: var(--white);
+  height: 100%;
+  cursor: pointer;
+}
+
+.headingContainer {
+  display: flex;
+  gap: 1rem;
+  background-color: #f9f9f9;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid var(--grey-border);
+  border-radius: var(--large-radius) var(--large-radius) 0 0;
+}
+
+.small .headingContainer {
+  border-radius: var(--large-radius);
+  height: 100%;
+  border: none;
+}
+
+.userCard .small .title {
+  font-size: 0.9rem;
+}
+
+.imageName {
+  display: flex;
+  gap: 1rem;
+}
+
+.image {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--button-shadow);
+  border-radius: var(--large-radius);
+}
+
+.image img {
+  width: 100%;
+  height: 100%;
+  border: 2px solid var(--white);
+  border-radius: var(--large-radius);
+  object-fit: cover;
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.instrumentContainer {
+  padding: 1rem;
+  width: 100%;
+}
+
+.instrumentCard {
+  padding: 1rem 0;
+}
+
+.instrumentInfo {
+  display: flex;
+  justify-content: space-between;
+}
+
+.instrumentLevel {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.instrumentName {
+  font-weight: 500;
+  font-size: 1.4rem;
+  color: var(--primary-blue);
+  font-family: "Oswald", sans-serif;
+}
+
+.instrumentLevel span {
+  background-color: var(--primary-blue);
+  color: var(--white);
+  padding: 0.5rem 0.7rem;
+  font-weight: 600;
+  border-radius: var(--large-radius);
+}

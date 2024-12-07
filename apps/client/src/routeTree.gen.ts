@@ -16,11 +16,11 @@ import { Route as UnauthorizedImport } from './routes/unauthorized'
 import { Route as RegisterImport } from './routes/register'
 import { Route as ProfileImport } from './routes/profile'
 import { Route as LoginImport } from './routes/login'
-import { Route as EnsemblerImport } from './routes/ensembler'
-import { Route as EnsembleImport } from './routes/ensemble'
-import { Route as CreateEnsembleImport } from './routes/create-ensemble'
 import { Route as AddInstrumentImport } from './routes/add-instrument'
 import { Route as IndexImport } from './routes/index'
+import { Route as EnsemblesIndexImport } from './routes/ensembles/index'
+import { Route as EnsemblesCreateEnsembleImport } from './routes/ensembles/create-ensemble'
+import { Route as EnsemblesEnsembleIdImport } from './routes/ensembles/$ensembleId'
 import { Route as MusiciansIndexImport } from './routes/musicians/index'
 import { Route as MusiciansMusicianIdImport } from './routes/m./routes/musicians/musicianId
 
@@ -56,24 +56,6 @@ const LoginRoute = LoginImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const EnsemblerRoute = EnsemblerImport.update({
-  id: '/ensembler',
-  path: '/ensembler',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const EnsembleRoute = EnsembleImport.update({
-  id: '/ensemble',
-  path: '/ensemble',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const CreateEnsembleRoute = CreateEnsembleImport.update({
-  id: '/create-ensemble',
-  path: '/create-ensemble',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const AddInstrumentRoute = AddInstrumentImport.update({
   id: '/add-instrument',
   path: '/add-instrument',
@@ -83,6 +65,24 @@ const AddInstrumentRoute = AddInstrumentImport.update({
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const EnsemblesIndexRoute = EnsemblesIndexImport.update({
+  id: '/ensembles/',
+  path: '/ensembles/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const EnsemblesCreateEnsembleRoute = EnsemblesCreateEnsembleImport.update({
+  id: '/ensembles/create-ensemble',
+  path: '/ensembles/create-ensemble',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const EnsemblesEnsembleIdRoute = EnsemblesEnsembleIdImport.update({
+  id: '/ensembles/$ensembleId',
+  path: '/ensembles/$ensembleId',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -114,27 +114,6 @@ declare module '@tanstack/react-router' {
       path: '/add-instrument'
       fullPath: '/add-instrument'
       preLoaderRoute: typeof AddInstrumentImport
-      parentRoute: typeof rootRoute
-    }
-    '/create-ensemble': {
-      id: '/create-ensemble'
-      path: '/create-ensemble'
-      fullPath: '/create-ensemble'
-      preLoaderRoute: typeof CreateEnsembleImport
-      parentRoute: typeof rootRoute
-    }
-    '/ensemble': {
-      id: '/ensemble'
-      path: '/ensemble'
-      fullPath: '/ensemble'
-      preLoaderRoute: typeof EnsembleImport
-      parentRoute: typeof rootRoute
-    }
-    '/ensembler': {
-      id: '/ensembler'
-      path: '/ensembler'
-      fullPath: '/ensembler'
-      preLoaderRoute: typeof EnsemblerImport
       parentRoute: typeof rootRoute
     }
     '/login': {
@@ -172,6 +151,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UpdateProfileImport
       parentRoute: typeof rootRoute
     }
+    '/ensembles/$ensembleId': {
+      id: '/ensembles/$ensembleId'
+      path: '/ensembles/$ensembleId'
+      fullPath: '/ensembles/$ensembleId'
+      preLoaderRoute: typeof EnsemblesEnsembleIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/ensembles/create-ensemble': {
+      id: '/ensembles/create-ensemble'
+      path: '/ensembles/create-ensemble'
+      fullPath: '/ensembles/create-ensemble'
+      preLoaderRoute: typeof EnsemblesCreateEnsembleImport
+      parentRoute: typeof rootRoute
+    }
+    '/ensembles/': {
+      id: '/ensembles/'
+      path: '/ensembles'
+      fullPath: '/ensembles'
+      preLoaderRoute: typeof EnsemblesIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/musicians/musicianId': {
       id: '/musicians/musicianId'
       path: '/musicians/musicianId'
@@ -194,14 +194,14 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/add-instrument': typeof AddInstrumentRoute
-  '/create-ensemble': typeof CreateEnsembleRoute
-  '/ensemble': typeof EnsembleRoute
-  '/ensembler': typeof EnsemblerRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
   '/unauthorized': typeof UnauthorizedRoute
   '/update-profile': typeof UpdateProfileRoute
+  '/ensembles/$ensembleId': typeof EnsemblesEnsembleIdRoute
+  '/ensembles/create-ensemble': typeof EnsemblesCreateEnsembleRoute
+  '/ensembles': typeof EnsemblesIndexRoute
   '/musicians/musicianId': typeof MusiciansMusicianIdRoute
   '/musicians': typeof MusiciansIndexRoute
 }
@@ -209,14 +209,14 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/add-instrument': typeof AddInstrumentRoute
-  '/create-ensemble': typeof CreateEnsembleRoute
-  '/ensemble': typeof EnsembleRoute
-  '/ensembler': typeof EnsemblerRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
   '/unauthorized': typeof UnauthorizedRoute
   '/update-profile': typeof UpdateProfileRoute
+  '/ensembles/$ensembleId': typeof EnsemblesEnsembleIdRoute
+  '/ensembles/create-ensemble': typeof EnsemblesCreateEnsembleRoute
+  '/ensembles': typeof EnsemblesIndexRoute
   '/musicians/musicianId': typeof MusiciansMusicianIdRoute
   '/musicians': typeof MusiciansIndexRoute
 }
@@ -225,14 +225,14 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/add-instrument': typeof AddInstrumentRoute
-  '/create-ensemble': typeof CreateEnsembleRoute
-  '/ensemble': typeof EnsembleRoute
-  '/ensembler': typeof EnsemblerRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
   '/unauthorized': typeof UnauthorizedRoute
   '/update-profile': typeof UpdateProfileRoute
+  '/ensembles/$ensembleId': typeof EnsemblesEnsembleIdRoute
+  '/ensembles/create-ensemble': typeof EnsemblesCreateEnsembleRoute
+  '/ensembles/': typeof EnsemblesIndexRoute
   '/musicians/musicianId': typeof MusiciansMusicianIdRoute
   '/musicians/': typeof MusiciansIndexRoute
 }
@@ -242,42 +242,42 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/add-instrument'
-    | '/create-ensemble'
-    | '/ensemble'
-    | '/ensembler'
     | '/login'
     | '/profile'
     | '/register'
     | '/unauthorized'
     | '/update-profile'
+    | '/ensembles/$ensembleId'
+    | '/ensembles/create-ensemble'
+    | '/ensembles'
     | '/musicians/musicianId'
     | '/musicians'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/add-instrument'
-    | '/create-ensemble'
-    | '/ensemble'
-    | '/ensembler'
     | '/login'
     | '/profile'
     | '/register'
     | '/unauthorized'
     | '/update-profile'
+    | '/ensembles/$ensembleId'
+    | '/ensembles/create-ensemble'
+    | '/ensembles'
     | '/musicians/musicianId'
     | '/musicians'
   id:
     | '__root__'
     | '/'
     | '/add-instrument'
-    | '/create-ensemble'
-    | '/ensemble'
-    | '/ensembler'
     | '/login'
     | '/profile'
     | '/register'
     | '/unauthorized'
     | '/update-profile'
+    | '/ensembles/$ensembleId'
+    | '/ensembles/create-ensemble'
+    | '/ensembles/'
     | '/musicians/musicianId'
     | '/musicians/'
   fileRoutesById: FileRoutesById
@@ -286,14 +286,14 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AddInstrumentRoute: typeof AddInstrumentRoute
-  CreateEnsembleRoute: typeof CreateEnsembleRoute
-  EnsembleRoute: typeof EnsembleRoute
-  EnsemblerRoute: typeof EnsemblerRoute
   LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
   RegisterRoute: typeof RegisterRoute
   UnauthorizedRoute: typeof UnauthorizedRoute
   UpdateProfileRoute: typeof UpdateProfileRoute
+  EnsemblesEnsembleIdRoute: typeof EnsemblesEnsembleIdRoute
+  EnsemblesCreateEnsembleRoute: typeof EnsemblesCreateEnsembleRoute
+  EnsemblesIndexRoute: typeof EnsemblesIndexRoute
   MusiciansMusicianIdRoute: typeof MusiciansMusicianIdRoute
   MusiciansIndexRoute: typeof MusiciansIndexRoute
 }
@@ -301,14 +301,14 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AddInstrumentRoute: AddInstrumentRoute,
-  CreateEnsembleRoute: CreateEnsembleRoute,
-  EnsembleRoute: EnsembleRoute,
-  EnsemblerRoute: EnsemblerRoute,
   LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,
   RegisterRoute: RegisterRoute,
   UnauthorizedRoute: UnauthorizedRoute,
   UpdateProfileRoute: UpdateProfileRoute,
+  EnsemblesEnsembleIdRoute: EnsemblesEnsembleIdRoute,
+  EnsemblesCreateEnsembleRoute: EnsemblesCreateEnsembleRoute,
+  EnsemblesIndexRoute: EnsemblesIndexRoute,
   MusiciansMusicianIdRoute: MusiciansMusicianIdRoute,
   MusiciansIndexRoute: MusiciansIndexRoute,
 }
@@ -325,14 +325,14 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/add-instrument",
-        "/create-ensemble",
-        "/ensemble",
-        "/ensembler",
         "/login",
         "/profile",
         "/register",
         "/unauthorized",
         "/update-profile",
+        "/ensembles/$ensembleId",
+        "/ensembles/create-ensemble",
+        "/ensembles/",
         "/musicians/musicianId",
         "/musicians/"
       ]
@@ -342,15 +342,6 @@ export const routeTree = rootRoute
     },
     "/add-instrument": {
       "filePath": "add-instrument.tsx"
-    },
-    "/create-ensemble": {
-      "filePath": "create-ensemble.tsx"
-    },
-    "/ensemble": {
-      "filePath": "ensemble.tsx"
-    },
-    "/ensembler": {
-      "filePath": "ensembler.tsx"
     },
     "/login": {
       "filePath": "login.tsx"
@@ -366,6 +357,15 @@ export const routeTree = rootRoute
     },
     "/update-profile": {
       "filePath": "update-profile.tsx"
+    },
+    "/ensembles/$ensembleId": {
+      "filePath": "ensembles/$ensembleId.tsx"
+    },
+    "/ensembles/create-ensemble": {
+      "filePath": "ensembles/create-ensemble.tsx"
+    },
+    "/ensembles/": {
+      "filePath": "ensembles/index.tsx"
     },
     "/musicians/musicianId": {
       "filePath": "musicians/musicianId.tsx"

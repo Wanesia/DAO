@@ -10,15 +10,16 @@ export const getUserStatus = async (): Promise<User> => {
   return response.data;
 };
 
-export const updateUserProfile = async (userEmail: string, formData: FormData): Promise<void> => {
+export const updateUserProfile = async (userEmail: string, formData: FormData): Promise<UserProfile> => {
   try {
     const response = await axiosInstance.patch(`/users/${userEmail}`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
-
     console.log("Profile update successful:", response.data);
+    return response.data;
+ 
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error("Failed to update profile:", error.response?.data);

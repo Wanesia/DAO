@@ -7,7 +7,7 @@ import { MantineProvider } from "@mantine/core";
 
 const router = createRouter({
   routeTree,
-  context: undefined!, 
+  context: undefined!,
 });
 
 declare module "@tanstack/react-router" {
@@ -27,7 +27,7 @@ function App() {
 }
 
 function InnerApp() {
-  const auth = useAuth(); 
+  const auth = useAuth();
 
   return <RouterProvider router={router} context={{ auth }} />;
 }

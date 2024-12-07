@@ -49,3 +49,4 @@ export enum JoinRequestStatus {
   PENDING = 'PENDING',
   ACCEPTED = 'ACCEPTED',
 }
+

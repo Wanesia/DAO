@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from "react";
 import EnsembleCard from "../EnsembleCard/EnsembleCard";
-import styles from "./ProfileInfo.module.css";
-import { getEnsemblesByIds } from "../../api/ensembleApi";
+import { getEnsemblesByCreator } from "../../api/ensembleApi";
 import { useNavigate } from "@tanstack/react-router";
 import { Ensemble } from "@shared/types";
 
-interface EnsembleListProps {
-  ensembleIds: string[];
-}
-
-const EnsembleList: React.FC<EnsembleListProps> = ({ ensembleIds }) => {
+const EnsembleList: React.FC = () => {
   const [ensembles, setEnsembles] = useState<Ensemble[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -17,52 +12,48 @@ const EnsembleList: React.FC<EnsembleListProps> = ({ ensembleIds }) => {
 
   useEffect(() => {
     const fetchEnsembles = async () => {
+      setLoading(true);
+      setError(null);
+
       try {
-        setLoading(true);
-        setError(null);
-
-        if (ensembleIds.length > 0) {
-          const fetchedEnsembles = await getEnsemblesByIds(ensembleIds);
-          setEnsembles(fetchedEnsembles);
-        } else {
-          setEnsembles([]);
-        }
-
-        setLoading(false);
+        const ensemblesByCreator = await getEnsemblesByCreator();
+        console.log("ensembles", ensemblesByCreator);
+        setEnsembles(ensemblesByCreator);
       } catch (err) {
         console.error("Failed to fetch ensembles", err);
         setError(
           err instanceof Error ? err.message : "Failed to load ensembles"
         );
+      } finally {
         setLoading(false);
       }
     };
 
     fetchEnsembles();
-  }, [ensembleIds]);
+  }, []);
 
   if (loading) return <div>Loading ensembles...</div>;
   if (error) return <div>Error: {error}</div>;
-  if (ensembles.length === 0) return <p>Ingen ensembler registreret</p>;
+  if (ensembles.length === 0) return <p>No ensembles found</p>;
 
   return (
-    <div className={styles.ensembles}>
-      {ensembles.map((ensemble) => {
-        return (
+      <ul className="gridLarge">
+        {ensembles.map((ensemble) => (
           <div
             key={ensemble._id}
-            onClick={() => {console.log(ensemble)
+            onClick={() =>
               navigate({
-                to: "/ensemble",
-                state: { ensemble }
-              });
-            }}
+                to: `/ensembles/${ensemble._id}`,
+                state: { ensemble: ensemble as Ensemble },
+              })
+            }
           >
-            <EnsembleCard ensemble={ensemble} />
+            <div className="gridItemLarge">
+              <EnsembleCard ensemble={ensemble} />
+            </div>
           </div>
-        );
-      })}
-    </div>
+        ))}
+      </ul>
   );
 };
 

@@ -47,6 +47,7 @@ const FormMultiSelect = <T extends FieldValues>({
         <MultiSelect
           classNames={{
             input: error ? styles.inputError : styles.multiselect, 
+            dropdown: styles.dropdown,
           }}
           error={fieldError?.message || error}
           data={options}
