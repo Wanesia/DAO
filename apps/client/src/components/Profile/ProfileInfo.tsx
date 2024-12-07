@@ -92,7 +92,11 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
           color="white-slim"
           onClick={() => navigate({ to: "/update-profile" })}
         />
-        <Button text="Indstilinger" color="white-slim" />
+        <Button 
+          text="Indstilinger"
+          color="white-slim"
+          onClick={() => navigate({ to: "/settings" })}
+        />
       </div>
       <div className={`${styles.container} ${styles["text-container"]}`}>
         <h2 className={styles.title}>Profiltekst</h2>

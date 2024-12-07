@@ -1,0 +1,25 @@
+h2 {
+  margin-top: 3rem;
+}
+
+h3 {
+  font-size: 1rem;
+  margin-top: 1rem;
+}
+
+.checkbox {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+.buttons > * {
+  margin-bottom: 1rem;
+  width: 100%;
+}
+.buttons > *:first-child {
+  margin-bottom: 5rem;
+  color: var(--primary-red);
+}
+input {
+  margin-top: 1rem;
+}
