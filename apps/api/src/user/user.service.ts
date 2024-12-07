@@ -88,12 +88,23 @@ export class UsersService {
     userDto: UpdateProfileDto,
   ): Promise<User> {
     try {
+      console.log('Updating user:', email, userDto);
+      const updateData: any = { ...userDto };
+      if (userDto.city || userDto.postcode) {
+        updateData.location = {
+          city: userDto.city,
+          postCode: userDto.postcode,
+        };
+        delete updateData.city;
+        delete updateData.postCode;
+      }
+
       const updatedUser = await this.userModel.findOneAndUpdate(
-        { email: email },
-        userDto,
+        { email },
+        updateData,
         {
-          new: true,
-          runValidators: true, // run schema validators
+          new: true, 
+          runValidators: true, 
         },
       );
 

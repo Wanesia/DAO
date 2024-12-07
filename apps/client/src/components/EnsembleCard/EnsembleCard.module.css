@@ -3,7 +3,11 @@
     border-radius: var(--large-radius);
     box-shadow: var(--button-shadow);
     background: var(--white);
+    height: 100%;
+    cursor: pointer;
 }
+
+
 
 .headingContainer {
     display: flex;
@@ -50,19 +54,9 @@
 
 .infoContainer {
     padding: 1rem;
-}
-
-.genres {
-    font-size: 12px;
-    color: var(--primary-blue);
-    font-weight: 700;
     display: flex;
-    gap: 0.5rem;
-    margin-top: 1rem;
+    min-height: 150px;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-.genres > * {
-    background-color: var(--bg-light-grey);
-    padding: 0.25rem 0.5rem;
-    border-radius: var(--small-radius);
-}

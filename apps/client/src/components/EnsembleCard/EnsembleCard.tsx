@@ -1,3 +1,4 @@
+import GenreTags from "../general-components/GenreTags";
 import styles from "./EnsembleCard.module.css";
 import { Ensemble } from "@shared/types";
 
@@ -6,6 +7,12 @@ interface EnsembleCardProps {
 }
 
 const EnsembleCard: React.FC<EnsembleCardProps> = ({ ensemble }) => {
+  function truncateText(text: string | undefined, maxLength: number) {
+    if (!text) return "No description available";
+    return text.length > maxLength
+      ? text.substring(0, maxLength) + "..."
+      : text;
+  }
   return (
     <div className={styles.ensembleCard}>
       <div className={styles.headingContainer}>
@@ -23,15 +30,12 @@ const EnsembleCard: React.FC<EnsembleCardProps> = ({ ensemble }) => {
         </div>
       </div>
       <div className={styles.infoContainer}>
-        <p>{ensemble.description || "No description available"}</p>
-        <div className={styles.genres}>
-          {ensemble.genres?.map((genre) => (
-            <span key={genre} className={styles.genre}>
-              {genre}
-            </span>
-          ))}
-        </div>
-        </div>
+        <p>
+          {truncateText(ensemble.description, 100) ||
+            "No description available"}
+        </p>
+        <GenreTags genres={ensemble.genres} />
+      </div>
     </div>
   );
 };

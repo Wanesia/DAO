@@ -1,6 +1,6 @@
 .filterWrapper {
-  max-width: 30%;
   margin: 4rem 0;
+  width: 100%;
 }
 
 .heading {
@@ -30,6 +30,17 @@
 .input::placeholder {
   font-weight: 400;
   color: var(--text-dark-grey);
+  font-size: 1rem;
+}
+
+.input:focus,
+.input:-webkit-autofill:focus {
+  box-shadow: 0 0 0px 1000px white inset;
+  border: 1px solid var(--primary-blue);
+}
+
+.input:-webkit-autofill {
+  box-shadow: 0 0 0px 1000px white inset;
 }
 
 .clearButton {
@@ -48,11 +59,6 @@
     transform 0.3s ease-in-out;
 }
 
-.dropdown {
-  font-weight: 500;
-  color: var(--primary-blue);
-}
-
 .clearButton:hover {
   background-color: #f2f2f2;
 }
@@ -60,3 +66,30 @@
 .clearButton:active {
   transform: scale(0.95);
 }
+
+.location {
+  border: 1px solid var(--grey-border);
+  border-radius: 10px;
+  padding: 8px 15px;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+  box-shadow: 0px 2px 4px #00000014;
+  width: 100%;
+}
+
+.location:focus,
+.location:-webkit-autofill:focus {
+  outline: none;
+  box-shadow: 0 0 0px 1000px white inset;
+  border: 1px solid var(--primary-blue);
+}
+
+.location:-webkit-autofill {
+  box-shadow: 0 0 0px 1000px white inset;
+}
+
+.dropdown {
+    font-weight: 500;
+    color: var(--primary-blue);
+  }

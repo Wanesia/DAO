@@ -50,6 +50,7 @@ const SingleSelect = <T extends FieldValues>({
             onChange={field.onChange}
             classNames={{
               input: error ? styles.inputError : styles.select, 
+              dropdown: styles.dropdown,
             }}
             error={fieldError?.message || error}
             {...selectProps}

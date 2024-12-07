@@ -1,10 +1,12 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import Search from "../components/Search/Search";
-import { getEnsembles } from "../api/ensembleApi";
-import EnsembleCard from "../components/EnsembleCard/EnsembleCard";
-import JoinButton from "../components/Button/JoinButton";
+import Search from "../../components/Search/Search";
+import { getEnsembles } from "../../api/ensembleApi";
+import EnsembleCard from "../../components/EnsembleCard/EnsembleCard";
+import JoinButton from "../../components/Button/JoinButton";
+import { Genre } from "../../constants/enums";
+import { useNavigate } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/ensembler")({
+export const Route = createFileRoute("/ensembles/")({
   beforeLoad: ({ context }) => {
     if (!context.auth.isTokenValid()) {
       throw redirect({
@@ -16,18 +18,9 @@ export const Route = createFileRoute("/ensembler")({
   component: RouteComponent,
 });
 
-enum Genre {
-  BAROK = "Barok",
-  FOLKEMUSIK = "Folkemusik",
-  KAMMERMUSIK = "Kammermusik",
-  ROMANTISK = "Romantisk",
-  SENMODERNE = "Senmoderne",
-  SENROMANTISK = "Senromantisk",
-  SYMFONISK = "Symfonisk",
-}
-
 function RouteComponent() {
   const genreOptions = Object.values(Genre);
+  const navigate = useNavigate();
 
   return (
     <main>
@@ -46,7 +39,16 @@ function RouteComponent() {
           // For each ensemble, it renders an `EnsembleCard` wrapped in a grid item
           // gridItem class is defined in global css so it can be used in any grid layout
           renderItem={(ensemble) => (
-            <div className="gridItem">
+            <div
+              className="gridItemLarge"
+              key={ensemble._id}
+              onClick={() =>
+                navigate({
+                  to: `/ensembles/${ensemble._id}`,
+                  state: { ensemble }, 
+                })
+              }
+            >
               <EnsembleCard key={ensemble.id} ensemble={ensemble} />
               <JoinButton ensembleId={ensemble._id} />
             </div>
@@ -57,6 +59,7 @@ function RouteComponent() {
           // You can define more filters by adding more objects to the filterOptions array
           filterOptions={[
             { label: "Genre", options: genreOptions, key: "genre" },
+            { label: "Location", key: "location" },
           ]}
           getFilterLabel={(filter) => {
             if (typeof filter === "string") {
