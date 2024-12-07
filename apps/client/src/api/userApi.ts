@@ -1,6 +1,7 @@
 import axios from "axios";
 import axiosInstance from "./axiosInstance";
-import { User } from "@shared/types";
+import { Instrument, User } from "@shared/types";
+import { UserProfile } from "@shared/userProfile";
 
 // don't know
 export const getUserStatus = async (): Promise<User> => {
@@ -85,4 +86,24 @@ export const getUserById = async (id: string): Promise<any> => {
       throw new Error("An unexpected error occurred. Please try again.");
     }
   }
+};
+
+export const getUsers = async (
+  searchTerm: string = '',
+  page: number = 1,
+  limit: number = 6, // the number of results per page, default is 6
+  filters: { instrument?: Instrument, location?: Location} = {}, // we can add more filters here
+): Promise<{ data: UserProfile[]; total: number }> => {
+  const response = await axiosInstance.get<{ data: UserProfile[]; total: number }>(
+    '/users',
+    {
+      params: {
+        searchTerm,
+        page,
+        limit,
+        ...filters,
+      },
+    },
+  );
+  return response.data;
 };

@@ -21,6 +21,8 @@ import { Route as EnsembleImport } from './routes/ensemble'
 import { Route as CreateEnsembleImport } from './routes/create-ensemble'
 import { Route as AddInstrumentImport } from './routes/add-instrument'
 import { Route as IndexImport } from './routes/index'
+import { Route as MusiciansIndexImport } from './routes/musicians/index'
+import { Route as MusiciansMusicianIdImport } from './routes/m./routes/musicians/musicianId
 
 // Create/Update Routes
 
@@ -81,6 +83,18 @@ const AddInstrumentRoute = AddInstrumentImport.update({
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const MusiciansIndexRoute = MusiciansIndexImport.update({
+  id: '/musicians/',
+  path: '/musicians/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const MusiciansMusicianIdRoute = MusiciansMusicianIdImport.update({
+  id: '/musicians/musicianId',
+  path: '/musicians/musicianId',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -158,6 +172,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UpdateProfileImport
       parentRoute: typeof rootRoute
     }
+    '/musicians/musicianId': {
+      id: '/musicians/musicianId'
+      path: '/musicians/musicianId'
+      fullPath: '/musicians/musicianId'
+      preLoaderRoute: typeof MusiciansMusicianIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/musicians/': {
+      id: '/musicians/'
+      path: '/musicians'
+      fullPath: '/musicians'
+      preLoaderRoute: typeof MusiciansIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -174,6 +202,8 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterRoute
   '/unauthorized': typeof UnauthorizedRoute
   '/update-profile': typeof UpdateProfileRoute
+  '/musicians/musicianId': typeof MusiciansMusicianIdRoute
+  '/musicians': typeof MusiciansIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -187,6 +217,8 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/unauthorized': typeof UnauthorizedRoute
   '/update-profile': typeof UpdateProfileRoute
+  '/musicians/musicianId': typeof MusiciansMusicianIdRoute
+  '/musicians': typeof MusiciansIndexRoute
 }
 
 export interface FileRoutesById {
@@ -201,6 +233,8 @@ export interface FileRoutesById {
   '/register': typeof RegisterRoute
   '/unauthorized': typeof UnauthorizedRoute
   '/update-profile': typeof UpdateProfileRoute
+  '/musicians/musicianId': typeof MusiciansMusicianIdRoute
+  '/musicians/': typeof MusiciansIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -216,6 +250,8 @@ export interface FileRouteTypes {
     | '/register'
     | '/unauthorized'
     | '/update-profile'
+    | '/musicians/musicianId'
+    | '/musicians'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -228,6 +264,8 @@ export interface FileRouteTypes {
     | '/register'
     | '/unauthorized'
     | '/update-profile'
+    | '/musicians/musicianId'
+    | '/musicians'
   id:
     | '__root__'
     | '/'
@@ -240,6 +278,8 @@ export interface FileRouteTypes {
     | '/register'
     | '/unauthorized'
     | '/update-profile'
+    | '/musicians/musicianId'
+    | '/musicians/'
   fileRoutesById: FileRoutesById
 }
 
@@ -254,6 +294,8 @@ export interface RootRouteChildren {
   RegisterRoute: typeof RegisterRoute
   UnauthorizedRoute: typeof UnauthorizedRoute
   UpdateProfileRoute: typeof UpdateProfileRoute
+  MusiciansMusicianIdRoute: typeof MusiciansMusicianIdRoute
+  MusiciansIndexRoute: typeof MusiciansIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -267,6 +309,8 @@ const rootRouteChildren: RootRouteChildren = {
   RegisterRoute: RegisterRoute,
   UnauthorizedRoute: UnauthorizedRoute,
   UpdateProfileRoute: UpdateProfileRoute,
+  MusiciansMusicianIdRoute: MusiciansMusicianIdRoute,
+  MusiciansIndexRoute: MusiciansIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -288,7 +332,9 @@ export const routeTree = rootRoute
         "/profile",
         "/register",
         "/unauthorized",
-        "/update-profile"
+        "/update-profile",
+        "/musicians/musicianId",
+        "/musicians/"
       ]
     },
     "/": {
@@ -320,6 +366,12 @@ export const routeTree = rootRoute
     },
     "/update-profile": {
       "filePath": "update-profile.tsx"
+    },
+    "/musicians/musicianId": {
+      "filePath": "musicians/musicianId.tsx"
+    },
+    "/musicians/": {
+      "filePath": "musicians/index.tsx"
     }
   }
 }

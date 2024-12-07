@@ -10,9 +10,10 @@ import {
   Req,
   UseInterceptors,
   UploadedFile,
+  Query
 } from '@nestjs/common';
 import { UsersService } from './user.service';
-import { User } from './schema/user.schema';
+import { Instrument, User } from './schema/user.schema';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { ImageUploadService } from '../imageUpload/imageUpload.service';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -33,8 +34,13 @@ export class UsersController {
   }
 
   @Get()
-  async findAll(): Promise<User[]> {
-    return this.usersService.findAll();
+  async findAll(
+    @Query('searchTerm') searchTerm: string = '',
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 6,
+    @Query('instrument') instrument?: Instrument,
+  ): Promise<{ data: User[]; total: number }> {
+    return this.usersService.searchUsers(searchTerm, page, limit, instrument);
   }
 
   @Get('profile')

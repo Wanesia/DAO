@@ -32,6 +32,41 @@ export class UsersService {
     }
   }
 
+  async searchUsers(
+    searchTerm: string,
+    page: number,
+    limit: number,
+    instrument: Instrument,
+  ): Promise<{ data: User[]; total: number }> {
+    let query: Record<string, any> = {};
+    // using regex to search for partial match - parts of words, options 'i' makes it case-insensitive
+    if (searchTerm && searchTerm.trim()) {
+      query = { name: { $regex: searchTerm, $options: 'i' } };
+    }
+
+    // checking whether provided instrument is in the genres array
+    // has to be changed because it's a nested object
+    if (instrument) {
+      query.instruments = { $in: [instrument] };
+    }
+
+    console.log('Query passed to search:', query);
+
+    try {
+      const total = await this.userModel.countDocuments(query).exec();
+      const data = await this.userModel
+        .find(query)
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .exec();
+
+      return { data, total };
+    } catch (error) {
+      console.error('Error searching ensembles:', error);
+      throw new Error('Failed to search ensembles.');
+    }
+  }
+
   async findUserByEmail(email: string): Promise<User> {
     try {
       const user = await this.userModel.findOne({ email }).exec();
@@ -140,7 +175,7 @@ export class UsersService {
     await user.save();
     return user;
   }
-  
+
   async updateLastSeen(userId: string): Promise<void> {
     try {
       await this.userModel.findByIdAndUpdate(userId, {
