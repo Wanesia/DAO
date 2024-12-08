@@ -8,6 +8,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Instrument, User } from './schema/user.schema';
 import { UpdateProfileDto } from './dto/updateProfile.dto';
+import { UpdateSettingsDto } from './dto/settings.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -151,7 +153,6 @@ export class UsersService {
     await user.save();
     return user;
   }
-  
   async updateLastSeen(userId: string): Promise<void> {
     try {
       await this.userModel.findByIdAndUpdate(userId, {
@@ -160,6 +161,67 @@ export class UsersService {
     } catch (error) {
       console.error(`Failed to update lastSeen for user ${userId}:`, error);
       throw new Error('Could not update lastSeen');
+    }
+  }
+  async updateSettings(
+    id: string,
+    updateSettingsDto: UpdateSettingsDto,
+  ): Promise<User> {
+    try {
+      const { password, newPassword, isSubscribedToNewsletter } =
+        updateSettingsDto;
+      const user = await this.userModel.findById(id);
+      console.log(user);
+      if (!user) {
+        throw new NotFoundException(`User with ID ${id} not found`);
+      }
+
+      // Validate and hash password if both currend password and newPassword are provided
+      if (password || newPassword) {
+        if (!password || !newPassword) {
+          throw new Error(
+            'Both current and new passwords are required to change the password',
+          );
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+          throw new Error('Current password is incorrect');
+        }
+
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+        updateSettingsDto.password = hashedPassword;
+      }
+
+      const updateFields: UpdateSettingsDto = {};
+
+      if (isSubscribedToNewsletter !== undefined) {
+        updateFields.isSubscribedToNewsletter = isSubscribedToNewsletter;
+      }
+
+      if (newPassword) {
+        updateFields.password = updateSettingsDto.password;
+      }
+
+      const updatedUser = await this.userModel.findByIdAndUpdate(
+        id,
+        updateFields,
+        {
+          new: true,
+          runValidators: true,
+        },
+      );
+      if (!updatedUser) {
+        throw new NotFoundException(`User with ID ${id} not found`);
+      }
+      return updatedUser;
+    } catch (error) {
+      console.error('Error updating user settings:', error);
+      throw new Error(
+        'Failed to update user settings. Please try again later.',
+      );
     }
   }
 }

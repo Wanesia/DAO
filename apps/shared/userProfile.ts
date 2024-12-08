@@ -12,6 +12,7 @@ export interface Location {
 }
 
 export interface UserProfile {
+  _id:string;
   name: string;
   surname: string;
   email: string;
@@ -29,4 +30,9 @@ export interface UserProfile {
   instruments: Instrument[];
   ensembleIds?: string[];
   facebookId?: string;
+}
+export interface UpdateSettingsDto {
+  password?: string;
+  newPassword?: string;
+  isSubscribedToNewsletter?: boolean;
 }

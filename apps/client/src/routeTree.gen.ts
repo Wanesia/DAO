@@ -13,6 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as UpdateProfileImport } from './routes/update-profile'
 import { Route as UnauthorizedImport } from './routes/unauthorized'
+import { Route as SettingsImport } from './routes/settings'
 import { Route as RegisterImport } from './routes/register'
 import { Route as ProfileImport } from './routes/profile'
 import { Route as LoginImport } from './routes/login'
@@ -33,6 +34,12 @@ const UpdateProfileRoute = UpdateProfileImport.update({
 const UnauthorizedRoute = UnauthorizedImport.update({
   id: '/unauthorized',
   path: '/unauthorized',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SettingsRoute = SettingsImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -123,6 +130,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterImport
       parentRoute: typeof rootRoute
     }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsImport
+      parentRoute: typeof rootRoute
+    }
     '/unauthorized': {
       id: '/unauthorized'
       path: '/unauthorized'
@@ -169,6 +183,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
+  '/settings': typeof SettingsRoute
   '/unauthorized': typeof UnauthorizedRoute
   '/update-profile': typeof UpdateProfileRoute
   '/ensembles/$ensembleId': typeof EnsemblesEnsembleIdRoute
@@ -182,6 +197,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
+  '/settings': typeof SettingsRoute
   '/unauthorized': typeof UnauthorizedRoute
   '/update-profile': typeof UpdateProfileRoute
   '/ensembles/$ensembleId': typeof EnsemblesEnsembleIdRoute
@@ -196,6 +212,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/register': typeof RegisterRoute
+  '/settings': typeof SettingsRoute
   '/unauthorized': typeof UnauthorizedRoute
   '/update-profile': typeof UpdateProfileRoute
   '/ensembles/$ensembleId': typeof EnsemblesEnsembleIdRoute
@@ -211,6 +228,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/profile'
     | '/register'
+    | '/settings'
     | '/unauthorized'
     | '/update-profile'
     | '/ensembles/$ensembleId'
@@ -223,6 +241,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/profile'
     | '/register'
+    | '/settings'
     | '/unauthorized'
     | '/update-profile'
     | '/ensembles/$ensembleId'
@@ -235,6 +254,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/profile'
     | '/register'
+    | '/settings'
     | '/unauthorized'
     | '/update-profile'
     | '/ensembles/$ensembleId'
@@ -249,6 +269,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
   RegisterRoute: typeof RegisterRoute
+  SettingsRoute: typeof SettingsRoute
   UnauthorizedRoute: typeof UnauthorizedRoute
   UpdateProfileRoute: typeof UpdateProfileRoute
   EnsemblesEnsembleIdRoute: typeof EnsemblesEnsembleIdRoute
@@ -262,6 +283,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,
   RegisterRoute: RegisterRoute,
+  SettingsRoute: SettingsRoute,
   UnauthorizedRoute: UnauthorizedRoute,
   UpdateProfileRoute: UpdateProfileRoute,
   EnsemblesEnsembleIdRoute: EnsemblesEnsembleIdRoute,
@@ -284,6 +306,7 @@ export const routeTree = rootRoute
         "/login",
         "/profile",
         "/register",
+        "/settings",
         "/unauthorized",
         "/update-profile",
         "/ensembles/$ensembleId",
@@ -305,6 +328,9 @@ export const routeTree = rootRoute
     },
     "/register": {
       "filePath": "register.tsx"
+    },
+    "/settings": {
+      "filePath": "settings.tsx"
     },
     "/unauthorized": {
       "filePath": "unauthorized.tsx"

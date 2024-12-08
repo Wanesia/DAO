@@ -1,6 +1,7 @@
 import axios from "axios";
 import axiosInstance from "./axiosInstance";
 import { User } from "@shared/types";
+import { UpdateSettingsDto } from "@shared/userProfile";
 import { UserProfile } from "@shared/userProfile";
 
 // don't know
@@ -81,6 +82,27 @@ export const getUserById = async (id: string): Promise<any> => {
       console.error("Failed to fetch user:", error.response?.data);
       throw new Error(
         error.response?.data?.message || "Failed to fetch user. Please try again."
+      );
+    } else {
+      console.error("An unexpected error occurred:", error);
+      throw new Error("An unexpected error occurred. Please try again.");
+    }
+  }
+};
+
+export const updateUserSettings = async (
+  id: string,
+  updateSettingsDto: UpdateSettingsDto
+): Promise<void> => {
+  console.log(`in updateUserSettings`)
+  try {
+    const response = await axiosInstance.patch(`/users/settings/${id}`, updateSettingsDto);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Failed to update user settings:", error.response?.data);
+      throw new Error(
+        error.response?.data?.message || "Failed to update user settings. Please try again."
       );
     } else {
       console.error("An unexpected error occurred:", error);
