@@ -94,7 +94,6 @@ export const updateUserSettings = async (
   id: string,
   updateSettingsDto: UpdateSettingsDto
 ): Promise<void> => {
-  console.log(`in updateUserSettings`)
   try {
     const response = await axiosInstance.patch(`/users/settings/${id}`, updateSettingsDto);
     return response.data;
@@ -103,6 +102,23 @@ export const updateUserSettings = async (
       console.error("Failed to update user settings:", error.response?.data);
       throw new Error(
         error.response?.data?.message || "Failed to update user settings. Please try again."
+      );
+    } else {
+      console.error("An unexpected error occurred:", error);
+      throw new Error("An unexpected error occurred. Please try again.");
+    }
+  }
+};
+
+export const deleteUser = async (id: string): Promise<void> => {
+  try{
+    const response = await axiosInstance.delete(`/users/${id}`);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Failed to delete user", error.response?.data);
+      throw new Error(
+        error.response?.data?.message || "Failed to delete user. Please try again."
       );
     } else {
       console.error("An unexpected error occurred:", error);
