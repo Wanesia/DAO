@@ -125,11 +125,11 @@ export class UsersService {
     try {
       const result = await this.userModel.findByIdAndDelete(id);
       if (!result) {
-        throw new Error('User not found');
+        throw new NotFoundException('User not found');
       }
     } catch (error) {
       console.error('Error deleting user:', error);
-      throw new Error('Failed to delete user. Please try again later.');
+      throw new InternalServerErrorException('Failed to delete user. Please try again later.');
     }
   }
   async addInstrument(email: string, newInstrument: Instrument): Promise<User> {
