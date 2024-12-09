@@ -133,7 +133,7 @@ describe('UsersController', () => {
 
   it('should delete a user', async () => {
     const userId = '123';
-    await usersController.remove(userId);
+    await usersController.deleteUser(userId);
     expect(usersService.deleteUser).toHaveBeenCalledWith(userId);
   });
 

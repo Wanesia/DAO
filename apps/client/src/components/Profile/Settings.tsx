@@ -5,6 +5,7 @@ import styles from "./Settings.module.css";
 import FormInput from "../form-components/FormInput";
 import { useForm } from "react-hook-form";
 import { updateUserSettings } from "../../api/userApi";
+import DeleteButton from "../Button/DeleteButton";
 interface ProfileInfoProps {
   user: UserProfile;
 }
@@ -35,7 +36,6 @@ const Settings: React.FC<ProfileInfoProps> = ({ user }) => {
     }
   };
 
-  console.log(user);
   return (
     <div className={styles.main}>
       <Button
@@ -79,12 +79,7 @@ const Settings: React.FC<ProfileInfoProps> = ({ user }) => {
 
         <h3>Profil</h3>
         <div className={styles.buttons}>
-          <Button
-            type="button"
-            color="white"
-            text="Slet profil"
-            onClick={() => navigate({ to: "/" })}
-          />
+          <DeleteButton userId={user._id}></DeleteButton>
           <Button
             type="submit"
             color="blue"

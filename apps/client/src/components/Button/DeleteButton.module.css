@@ -1,0 +1,45 @@
+.main > *:first-child {
+  margin-bottom: 5rem;
+  color: var(--primary-red);
+  width: 100%;
+}
+.main {
+  position: relative;
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.title{
+    margin: 1rem 0;
+}
+.modal {
+  background-color: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: var(--button-shadow);
+  text-align: center;
+}
+
+.modalActions {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: space-around;
+}
+
+.modalActions button {
+  padding: 1rem 2rem;
+}
+
+.modalActions button:first-child {
+    color: var(--primary-red);
+}

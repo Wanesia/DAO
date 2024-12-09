@@ -16,10 +16,7 @@ h3 {
   margin-bottom: 1rem;
   width: 100%;
 }
-.buttons > *:first-child {
-  margin-bottom: 5rem;
-  color: var(--primary-red);
-}
+
 input {
   margin-top: 1rem;
 }
