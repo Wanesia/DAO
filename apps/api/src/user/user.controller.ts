@@ -19,10 +19,11 @@ import { ImageUploadService } from '../imageUpload/imageUpload.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AddInstrumentDto } from './dto/add-instrument.dto';
 import { LastSeenInterceptor } from 'src/interceptors/lastSeen.interceptor';
+import { UpdateSettingsDto } from './dto/settings.dto';
 import { NotFoundException } from '@nestjs/common';
 
 @Controller('users')
-// @UseInterceptors(LastSeenInterceptor)
+@UseInterceptors(LastSeenInterceptor)
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
@@ -96,7 +97,7 @@ export class UsersController {
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string): Promise<void> {
+  async deleteUser(@Param('id') id: string): Promise<void> {
     return this.usersService.deleteUser(id);
   }
 
@@ -118,5 +119,14 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   async getUserById(@Param('id') id: string) {
     return await this.usersService.findUserById(id);
+  }
+
+  @Patch('settings/:id')
+  @UseGuards(JwtAuthGuard)
+  async updateSettings(
+    @Param('id') id: string,
+    @Body() updateSettingsDto: UpdateSettingsDto,
+  ): Promise<User> {
+    return this.usersService.updateSettings(id, updateSettingsDto);
   }
 }

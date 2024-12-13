@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import ProfileEdit from "../components/Profile/ProfileEdit";
+import Settings from "../components/Profile/Settings";
 import { UserProvider, useUser } from "../context/UserContext";
 
-export const Route = createFileRoute("/update-profile")({
+export const Route = createFileRoute("/settings")({
   component: RouteComponent,
 });
 
@@ -10,13 +10,12 @@ function RouteComponent() {
   return (
     <UserProvider>
       <main className="main-form">
-        <UpdateForm></UpdateForm>
+        <SettingsForm></SettingsForm>
       </main>
     </UserProvider>
   );
 }
-
-function UpdateForm() {
+function SettingsForm() {
   const { user, loading } = useUser();
 
   if (loading) {
@@ -27,5 +26,5 @@ function UpdateForm() {
     return <div>No user data available.</div>;
   }
 
-  return <ProfileEdit user={user} />;
+  return <Settings user={user} />;
 }

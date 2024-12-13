@@ -3,7 +3,7 @@ import Button from "../Button/Button";
 import { UserProfile } from "@shared/userProfile.ts";
 import FormInput from "../form-components/FormInput";
 import { useForm, FieldValues } from "react-hook-form";
-import styles from "./ProfileSettings.module.css";
+import styles from "./ProfileEdit.module.css";
 import { Grid } from "@mantine/core";
 import DragAndDrop from "../DragAndDrop/DragAndDrop";
 import FormTextarea from "../form-components/Textarea";
@@ -13,7 +13,7 @@ import { updateUserProfile } from "../../api/userApi";
 interface ProfileInfoProps {
   user: UserProfile;
 }
-const ProfileSettings: React.FC<ProfileInfoProps> = ({ user }) => {
+const ProfileEdit: React.FC<ProfileInfoProps> = ({ user }) => {
   const navigate = useNavigate();
   const { control, handleSubmit, setValue } = useForm<FieldValues>({
     defaultValues: {
@@ -156,4 +156,4 @@ const ProfileSettings: React.FC<ProfileInfoProps> = ({ user }) => {
   );
 };
 
-export default ProfileSettings;
+export default ProfileEdit;

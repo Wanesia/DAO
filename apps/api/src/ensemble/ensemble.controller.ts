@@ -25,7 +25,6 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Genre, JoinRequestStatus } from '@shared/enums';
 import { LastSeenInterceptor } from '../interceptors/lastSeen.interceptor';
-import { JwtService } from '@nestjs/jwt';
 
 interface AuthenticatedRequest extends Request {
   user: {
