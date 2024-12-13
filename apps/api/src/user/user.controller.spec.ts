@@ -4,6 +4,7 @@ import { UsersService } from './user.service';
 import { ImageUploadService } from '../imageUpload/imageUpload.service';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { Genre, InstrumentName } from '@shared/enums';
+import { Instrument } from './schema/user.schema';
 
 // Mock data for a user
 const mockUser = {
@@ -41,6 +42,11 @@ describe('UsersController', () => {
   let usersService: UsersService;
   let imageUploadService: ImageUploadService;
 
+  const mockUsers = [
+    { id: '1', name: 'John Doe', instruments: [{ name: 'Piano' }] },
+    { id: '2', name: 'Jane Doe', instruments: [{ name: 'Violin' }] },
+  ];
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UsersController],
@@ -49,7 +55,10 @@ describe('UsersController', () => {
           provide: UsersService,
           useValue: {
             createUser: jest.fn().mockResolvedValue(mockUser),
-            findAll: jest.fn().mockResolvedValue([mockUser]),
+            searchUsers: jest.fn().mockResolvedValue({
+              data: [mockUser],
+              total: 1,
+            }), 
             findUserById: jest.fn().mockResolvedValue(mockUser),
             findUserByEmail: jest.fn().mockResolvedValue(mockUser),
             updateUser: jest.fn().mockResolvedValue(updatedUser),
@@ -57,6 +66,7 @@ describe('UsersController', () => {
             updateUserByEmail: jest.fn().mockResolvedValue(updatedUser),
             addInstrument: jest.fn().mockResolvedValue({ ...mockUser, instruments: [mockInstrument] }),
             deleteInstrument: jest.fn().mockResolvedValue({ ...mockUser, instruments: [] }),
+            
           },
         },
         {
@@ -91,8 +101,11 @@ describe('UsersController', () => {
 
   it('should return an array of users', async () => {
     const result = await usersController.findAll();
-    expect(usersService.findAll).toHaveBeenCalled();
-    expect(result).toEqual([mockUser]);
+    expect(usersService.searchUsers).toHaveBeenCalledWith("", 1, 6, undefined);
+    expect(result).toEqual({
+      data: [mockUser],
+      total: 1
+    });
   });
 
   it('should return a user profile', async () => {
@@ -151,4 +164,18 @@ describe('UsersController', () => {
     expect(usersService.deleteInstrument).toHaveBeenCalledWith(email, index);
     expect(result.instruments).not.toContainEqual(mockInstrument);
   });
+  it('should return paginated and filtered users', async () => {
+    const searchTerm = 'John';
+    const page = 1;
+    const limit = 10;
+  
+    const result = await usersController.findAll(searchTerm, page, limit, mockInstrument);
+  
+    expect(usersService.searchUsers).toHaveBeenCalledWith(searchTerm, page, limit, mockInstrument);
+    expect(result).toEqual({
+      data: [mockUser],
+      total: 1
+    });
+  });
+  
 });

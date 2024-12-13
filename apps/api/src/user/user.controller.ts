@@ -21,6 +21,7 @@ import { AddInstrumentDto } from './dto/add-instrument.dto';
 import { LastSeenInterceptor } from 'src/interceptors/lastSeen.interceptor';
 import { UpdateSettingsDto } from './dto/settings.dto';
 import { NotFoundException } from '@nestjs/common';
+import { InstrumentName } from '@shared/enums';
 
 @Controller('users')
 @UseInterceptors(LastSeenInterceptor)
