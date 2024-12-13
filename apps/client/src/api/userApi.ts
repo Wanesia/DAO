@@ -108,3 +108,24 @@ export const getUsers = async (
   );
   return response.data;
 };
+
+export const getUserBySlug = async (slug: string): Promise<UserProfile> => {
+  try {
+    const response = await axiosInstance.get<UserProfile>(`/users/profile/${slug}`);
+    console.log("User profile fetched successfully:", response.data);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response?.status === 404) {
+        throw new Error("User not found");
+      }
+      console.error("Failed to fetch user profile:", error.response?.data);
+      throw new Error(
+        error.response?.data?.message || "Failed to fetch user profile. Please try again."
+      );
+    } else {
+      console.error("An unexpected error occurred:", error);
+      throw new Error("An unexpected error occurred. Please try again.");
+    }
+  }
+};

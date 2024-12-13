@@ -118,9 +118,9 @@ button {
 
 .gridLarge {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, max-content));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   grid-gap: 30px;
-  margin: 2rem 0;
+  margin: 1rem 0;
   justify-content: space-between; 
 }
 

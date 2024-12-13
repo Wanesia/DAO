@@ -31,6 +31,26 @@ export class User extends Document {
   @Prop({ required: true })
   surname: string;
 
+  @Prop({ 
+    required: true, 
+    unique: true,
+    default: function(this: User) {
+      if (this.name && this.surname) {
+        const uniqueId = Math.random().toString(36).substring(2, 8);
+        const nameSlug = `${this.name}-${this.surname}`.toLowerCase()
+          .trim()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .replace(/[^a-z0-9-]/g, '-')
+          .replace(/-+/g, '-')
+          .replace(/^-|-$/g, '');
+        return `${nameSlug}-${uniqueId}`;
+      }
+      return undefined;
+    }
+  })
+  slug: string;
+
   @Prop({ required: true, unique: true })
   email: string;
 

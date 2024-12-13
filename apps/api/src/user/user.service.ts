@@ -45,9 +45,8 @@ export class UsersService {
     }
 
     // checking whether provided instrument is in the genres array
-    // has to be changed because it's a nested object
     if (instrument) {
-      query.instruments = { $in: [instrument] };
+      query['instruments.name']  = { $in: [instrument] };
     }
 
     console.log('Query passed to search:', query);
@@ -99,6 +98,10 @@ export class UsersService {
         'An error occurred while retrieving the user.',
       );
     }
+  }
+
+  async findBySlug(slug: string): Promise<User | null> {
+    return this.userModel.findOne({ slug }).exec();
   }
 
   async updateUser(id: string, userDto: any): Promise<User> {

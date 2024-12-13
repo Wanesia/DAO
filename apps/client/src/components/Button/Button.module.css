@@ -19,6 +19,7 @@
   .blue {
     background-color: var(--primary-blue);
     color: var(--white);
+    max-height: 56px;
   }
   
   .blue:hover {
@@ -66,12 +67,7 @@
     box-shadow: none; 
   }
 
-  @media (max-width: 1024px) {
-    .btn {
-      font-size: 0.875rem; 
-      padding: 0.5rem 1rem; 
-    }
-  }
+  
 
 
   

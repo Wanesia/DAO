@@ -27,6 +27,19 @@ export class UserGenerator {
     };
   }
 
+  private static generateSlug(firstName: string, surname: string): string {
+    const uniqueId = Math.random().toString(36).substring(2, 8);
+    const nameSlug = `${firstName}-${surname}`.toLowerCase()
+      .trim()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+      .replace(/[^a-z0-9-]/g, '-')     // Replace non-alphanumeric chars with hyphens
+      .replace(/-+/g, '-')             // Replace multiple hyphens with single hyphen
+      .replace(/^-|-$/g, '');          // Remove leading/trailing hyphens
+    
+    return `${nameSlug}-${uniqueId}`;
+  }
+
   static async generate(count: number = 1): Promise<FakeUser[]> {
     console.log("generating fake users");
 
@@ -37,10 +50,13 @@ export class UserGenerator {
 
 
     for (let i = 0; i < count; i++) {
+      const firstName = faker.person.firstName();
+      const lastName = faker.person.lastName();
       const user: FakeUser = {
         _id: new Types.ObjectId(),
-        name: faker.person.firstName(),
-        surname: faker.person.lastName(),
+        name: firstName,
+        surname: lastName,
+        slug: this.generateSlug(firstName, lastName),
         email: faker.internet.email(),
         password: hashedPassword, // Default password for all fake users
         authProvider: "local",
