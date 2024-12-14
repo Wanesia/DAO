@@ -1,0 +1,189 @@
+.wrapper {
+  max-width: 60%;
+  margin: 0 auto;
+  padding: 3rem 0;
+}
+
+.heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 4rem;
+}
+
+.imageContainer {
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.imageContainer img {
+  object-fit: cover;
+}
+
+.imageContainer h2 {
+  color: var(--primary-red);
+  margin-bottom: 0.5rem;
+}
+
+.subheading {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.profilePicture {
+  width: 100px;
+  height: 100px;
+  border-radius: var(--large-radius);
+  margin-right: 1rem;
+  box-shadow: var(--button-shadow);
+}
+
+.profileText {
+  margin-bottom: 3rem;
+}
+
+.profileText h3 {
+  margin-bottom: 1rem;
+}
+
+.name {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.isSeeking {
+    padding: 0.4rem 1rem;
+    font-weight: 700;
+    background: var(--bg-light-grey);
+    color: var(--primary-blue);
+    border-radius: var(--large-radius);
+    font-size: 0.8rem;
+}
+
+.status {
+    font-size: 1rem;
+}
+
+.instrument-container,
+.ensembler-container,
+.text-container {
+  border-bottom: 1px solid var(--grey-border);
+  border-top: 1px solid var(--grey-border);
+}
+.level {
+  display: inline-block;
+  padding: 0.5rem 0.85rem;
+  background-color: var(--primary-blue);
+  color: white;
+  border-radius: var(--large-radius);
+  margin-left: 0.5rem;
+}
+.top {
+  display: flex;
+  justify-content: space-between;
+}
+.content {
+  border-radius: var(--large-radius);
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+}
+.content > * {
+  color: var(--primary-blue);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+.text {
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+.title {
+  margin-bottom: 1rem;
+}
+.genres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.genres > * {
+  padding: 0.5rem;
+  background-color: #f0f0f0;
+  border-radius: var(--small-radius);
+}
+.instrument {
+  position: relative;
+}
+
+.section {
+  margin-bottom: 3rem;
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.contactDetails {
+  margin: 1rem 0;
+}
+
+.closeButton {
+  background: #f0f0f0;
+  border: none;
+  padding: 0.8rem 1.2rem;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+}
+.modal button {
+  width: 100%; 
+  margin-bottom: 1rem; 
+}
+
+.icon {
+    color: var(--primary-blue);
+}
+
+@media (max-width: 1024px) {
+  .wrapper {
+    max-width: 70%;
+  }
+}
+
+@media (max-width: 768px) {
+  .wrapper {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .heading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2rem;
+  }
+
+  .heading button {
+    width: 100%;
+  }
+
+}

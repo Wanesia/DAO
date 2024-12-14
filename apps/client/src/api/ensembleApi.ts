@@ -117,9 +117,10 @@ export const getEnsembleById = async (
   }
 };
 
-export const getEnsemblesByCreator = async (): Promise<Ensemble[]> => {
+export const getEnsemblesByCreator = async (userId?: string): Promise<Ensemble[]> => {
   try {
-    const response = await axiosInstance.get<Ensemble[]>(`/ensembles/creator`);
+    const url = userId ? `/ensembles/creator?userId=${userId}` : `/ensembles/creator`;
+    const response = await axiosInstance.get<Ensemble[]>(url);
     return response.data || [];
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -134,3 +135,4 @@ export const getEnsemblesByCreator = async (): Promise<Ensemble[]> => {
     }
   }
 };
+

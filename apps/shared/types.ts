@@ -77,6 +77,7 @@ export interface FakeUser {
   name: string;
   surname: string;
   email: string;
+  slug: string;
   password?: string;
   authProvider: "local";
   phone: string;

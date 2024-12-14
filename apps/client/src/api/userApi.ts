@@ -1,6 +1,6 @@
 import axios from "axios";
 import axiosInstance from "./axiosInstance";
-import { User } from "@shared/types";
+import { Instrument, User } from "@shared/types";
 import { UpdateSettingsDto } from "@shared/userProfile";
 import { UserProfile } from "@shared/userProfile";
 
@@ -119,6 +119,47 @@ export const deleteUser = async (id: string): Promise<void> => {
       console.error("Failed to delete user", error.response?.data);
       throw new Error(
         error.response?.data?.message || "Failed to delete user. Please try again."
+      );
+    } else {
+      console.error("An unexpected error occurred:", error);
+      throw new Error("An unexpected error occurred. Please try again.");
+    }
+  }
+};
+
+export const getUsers = async (
+  searchTerm: string = '',
+  page: number = 1,
+  limit: number = 6, // the number of results per page, default is 6
+  filters: { instrument?: Instrument, location?: Location} = {}, // we can add more filters here
+): Promise<{ data: UserProfile[]; total: number }> => {
+  const response = await axiosInstance.get<{ data: UserProfile[]; total: number }>(
+    '/users',
+    {
+      params: {
+        searchTerm,
+        page,
+        limit,
+        ...filters,
+      },
+    },
+  );
+  return response.data;
+};
+
+export const getUserBySlug = async (slug: string): Promise<UserProfile> => {
+  try {
+    const response = await axiosInstance.get<UserProfile>(`/users/profile/${slug}`);
+    console.log("User profile fetched successfully:", response.data);
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      if (error.response?.status === 404) {
+        throw new Error("User not found");
+      }
+      console.error("Failed to fetch user profile:", error.response?.data);
+      throw new Error(
+        error.response?.data?.message || "Failed to fetch user profile. Please try again."
       );
     } else {
       console.error("An unexpected error occurred:", error);

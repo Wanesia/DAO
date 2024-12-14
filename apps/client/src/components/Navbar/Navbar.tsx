@@ -53,7 +53,7 @@ const Navbar: React.FC = () => {
         />
         <Button
           text="Find musiker"
-          link="/musiker"
+          link="/musicians"
           color="transparent"
           onClick={handleCloseMenu}
         />

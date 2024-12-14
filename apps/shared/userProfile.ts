@@ -30,6 +30,8 @@ export interface UserProfile {
   instruments: Instrument[];
   ensembleIds?: string[];
   facebookId?: string;
+  slug: string;
+  _id: string;
 }
 export interface UpdateSettingsDto {
   password?: string;

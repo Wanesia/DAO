@@ -10,15 +10,18 @@ import {
   Req,
   UseInterceptors,
   UploadedFile,
+  Query
 } from '@nestjs/common';
 import { UsersService } from './user.service';
-import { User } from './schema/user.schema';
+import { Instrument, User } from './schema/user.schema';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { ImageUploadService } from '../imageUpload/imageUpload.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AddInstrumentDto } from './dto/add-instrument.dto';
 import { LastSeenInterceptor } from 'src/interceptors/lastSeen.interceptor';
 import { UpdateSettingsDto } from './dto/settings.dto';
+import { NotFoundException } from '@nestjs/common';
+import { InstrumentName } from '@shared/enums';
 
 @Controller('users')
 @UseInterceptors(LastSeenInterceptor)
@@ -34,8 +37,13 @@ export class UsersController {
   }
 
   @Get()
-  async findAll(): Promise<User[]> {
-    return this.usersService.findAll();
+  async findAll(
+    @Query('searchTerm') searchTerm: string = '',
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 6,
+    @Query('instrument') instrument?: Instrument,
+  ): Promise<{ data: User[]; total: number }> {
+    return this.usersService.searchUsers(searchTerm, page, limit, instrument);
   }
 
   @Get('profile')
@@ -49,6 +57,17 @@ export class UsersController {
   @Get('email/:email')
   async findByEmail(@Param('email') email: string): Promise<User> {
     return this.usersService.findUserByEmail(email);
+  }
+
+  @Get('profile/:slug')
+  async getUserBySlug(@Param('slug') slug: string): Promise<User> {
+    const user = await this.usersService.findBySlug(slug);
+    if (!user) {
+      throw new NotFoundException(`User with slug ${slug} not found`);
+    }
+
+    const { password, __v, ...userWithoutSensitiveInfo } = user.toObject();
+    return userWithoutSensitiveInfo;
   }
 
   @Patch(':email')

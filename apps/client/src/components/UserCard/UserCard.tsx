@@ -37,7 +37,7 @@ const UserCard: React.FC<UserCardProps> = ({ user, size }) => {
           <InstrumentCard key={`instrument-${index}`} instrument={instrument} />
         ))}
         {user.instruments.length > 2 && (
-          <p className={styles.instrumentName}>
+          <p className={styles.moreInfo}>
             + {user.instruments.length - 2} instrumenter mere
           </p>
         )}

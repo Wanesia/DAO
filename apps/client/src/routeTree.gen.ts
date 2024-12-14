@@ -19,7 +19,9 @@ import { Route as ProfileImport } from './routes/profile'
 import { Route as LoginImport } from './routes/login'
 import { Route as AddInstrumentImport } from './routes/add-instrument'
 import { Route as IndexImport } from './routes/index'
+import { Route as MusiciansIndexImport } from './routes/musicians/index'
 import { Route as EnsemblesIndexImport } from './routes/ensembles/index'
+import { Route as MusiciansSlugImport } from './routes/musicians/$slug'
 import { Route as EnsemblesCreateEnsembleImport } from './routes/ensembles/create-ensemble'
 import { Route as EnsemblesEnsembleIdImport } from './routes/ensembles/$ensembleId'
 
@@ -73,9 +75,21 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const MusiciansIndexRoute = MusiciansIndexImport.update({
+  id: '/musicians/',
+  path: '/musicians/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const EnsemblesIndexRoute = EnsemblesIndexImport.update({
   id: '/ensembles/',
   path: '/ensembles/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const MusiciansSlugRoute = MusiciansSlugImport.update({
+  id: '/musicians/$slug',
+  path: '/musicians/$slug',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -165,11 +179,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnsemblesCreateEnsembleImport
       parentRoute: typeof rootRoute
     }
+    '/musicians/$slug': {
+      id: '/musicians/$slug'
+      path: '/musicians/$slug'
+      fullPath: '/musicians/$slug'
+      preLoaderRoute: typeof MusiciansSlugImport
+      parentRoute: typeof rootRoute
+    }
     '/ensembles/': {
       id: '/ensembles/'
       path: '/ensembles'
       fullPath: '/ensembles'
       preLoaderRoute: typeof EnsemblesIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/musicians/': {
+      id: '/musicians/'
+      path: '/musicians'
+      fullPath: '/musicians'
+      preLoaderRoute: typeof MusiciansIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -188,7 +216,9 @@ export interface FileRoutesByFullPath {
   '/update-profile': typeof UpdateProfileRoute
   '/ensembles/$ensembleId': typeof EnsemblesEnsembleIdRoute
   '/ensembles/create-ensemble': typeof EnsemblesCreateEnsembleRoute
+  '/musicians/$slug': typeof MusiciansSlugRoute
   '/ensembles': typeof EnsemblesIndexRoute
+  '/musicians': typeof MusiciansIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -202,7 +232,9 @@ export interface FileRoutesByTo {
   '/update-profile': typeof UpdateProfileRoute
   '/ensembles/$ensembleId': typeof EnsemblesEnsembleIdRoute
   '/ensembles/create-ensemble': typeof EnsemblesCreateEnsembleRoute
+  '/musicians/$slug': typeof MusiciansSlugRoute
   '/ensembles': typeof EnsemblesIndexRoute
+  '/musicians': typeof MusiciansIndexRoute
 }
 
 export interface FileRoutesById {
@@ -217,7 +249,9 @@ export interface FileRoutesById {
   '/update-profile': typeof UpdateProfileRoute
   '/ensembles/$ensembleId': typeof EnsemblesEnsembleIdRoute
   '/ensembles/create-ensemble': typeof EnsemblesCreateEnsembleRoute
+  '/musicians/$slug': typeof MusiciansSlugRoute
   '/ensembles/': typeof EnsemblesIndexRoute
+  '/musicians/': typeof MusiciansIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -233,7 +267,9 @@ export interface FileRouteTypes {
     | '/update-profile'
     | '/ensembles/$ensembleId'
     | '/ensembles/create-ensemble'
+    | '/musicians/$slug'
     | '/ensembles'
+    | '/musicians'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -246,7 +282,9 @@ export interface FileRouteTypes {
     | '/update-profile'
     | '/ensembles/$ensembleId'
     | '/ensembles/create-ensemble'
+    | '/musicians/$slug'
     | '/ensembles'
+    | '/musicians'
   id:
     | '__root__'
     | '/'
@@ -259,7 +297,9 @@ export interface FileRouteTypes {
     | '/update-profile'
     | '/ensembles/$ensembleId'
     | '/ensembles/create-ensemble'
+    | '/musicians/$slug'
     | '/ensembles/'
+    | '/musicians/'
   fileRoutesById: FileRoutesById
 }
 
@@ -274,7 +314,9 @@ export interface RootRouteChildren {
   UpdateProfileRoute: typeof UpdateProfileRoute
   EnsemblesEnsembleIdRoute: typeof EnsemblesEnsembleIdRoute
   EnsemblesCreateEnsembleRoute: typeof EnsemblesCreateEnsembleRoute
+  MusiciansSlugRoute: typeof MusiciansSlugRoute
   EnsemblesIndexRoute: typeof EnsemblesIndexRoute
+  MusiciansIndexRoute: typeof MusiciansIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -288,7 +330,9 @@ const rootRouteChildren: RootRouteChildren = {
   UpdateProfileRoute: UpdateProfileRoute,
   EnsemblesEnsembleIdRoute: EnsemblesEnsembleIdRoute,
   EnsemblesCreateEnsembleRoute: EnsemblesCreateEnsembleRoute,
+  MusiciansSlugRoute: MusiciansSlugRoute,
   EnsemblesIndexRoute: EnsemblesIndexRoute,
+  MusiciansIndexRoute: MusiciansIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -311,7 +355,9 @@ export const routeTree = rootRoute
         "/update-profile",
         "/ensembles/$ensembleId",
         "/ensembles/create-ensemble",
-        "/ensembles/"
+        "/musicians/$slug",
+        "/ensembles/",
+        "/musicians/"
       ]
     },
     "/": {
@@ -344,8 +390,14 @@ export const routeTree = rootRoute
     "/ensembles/create-ensemble": {
       "filePath": "ensembles/create-ensemble.tsx"
     },
+    "/musicians/$slug": {
+      "filePath": "musicians/$slug.tsx"
+    },
     "/ensembles/": {
       "filePath": "ensembles/index.tsx"
+    },
+    "/musicians/": {
+      "filePath": "musicians/index.tsx"
     }
   }
 }

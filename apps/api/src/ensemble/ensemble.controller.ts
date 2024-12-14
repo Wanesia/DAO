@@ -184,9 +184,10 @@ export class EnsembleController {
   @UseGuards(JwtAuthGuard)
   async getEnsemblesByCreator(
     @Req() req: AuthenticatedRequest,
+    @Query('userId') userId?: string, 
   ): Promise<Ensemble[]> {
     try {
-      const creatorId = req.user.userId;
+      const creatorId = userId || req.user.userId; 
       const ensembles = await this.ensembleService.findByCreator(creatorId);
       return ensembles;
     } catch (error) {
@@ -196,4 +197,5 @@ export class EnsembleController {
       );
     }
   }
+  
 }
