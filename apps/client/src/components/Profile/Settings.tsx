@@ -16,7 +16,7 @@ const Settings: React.FC<ProfileInfoProps> = ({ user }) => {
     handleSubmit,
     setError,
     control,
-    formState: {  isSubmitting },
+    formState: { isSubmitting },
   } = useForm<UpdateSettingsDto>({
     defaultValues: {
       password: "",
@@ -28,7 +28,7 @@ const Settings: React.FC<ProfileInfoProps> = ({ user }) => {
   const onSubmit = async (data: UpdateSettingsDto) => {
     console.log("Form submitted:", data);
     try {
-      await updateUserSettings(user._id, data)
+      await updateUserSettings(user._id, data);
       navigate({ to: "/profile" });
     } catch (error) {
       console.error(error);
@@ -47,25 +47,26 @@ const Settings: React.FC<ProfileInfoProps> = ({ user }) => {
       <h2>Indstillinger</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <h3>Skift adgangskode</h3>
-        <FormInput
-          name="password"
-          type="password"
-          placeholder="Adgangskode"
-          control={control}
-        />
-        <FormInput
-          name="newPassword"
-          type="password"
-          placeholder="Ny adgangskode"
-          control={control}
-          rules={{
-            minLength: {
-              value: 8,
-              message: "New password must be at least 8 characters",
-            },
-          }}
-        />
-
+        <div className={styles.passwords}>
+          <FormInput
+            name="password"
+            type="password"
+            placeholder="Adgangskode"
+            control={control}
+          />
+          <FormInput
+            name="newPassword"
+            type="password"
+            placeholder="Ny adgangskode"
+            control={control}
+            rules={{
+              minLength: {
+                value: 8,
+                message: "New password must be at least 8 characters",
+              },
+            }}
+          />
+        </div>
         <h3>Nyhedsbreve</h3>
         <div className={styles.checkbox}>
           <label className={styles.checkbox} htmlFor="isSubscribedToNewsletter">
