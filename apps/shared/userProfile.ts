@@ -12,7 +12,7 @@ export interface Location {
 }
 
 export interface UserProfile {
-  _id:string;
+  _id: string;
   name: string;
   surname: string;
   email: string;
@@ -31,7 +31,6 @@ export interface UserProfile {
   ensembleIds?: string[];
   facebookId?: string;
   slug: string;
-  _id: string;
 }
 export interface UpdateSettingsDto {
   password?: string;
