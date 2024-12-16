@@ -18,7 +18,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { ImageUploadService } from '../imageUpload/imageUpload.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AddInstrumentDto } from './dto/add-instrument.dto';
-import { LastSeenInterceptor } from 'src/interceptors/lastSeen.interceptor';
+import { LastSeenInterceptor } from '../interceptors/lastSeen.interceptor';
 import { UpdateSettingsDto } from './dto/settings.dto';
 import { NotFoundException } from '@nestjs/common';
 import { InstrumentName } from '@shared/enums';

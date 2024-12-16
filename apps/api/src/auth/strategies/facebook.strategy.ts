@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Profile, Strategy } from 'passport-facebook';
-import { UsersService } from 'src/user/user.service';
+import { UsersService } from '../../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthService } from '../auth.service';
 
