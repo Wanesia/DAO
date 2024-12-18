@@ -27,5 +27,12 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run tests
+      - name: Run Unit Tests
         run: npm test
+
+      - name: Run E2E Tests for API
+        run: npm run test:e2e
+
+      - name: Run E2E Tests for Client
+        working-directory: ./apps/client/tests
+        run: npx playwright test
