@@ -10,7 +10,7 @@ on:
 
 jobs:
   api-tests:
-    name: API Tests
+    name: Tests
     runs-on: ubuntu-latest
     defaults:
       run:
