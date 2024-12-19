@@ -104,12 +104,12 @@ const Search = <T, F>({
               <Filter
                 key={key as string}
                 label={label}
-                options={options} 
+                options={options}
                 onFilterChange={(value) =>
                   updateFilter(key, value as F[keyof F] | null)
                 }
                 getOptionLabel={getFilterLabel}
-                filterType={key === "location" ? "text" : "dropdown"} 
+                filterType={key === "location" ? "text" : "dropdown"}
               />
             ))}
         </div>

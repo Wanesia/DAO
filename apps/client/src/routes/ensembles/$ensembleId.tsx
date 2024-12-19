@@ -4,7 +4,7 @@ import { getEnsembleById, deleteEnsemble } from "../../api/ensembleApi";
 import { getUserById } from "../../api/userApi";
 import { acceptJoinRequest, cancelJoinRequest } from "../../api/joinRequestApi";
 import { Ensemble, PostWithEnsembleDTO } from "@shared/types";
-import { JoinRequest, Post } from "@shared/types";
+import { JoinRequest } from "@shared/types";
 import styles from "./Ensembles.module.css";
 import Button from "../../components/Button/Button";
 import GenreTags from "../../components/general-components/GenreTags";

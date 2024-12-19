@@ -21,7 +21,7 @@ export const Route = createFileRoute("/posts/create-post")({
 
 function RouteComponent() {
   const [currentStep, setCurrentStep] = useState(1);
-  const { control, handleSubmit, setValue, watch, setError } =
+  const { control, handleSubmit, setValue, setError } =
     useForm<FieldValues>();
 
   const navigate = useNavigate();

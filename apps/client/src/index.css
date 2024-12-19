@@ -21,7 +21,7 @@
 }
 
 .welcome-img img{
-  width: 250px;
+  width: 400px;
 }
 
 .buttons {
@@ -101,6 +101,8 @@ svg {
   font-size: 2rem;
 }
 
+
+
 @media (max-width: 768px) {
   .hero {
     flex-direction: column;
@@ -124,5 +126,9 @@ svg {
     flex: 1 1 100%;
     max-width: 500px;
     margin: 20px 0;
+  }
+
+  .welcome-img img {
+    width: 200px;
   }
 }

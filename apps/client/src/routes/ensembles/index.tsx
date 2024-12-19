@@ -2,7 +2,6 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 import Search from "../../components/Search/Search";
 import { getEnsembles } from "../../api/ensembleApi";
 import EnsembleCard from "../../components/EnsembleCard/EnsembleCard";
-import JoinButton from "../../components/Button/JoinButton";
 import { Genre } from "../../constants/enums";
 import { useNavigate } from "@tanstack/react-router";
 
