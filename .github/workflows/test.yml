@@ -10,7 +10,7 @@ on:
 
 jobs:
   api-tests:
-    name: API Tests
+    name: Tests
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -27,5 +27,5 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run tests
+      - name: Run Unit Tests
         run: npm test

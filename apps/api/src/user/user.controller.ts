@@ -18,7 +18,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { ImageUploadService } from '../imageUpload/imageUpload.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AddInstrumentDto } from './dto/add-instrument.dto';
-import { LastSeenInterceptor } from 'src/interceptors/lastSeen.interceptor';
+import { LastSeenInterceptor } from '../interceptors/lastSeen.interceptor';
 import { UpdateSettingsDto } from './dto/settings.dto';
 import { NotFoundException } from '@nestjs/common';
 import { InstrumentName } from '@shared/enums';
@@ -72,6 +72,7 @@ export class UsersController {
 
   @Patch(':email')
   @UseInterceptors(FileInterceptor('image'))
+  @UseGuards(JwtAuthGuard)
   async updateProfile(
     @Param('email') email: string,
     @UploadedFile() image: Express.Multer.File,
@@ -93,16 +94,19 @@ export class UsersController {
     return this.usersService.updateUserByEmail(email, updateData);
   }
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   async update(@Param('id') id: string, @Body() userDto: any): Promise<User> {
     return this.usersService.updateUser(id, userDto);
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   async deleteUser(@Param('id') id: string): Promise<void> {
     return this.usersService.deleteUser(id);
   }
 
   @Patch('instruments/:email')
+  @UseGuards(JwtAuthGuard)
   async addInstrument(
     @Param('email') email: string,
     @Body() instrument: AddInstrumentDto,
@@ -110,6 +114,7 @@ export class UsersController {
     return this.usersService.addInstrument(email, instrument);
   }
   @Patch('/:email/instruments/delete')
+  @UseGuards(JwtAuthGuard)
   async deleteInstrumentByEmail(
     @Param('email') email: string,
     @Body() body: { index: number },
