@@ -4,6 +4,7 @@ import styles from "./Search.module.css";
 import { FaSearch } from "react-icons/fa";
 import Pagination from "../Pagination/Pagination";
 import Filter from "../Filter/Filter";
+import LoadingRing from "../LoadingRing/LoadingRing";
 
 interface SearchProps<T, F> {
   fetchData: (
@@ -65,7 +66,7 @@ const Search = <T, F>({
 
   // Fetch data whenever searchTerm, page, or filters change
   useEffect(() => {
-    console.log(filters);
+    setIsLoading(true);
     fetchResults(searchTerm, page, filters);
     return () => fetchResults.cancel();
   }, [searchTerm, page, filters, fetchResults]);
@@ -104,12 +105,12 @@ const Search = <T, F>({
               <Filter
                 key={key as string}
                 label={label}
-                options={options} 
+                options={options}
                 onFilterChange={(value) =>
                   updateFilter(key, value as F[keyof F] | null)
                 }
                 getOptionLabel={getFilterLabel}
-                filterType={key === "location" ? "text" : "dropdown"} 
+                filterType={key === "location" ? "text" : "dropdown"}
               />
             ))}
         </div>
@@ -124,9 +125,10 @@ const Search = <T, F>({
 
         {!isLoading && !error && results.length === 0 && (
           <div className="content">
-            <p className={styles.empty}>No results found.</p>
+            <p className={styles.empty}>Ingen resultater fundet.</p>
           </div>
         )}
+        {isLoading && <div className="loading"><LoadingRing size="large" /></div>}
 
         {!isLoading && !error && results.length > 0 && (
           <>

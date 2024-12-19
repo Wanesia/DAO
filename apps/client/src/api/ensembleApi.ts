@@ -117,9 +117,13 @@ export const getEnsembleById = async (
   }
 };
 
-export const getEnsemblesByCreator = async (userId?: string): Promise<Ensemble[]> => {
+export const getEnsemblesByCreator = async (
+  userId?: string
+): Promise<Ensemble[]> => {
   try {
-    const url = userId ? `/ensembles/creator?userId=${userId}` : `/ensembles/creator`;
+    const url = userId
+      ? `/ensembles/creator?userId=${userId}`
+      : `/ensembles/creator`;
     const response = await axiosInstance.get<Ensemble[]>(url);
     return response.data || [];
   } catch (error) {
@@ -136,3 +140,24 @@ export const getEnsemblesByCreator = async (userId?: string): Promise<Ensemble[]
   }
 };
 
+export const getEnsemblesByMember = async (
+  slug: string
+): Promise<Ensemble[]> => {
+  try {
+    const response = await axiosInstance.get<Ensemble[]>(
+      `/ensembles/member/${slug}`
+    );
+    return response.data|| [];
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Failed to fetch ensembles:", error.response?.data);
+      throw new Error(
+        error.response?.data?.message ||
+          "Failed to fetch ensembles. Please try again."
+      );
+    } else {
+      console.error("An unexpected error occurred:", error);
+      throw new Error("An unexpected error occurred. Please try again.");
+    }
+  }
+};

@@ -105,10 +105,19 @@ button {
   padding: 1rem;
 }
 
+.main-form h2 {
+  margin-bottom: 2rem;
+}
+
 .content {
   max-width: 80%;
   margin: 0 auto;
   padding: 2rem 0 0 0;
+}
+
+.intro {
+  margin: 1rem 0 2rem 0;
+  max-width: 70%;
 }
 
 .grey-wrapper {
@@ -146,6 +155,14 @@ label {
   color: var(--primary-blue);
   font-weight: 600;
   margin-bottom: 8px;
-  font-size: 1rem;
+  font-size: 0.85rem;
 }
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 0;
+}
+
 

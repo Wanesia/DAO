@@ -41,20 +41,7 @@
   padding: 0;
 }
 
-@media (max-width: 1024px) and (min-width: 769px) {
-  .logo {
-    font-size: 1.2rem;
-  }
-
-  .subheading {
-    font-size: 0.7rem;
-  }
-  .navbar .buttons {
-    gap: 0.5rem;
-  }
-}
-
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .hamburger {
     display: block;
   }

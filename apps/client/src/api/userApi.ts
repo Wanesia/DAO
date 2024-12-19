@@ -4,10 +4,8 @@ import { Instrument, User } from "@shared/types";
 import { UpdateSettingsDto } from "@shared/userProfile";
 import { UserProfile } from "@shared/userProfile";
 
-// don't know
 export const getUserStatus = async (): Promise<User> => {
   const response = await axiosInstance.get<User>("/auth/status");
-  console.log(response.data);
   return response.data;
 };
 
@@ -18,7 +16,6 @@ export const updateUserProfile = async (userEmail: string, formData: FormData): 
         "Content-Type": "multipart/form-data",
       },
     });
-    console.log("Profile update successful:", response.data);
     return response.data;
  
   } catch (error) {
@@ -37,11 +34,10 @@ export const addInstrument = async (
   instrumentData: { name: string; level: number; genres: string[] }
 ): Promise<void> => {
   try {
-    const response = await axiosInstance.patch(
+    return await axiosInstance.patch(
       `/users/instruments/${userEmail}`,
       instrumentData
     );
-    console.log("Instrument added successfully:", response.data);
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error("Failed to add instrument:", error.response?.data);
@@ -150,7 +146,6 @@ export const getUsers = async (
 export const getUserBySlug = async (slug: string): Promise<UserProfile> => {
   try {
     const response = await axiosInstance.get<UserProfile>(`/users/profile/${slug}`);
-    console.log("User profile fetched successfully:", response.data);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

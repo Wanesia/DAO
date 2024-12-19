@@ -1,12 +1,15 @@
 import GenreTags from "../general-components/GenreTags";
 import styles from "./EnsembleCard.module.css";
 import { Ensemble } from "@shared/types";
+import { useNavigate } from "@tanstack/react-router";
 
 interface EnsembleCardProps {
   ensemble: Ensemble;
 }
 
 const EnsembleCard: React.FC<EnsembleCardProps> = ({ ensemble }) => {
+  const navigate = useNavigate();
+  
   function truncateText(text: string | undefined, maxLength: number) {
     if (!text) return "No description available";
     return text.length > maxLength
@@ -14,7 +17,12 @@ const EnsembleCard: React.FC<EnsembleCardProps> = ({ ensemble }) => {
       : text;
   }
   return (
-    <div className={styles.ensembleCard}>
+    <div className={styles.ensembleCard}  onClick={() =>
+      navigate({
+        to: `/ensembles/${ensemble._id}`,
+        params: { ensembleId: ensemble._id },
+      })
+    }>
       <div className={styles.headingContainer}>
         {ensemble.imageUrl && (
           <div className={styles.image}>

@@ -28,8 +28,8 @@ const Navbar: React.FC = () => {
 
   const handleLogout = () => {
     logout();
-    navigate({ to: "/"
-  })};
+    navigate({ to: "/" });
+  };
 
   return (
     <nav className={styles.nav}>
@@ -48,6 +48,12 @@ const Navbar: React.FC = () => {
         <Button
           text="Hjem"
           link="/"
+          color="transparent"
+          onClick={handleCloseMenu}
+        />
+        <Button
+          text="Opslag"
+          link="/posts"
           color="transparent"
           onClick={handleCloseMenu}
         />

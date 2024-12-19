@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import * as bcrypt from 'bcrypt';
 import { FacebookStrategy } from './auth/strategies/facebook.strategy';
 import { ImageUploadModule } from './imageUpload/imageUpload.module';
+import { PostModule } from './post/post.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ImageUploadModule } from './imageUpload/imageUpload.module';
     UserModule,
     EnsembleModule,
     AuthModule,
+    PostModule,
     ImageUploadModule,
     ConfigModule.forRoot({
       isGlobal: true, // makes config available throughout the app
