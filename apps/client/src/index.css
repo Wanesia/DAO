@@ -101,6 +101,15 @@ svg {
   font-size: 2rem;
 }
 
+@media (max-width: 1024px) {
+
+
+  .welcome-img img {
+    width: 300px;
+  }
+  
+}
+
 
 
 @media (max-width: 768px) {
