@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker';
+import { fakerDA as faker } from '@faker-js/faker';
 
 export interface Location {
   city: string;

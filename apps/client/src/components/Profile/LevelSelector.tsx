@@ -27,8 +27,8 @@ const LevelSelector: React.FC<LevelSelectorProps> = ({ name, control }) => {
   };
 
   return (
-    <>
-      <p className={styles.text}>Hvor øvet er du?</p>
+    <div>
+      <label className={styles.label}>Hvor øvet er du?<span className="m_78a94662"> *</span></label>
       <div className={styles.container}>
         <div className={styles.level}>
           <h2 className={styles.niveau}>Niveau {field.value}</h2>
@@ -51,7 +51,7 @@ const LevelSelector: React.FC<LevelSelectorProps> = ({ name, control }) => {
         </div>
         <p>{levelText[field.value]}</p>
       </div>
-    </>
+    </div>
   );
 };
 

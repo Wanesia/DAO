@@ -106,3 +106,52 @@ export interface FakeEnsemble {
   member_ids: Types.ObjectId[];
   creator: Types.ObjectId;
 }
+
+export interface Post {
+  _id: string;
+  title: string;
+  description: string;
+  instrument: Instrument;
+  location: Location;
+  ensemble: string;
+}
+
+export interface AuthenticatedRequest extends Request {
+  user: {
+    userId: string;
+    accessToken: string;
+  };
+}
+
+export class PostWithEnsembleDTO {
+  _id: string;
+  title: string;
+  description: string;
+  createdAt?: Date;
+  ensemble: {
+    _id: string;
+    name: string;
+    imageUrl?: string;
+    number_of_musicians?: number;
+    creator: string;
+    member_ids: string[];
+  };
+  location: {
+    city: string;
+    postCode: string;
+  };
+  instrument: {
+    name: InstrumentName;
+    level: number;
+    genres: Genre[];
+  };
+}
+
+export interface FakePost {
+  _id: Types.ObjectId;
+  title: string;
+  description: string;
+  ensemble: Types.ObjectId; 
+  instrument: Instrument;
+  location: Location;
+}

@@ -13,6 +13,7 @@
   outline: none;
   box-sizing: border-box;
   box-shadow: var(--small-shadow);
+  margin-top: 0;
 }
 
 .searchIcon {

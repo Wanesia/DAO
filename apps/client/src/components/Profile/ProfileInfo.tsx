@@ -6,6 +6,7 @@ import { deleteInstrument } from "../../api/userApi";
 import { useState } from "react";
 import { FaCircle, FaTrash } from "react-icons/fa";
 import EnsembleList from "./EnsembleList";
+import PostList from "./PostList";
 
 interface ProfileInfoProps {
   user: UserProfile;
@@ -147,6 +148,15 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
         </div>
       
           <EnsembleList />
+      </div>
+      <div className={`${styles.container} ${styles["ensembler-container"]}`}>
+        <div className={styles.ensembleHeading}>
+        <h2>Mine opslag</h2>
+        <Button text="Opret" color="white-slim"  onClick={() => navigate({ to: "/posts/create-post" })}/>
+        </div>
+
+        <PostList/>
+
       </div>
     </div>
   );

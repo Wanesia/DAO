@@ -10,11 +10,13 @@ import { Ensemble } from './schema/ensemble.schema';
 import { CreateEnsembleDto } from './dto/ensemble.dto';
 import { Types } from 'mongoose';
 import { Genre, JoinRequestStatus } from '@shared/enums';
+import { User } from 'src/user/schema/user.schema';
 
 @Injectable()
 export class EnsembleService {
   constructor(
-    @InjectModel(Ensemble.name) private ensembleModel: Model<Ensemble>,
+    @InjectModel(Ensemble.name) private readonly ensembleModel: Model<Ensemble>,
+    @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
 
   async createEnsemble(
@@ -227,4 +229,19 @@ export class EnsembleService {
       );
     }
   }
+
+  async findByMember(slug: string): Promise<Ensemble[]> {
+    // Find the user by slug
+    const user = await this.userModel.findOne({ slug }).exec();
+    if (!user) {
+      throw new NotFoundException(`User with slug '${slug}' not found`);
+    }
+  
+    // Get user id and find ensembles where the user is a member
+    const userId = user._id; // 
+    const ensembles = await this.ensembleModel.find({ member_ids: userId }).exec();
+  
+    return ensembles;
+  }
+  
 }

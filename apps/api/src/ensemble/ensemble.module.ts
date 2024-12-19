@@ -15,5 +15,6 @@ import { UserModule } from 'src/user/user.module';
   ],
   controllers: [EnsembleController],
   providers: [EnsembleService],
+  exports: [EnsembleService] 
 })
-export class EnsembleModule {}
+export class EnsembleModule {};

@@ -25,13 +25,8 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Genre, JoinRequestStatus } from '@shared/enums';
 import { LastSeenInterceptor } from '../interceptors/lastSeen.interceptor';
+import { AuthenticatedRequest } from '@shared/types';
 
-interface AuthenticatedRequest extends Request {
-  user: {
-    userId: string;
-    accessToken: string;
-  };
-}
 
 @Controller('ensembles')
 @UseInterceptors(LastSeenInterceptor)
@@ -197,5 +192,13 @@ export class EnsembleController {
       );
     }
   }
+
+  @Get('member/:slug')
+  @UseGuards(JwtAuthGuard)
+  async getEnsemblesByMember(@Param('slug') slug: string): Promise<Ensemble[]> {
+    return this.ensembleService.findByMember(slug);
+  }
+  
+
   
 }
