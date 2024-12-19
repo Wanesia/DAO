@@ -3,7 +3,6 @@ import Search from "../../components/Search/Search";
 import { getEnsembles } from "../../api/ensembleApi";
 import EnsembleCard from "../../components/EnsembleCard/EnsembleCard";
 import { Genre } from "../../constants/enums";
-import { useNavigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/ensembles/")({
   beforeLoad: ({ context }) => {
@@ -20,7 +19,6 @@ export const Route = createFileRoute("/ensembles/")({
 
 function RouteComponent() {
   const genreOptions = Object.values(Genre);
-  const navigate = useNavigate();
 
   return (
     <main>

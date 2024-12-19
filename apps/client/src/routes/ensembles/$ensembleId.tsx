@@ -208,21 +208,7 @@ function EnsembleInfo() {
         <section className={styles.ensembleSection}>
           <div className={styles.heading}>
             <h2>{ensemble.name}</h2>
-            {ensemble.homepageUrl && (
-              <Button
-                color="white"
-                text="Besøg hjemmeside"
-                link={ensemble.homepageUrl}
-              />
-            )}
-          </div>
-
-          <p className={styles.info}>
-            {ensemble.location.city} {ensemble.location.postCode}
-          </p>
-          {/* edit buttons */}
-          {isCreator && (
-            <>
+            {isCreator ? (
               <div className={styles.buttons}>
                 <Button
                   color="white-slim"
@@ -231,21 +217,55 @@ function EnsembleInfo() {
                   onClick={() => handleDeleteEnsemble(ensemble._id)}
                 />
               </div>
+            ) : (
+              ensemble.homepageUrl && (
+                <Button
+                  color="white"
+                  text="Besøg hjemmeside"
+                  link={ensemble.homepageUrl}
+                />
+              )
+            )}
+          </div>
+
+          <p className={styles.info}>
+            {ensemble.location.city} {ensemble.location.postCode}
+          </p>
+          {isCreator && (
+            <>
               {/* requests */}
               <section className={styles.requests}>
                 <label>Requests to Join</label>
                 {joinRequests.length > 0 ? (
                   joinRequests.map((request: JoinRequest) => (
-                    <div key={request._id}>
+                    <div key={request._id} className={styles.request}>
                       <p>
-                        {`${userData[request.userId]?.name || "Loading..."} wants to join ${ensemble.name}`}
+                        <span
+                          className={styles.requestName}
+                          onClick={() =>
+                            navigate({
+                              to: `/musicians/${userData[request.userId]?.slug}`,
+                            })
+                          }
+                        >
+                          {userData[request.userId]?.name}{" "}{userData[request.userId]?.surname}{" "}
+                        </span>
+                        ønsker at blive medlem
                       </p>
-                      <button onClick={() => handleAccept(request.userId)}>
-                        Accept
-                      </button>
-                      <button onClick={() => handleDecline(request.userId)}>
-                        Decline
-                      </button>
+                      <div className={styles.buttons}>
+                        <button
+                          onClick={() => handleAccept(request.userId)}
+                          className={styles.accept}
+                        >
+                          Accepter
+                        </button>
+                        <button
+                          onClick={() => handleDecline(request.userId)}
+                          className={styles.decline}
+                        >
+                          Afvis
+                        </button>
+                      </div>
                     </div>
                   ))
                 ) : (
@@ -277,7 +297,15 @@ function EnsembleInfo() {
                       {memberData[ensemble.creator].name}{" "}
                       {memberData[ensemble.creator].surname}
                     </p>
-                    <Button color="extra-small" text="Vis profil" onClick={() => navigate({to: `/musicians/${memberData[ensemble.creator].slug}`})}/>
+                    <Button
+                      color="extra-small"
+                      text="Vis profil"
+                      onClick={() =>
+                        navigate({
+                          to: `/musicians/${memberData[ensemble.creator].slug}`,
+                        })
+                      }
+                    />
                   </div>
                 ) : (
                   <p>Loading creator information...</p>
@@ -320,7 +348,13 @@ function EnsembleInfo() {
               .map((id: string) => {
                 const member = memberData[id];
                 return member ? (
-                  <div className="gridItemSmall" key={id} onClick={() => navigate({to: `/musicians/${member.slug}`})}>
+                  <div
+                    className="gridItemSmall"
+                    key={id}
+                    onClick={() =>
+                      navigate({ to: `/musicians/${member.slug}` })
+                    }
+                  >
                     <UserCard user={member} size="small" />
                   </div>
                 ) : (
