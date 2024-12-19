@@ -46,10 +46,7 @@ export class PostController {
     @Query('userId') userId?: string,
   ): Promise<PostSchema[]> {
     try {
-        console.log('Request user:', req.user);
       const creatorId = userId || req.user.userId;
-      console.log('Request user:', req.user);
-      console.log('Creator ID:', creatorId);
       const posts = await this.postService.findByUser(creatorId);
       return posts;
     } catch (error) {
@@ -63,7 +60,6 @@ export class PostController {
   @Get(':id')
   @UseGuards(JwtAuthGuard)
   async findPostById(@Param('id') id: string): Promise<PostSchema[]> {
-    console.log('Find post by ID:', id);
     return this.postService.getById(id);
   }
 
@@ -79,12 +75,8 @@ export class PostController {
   async create(
     @Body() createPostDto: CreatePostDto,
   ): Promise<{ success: boolean; post?: PostSchema; error?: string }> {
-    console.log('Create post endpoint hit');
-    console.log('Form data ensembleId type:', typeof createPostDto.ensembleId);
-    console.log('Form data ensembleId:', createPostDto.ensembleId);
     try {
       const result = await this.postService.createPost(createPostDto);
-      console.log('Post created successfully:', result);
       return result;
     } catch (error) {
       console.error('Error creating post:', error);

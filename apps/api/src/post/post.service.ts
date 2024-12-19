@@ -169,7 +169,6 @@ export class PostService {
         .populate('ensemble', 'name imageUrl number_of_musicians member_ids creator')
         .lean();
 
-      console.log('Post:', post);
       return post;
     } catch (error) {
       console.error('Error fetching post by ID:', error);
@@ -206,8 +205,6 @@ export class PostService {
 
       const newPost = new this.postModel(postData);
       const savedPost = await newPost.save();
-      console.log('Saved post ensembleId type:', typeof savedPost.ensemble);
-      console.log('Saved post ensembleId:', savedPost.ensemble);
       return { success: true, post: savedPost };
     } catch (error) {
       if (error.code === 11000) {

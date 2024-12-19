@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { getPostsByUser } from "../../api/postApi";
 import { useNavigate } from "@tanstack/react-router";
-import { Post } from "@shared/types";
+import { PostWithEnsembleDTO } from "@shared/types";
 import PostCard from "../PostCard/PostCard";
 
 const PostList: React.FC = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<PostWithEnsembleDTO[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -17,7 +17,6 @@ const PostList: React.FC = () => {
 
       try {
         const postsByUser = await getPostsByUser();
-        console.log("posts", postsByUser);
         setPosts(postsByUser);
       } catch (err) {
         console.error("Failed to fetch posts", err);

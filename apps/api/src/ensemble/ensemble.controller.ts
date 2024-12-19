@@ -114,7 +114,6 @@ export class EnsembleController {
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   async remove(@Param('id') id: string): Promise<void> {
-    console.log('delete ensemble');
     return this.ensembleService.deleteEnsemble(id);
   }
 

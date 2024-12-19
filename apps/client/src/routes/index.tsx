@@ -16,7 +16,6 @@ function RouteComponent() {
   const { isLoggedIn } = useAuth();
   const [showPopup, setShowPopup] = useState(false);
   const { user } = useUser();
-
   const handleClick = () => {
     if (!isLoggedIn) {
       setShowPopup(true);
@@ -27,7 +26,7 @@ function RouteComponent() {
       {isLoggedIn ? (
         <section className="hero">
           <div className="heading-container">
-            {user && user.name && <h1>Welcome {user.name}!</h1>}
+            {user && <h1>Welcome {user.name}!</h1>}
             <p className="intro">
               Du kan nu oprette opslag for at finde nogle at spille med eller
               kontakte andre musikere gennem deres opslag.

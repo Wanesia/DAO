@@ -65,7 +65,6 @@ const Search = <T, F>({
 
   // Fetch data whenever searchTerm, page, or filters change
   useEffect(() => {
-    console.log(filters);
     fetchResults(searchTerm, page, filters);
     return () => fetchResults.cancel();
   }, [searchTerm, page, filters, fetchResults]);

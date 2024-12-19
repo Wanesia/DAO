@@ -36,7 +36,6 @@ export class EnsembleService {
         creator: creatorId,
         member_ids: [creatorId],
       };
-      console.log('Ensemble data:', ensembleData);
 
       const newEnsemble = await this.ensembleModel.create(ensembleData);
       return newEnsemble;
@@ -72,8 +71,6 @@ export class EnsembleService {
         query['location.city'] = { $regex: new RegExp(location, 'i') };
       }
     }
-
-    console.log('Query passed to search:', query);
 
     try {
       const total = await this.ensembleModel.countDocuments(query).exec();

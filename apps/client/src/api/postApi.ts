@@ -19,15 +19,12 @@ export const getPosts = async (
       },
     }
   );
-  console.log(filters);
-  console.log("API Response:", response);
   return response.data;
 };
 
-export const getPostsByUser = async (userId?: string): Promise<Post[]> => {
+export const getPostsByUser = async (userId?: string): Promise<PostWithEnsembleDTO[]> => {
   try {
-    console.log("userId", userId);
-    const response = await axiosInstance.get<Post[]>("/posts/user", {
+    const response = await axiosInstance.get<PostWithEnsembleDTO[]>("/posts/user", {
       params: userId ? { userId } : undefined,
     });
     return response.data;

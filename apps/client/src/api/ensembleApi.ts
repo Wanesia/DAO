@@ -144,11 +144,9 @@ export const getEnsemblesByMember = async (
   slug: string
 ): Promise<Ensemble[]> => {
   try {
-    console.log("getting ensembles by member");
     const response = await axiosInstance.get<Ensemble[]>(
       `/ensembles/member/${slug}`
     );
-    console.log("response", response.data);
     return response.data|| [];
   } catch (error) {
     if (axios.isAxiosError(error)) {
