@@ -6,16 +6,18 @@ import { useState } from "react";
 import { getEnsemblesByCreator } from "../../api/ensembleApi";
 import { useWatch } from "react-hook-form";
 import styles from "./SelectEnsemble.module.css";
+import { useNotification } from "../../context/NotificationContext";
 
 const SelectEnsemble: React.FC<{
   onNext: () => void;
   control: any;
   setValue: (name: string, value: any) => void;
-}> = ({ onNext, control, setValue }) => {
+}> = ({ onNext, control }) => {
   const [ensembles, setEnsembles] = useState<Ensemble[]>([]);
-  const [loading, setLoading] = useState<boolean | null>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [selectionError, setSelectionError] = useState<string | null>(null);
+  const { addNotification } = useNotification();
 
   const ensembleId = useWatch({
     control,
@@ -28,7 +30,7 @@ const SelectEnsemble: React.FC<{
         const ensemblesData = await getEnsemblesByCreator();
         setEnsembles(ensemblesData);
       } catch (err) {
-        setError("Failed to load ensembles.");
+        addNotification("error", "Der opstod en fejl. Prøv venligst igen.");
       } finally {
         setLoading(false);
       }
@@ -65,7 +67,12 @@ const SelectEnsemble: React.FC<{
         required
         error={selectionError}
       />
-      <Button color="blue" text="Videre" onClick={handleNext} />
+      <Button
+        color="blue"
+        text="Videre"
+        onClick={handleNext}
+        disabled={!ensembleId}
+      />
     </div>
   );
 };

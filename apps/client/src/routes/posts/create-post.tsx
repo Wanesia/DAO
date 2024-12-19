@@ -6,6 +6,8 @@ import styles from "./Posts.module.css";
 import { createPost } from "../../api/postApi";
 import { useNavigate, redirect, createFileRoute } from "@tanstack/react-router";
 import Button from "../../components/Button/Button";
+import { useNotification } from "../../context/NotificationContext";
+import { add } from "lodash";
 
 export const Route = createFileRoute("/posts/create-post")({
   beforeLoad: ({ context }) => {
@@ -25,12 +27,12 @@ function RouteComponent() {
     useForm<FieldValues>();
 
   const navigate = useNavigate();
+  const { addNotification } = useNotification();
 
   const handleNext = () => setCurrentStep(2);
   const handleBack = () => setCurrentStep(1);
 
   const onSubmit = async (data: FieldValues) => {
-    console.log("Form submitted with data:", data);
     try {
       const formData = {
         title: data.title,
@@ -49,21 +51,13 @@ function RouteComponent() {
 
       const result = await createPost(formData);
       if (result.success) {
-        console.log("Post created successfully:", result.post);
+        addNotification("success", "Post oprettet med succes!");
         navigate({ to: "/profile" });
       } else {
-        console.error("Error creating post:", result.error);
-        setError("title", {
-          type: "manual",
-          message: result.error,
-        });
+        addNotification("error", "Der opstod en fejl. Prøv venligst igen.");
       }
     } catch (error) {
-      console.error("Error in form submission:", error);
-      setError("title", {
-        type: "manual",
-        message: "An unexpected error occurred",
-      });
+      addNotification("error", "Der opstod en fejl. Prøv venligst igen.");
     }
   };
 

@@ -5,6 +5,8 @@ import { routeTree } from "./routeTree.gen";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { MantineProvider } from "@mantine/core";
 import { UserProvider } from "./context/UserContext";
+import { NotificationProvider } from "./context/NotificationContext";
+import Notification from "./components/Notification/Notification";
 
 const router = createRouter({
   routeTree,
@@ -20,11 +22,14 @@ declare module "@tanstack/react-router" {
 function App() {
   return (
     <AuthProvider>
-      <UserProvider>
-      <MantineProvider>
-        <InnerApp />
-      </MantineProvider>
-      </UserProvider>
+      <NotificationProvider>
+        <UserProvider>
+          <MantineProvider>
+            <Notification />
+            <InnerApp />
+          </MantineProvider>
+        </UserProvider>
+      </NotificationProvider>
     </AuthProvider>
   );
 }

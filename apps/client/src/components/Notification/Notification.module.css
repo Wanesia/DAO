@@ -1,0 +1,39 @@
+.container {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1000;
+  }
+  
+  .notification {
+    padding: 10px 15px;
+    border-radius: 5px;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  .notification.success {
+    background-color: #4caf50; 
+  }
+  
+  .notification.error {
+    background-color: #f44336; 
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  

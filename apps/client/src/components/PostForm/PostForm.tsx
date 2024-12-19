@@ -14,14 +14,7 @@ interface PostFormProps {
   handleSubmit: (e: React.FormEvent) => void;
 }
 
-const PostForm: React.FC<PostFormProps> = ({
-  control,
-  handleSubmit
-}) => {
-  const [loading, setLoading] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-
+const PostForm: React.FC<PostFormProps> = ({ control, handleSubmit }) => {
   const genreOptions = Object.keys(Genre).map((key) => ({
     value: Genre[key as keyof typeof Genre],
     label: Genre[key as keyof typeof Genre],
@@ -41,25 +34,26 @@ const PostForm: React.FC<PostFormProps> = ({
           control={control}
           placeholder="Opslag titel"
           required
+          rules={{ required: "Titel er påkrævet" }}
         />
         <FormTextarea
           name="description"
           control={control}
           label="Beskrivelse"
-          placeholder="Skriv en kort beskrivelse af hvad du søger…"
           required
+          placeholder="Skriv en kort beskrivelse af hvad du søger…"
         />
-
         <SingleSelect
           name="name"
           label="Instrument"
           control={control}
-          options={instrumentOptions}
           required
+          options={instrumentOptions}
         />
-
-        <LevelSelector name="level" control={control} />
-
+        <LevelSelector
+          name="level"
+          control={control}
+        />
         <Grid align="end">
           <Grid.Col span={6}>
             <FormInput
@@ -68,35 +62,35 @@ const PostForm: React.FC<PostFormProps> = ({
               label="Område"
               required
               placeholder="Postnr."
+              rules={{ required: "Postnr. er påkrævet" }}
             />
           </Grid.Col>
           <Grid.Col span={6}>
             <FormInput
               name="city"
+              required
               control={control}
               placeholder="By"
-              required
+              rules={{ required: "By er påkrævet" }}
             />
           </Grid.Col>
         </Grid>
-
         <MultiSelect
           name="genres"
           control={control}
+          required
           options={genreOptions}
           label="Genrer"
-          required
         />
         <Button
           color="blue"
-          text={loading ? "Opretter..." : "Opret opslag"}
+          text="Opret opslag"
           type="submit"
         />
-        {successMessage && <p className={styles.success}>{successMessage}</p>}
-        {errorMessage && <p className={styles.error}>{errorMessage}</p>}
       </form>
     </div>
   );
 };
 
 export default PostForm;
+
