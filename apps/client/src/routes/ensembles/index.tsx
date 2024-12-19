@@ -16,7 +16,6 @@ export const Route = createFileRoute("/ensembles/")({
   component: RouteComponent,
 });
 
-
 function RouteComponent() {
   const genreOptions = Object.values(Genre);
 
@@ -37,13 +36,8 @@ function RouteComponent() {
           // For each ensemble, it renders an `EnsembleCard` wrapped in a grid item
           // gridItem class is defined in global css so it can be used in any grid layout
           renderItem={(ensemble) => (
-            <div
-              className="gridItemLarge"
-              key={ensemble._id}
-             
-            >
+            <div className="gridItemLarge" key={ensemble._id}>
               <EnsembleCard key={ensemble.id} ensemble={ensemble} />
-      
             </div>
           )}
           // Filter options define what filters will be available in the search component

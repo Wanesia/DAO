@@ -8,7 +8,6 @@ import { FaCircle, FaTrash } from "react-icons/fa";
 import EnsembleList from "./EnsembleList";
 import PostList from "./PostList";
 import { useNotification } from "../../context/NotificationContext";
-import { add } from "lodash";
 
 interface ProfileInfoProps {
   user: UserProfile;
