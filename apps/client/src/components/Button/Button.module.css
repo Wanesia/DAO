@@ -15,6 +15,9 @@
   font-weight: 600;
   box-shadow: var(--button-shadow);
   border: 1px solid #dddddd;
+  white-space: nowrap;
+
+
 }
 
 .blue {
