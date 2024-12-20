@@ -13,12 +13,13 @@ import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import DragAndDrop from "../DragAndDrop/DragAndDrop";
 import { MusicianCount, PracticeFrequency, EnsembleType, Genre } from "../../constants/enums";
+import { useNotification } from "../../context/NotificationContext";
 
 const EnsembleForm: React.FC = () => {
   const { control, handleSubmit, setError } = useForm<FieldValues>();
   const [loading, setLoading] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const { addNotification } = useNotification();
 
   const navigate = useNavigate();
 
@@ -46,7 +47,6 @@ const EnsembleForm: React.FC = () => {
 
   const onSubmit = async (data: FieldValues) => {
     setLoading(true);
-    setSuccessMessage("");
     setErrorMessage("");
   
     try {
@@ -64,7 +64,7 @@ const EnsembleForm: React.FC = () => {
   
       await createEnsemble(formData);
   
-      setSuccessMessage("Ensemble created successfully!");
+      addNotification("success", "Ensemble oprettet med succes!");
       navigate({ to: "/profile" });
     } catch (error: any) {
       
@@ -75,7 +75,7 @@ const EnsembleForm: React.FC = () => {
           message: "Et ensemble med dette navn findes allerede.",
         });
       } else {
-        setErrorMessage(errorMessage);
+        addNotification("error", "Der skete en fejl. Prøv igen.");
       }
 
     } finally {
@@ -163,7 +163,6 @@ const EnsembleForm: React.FC = () => {
         text={loading ? "Opretter..." : "Opret ensemble"}
         type="submit"
       />
-      {successMessage && <p className={styles.success}>{successMessage}</p>}
       {errorMessage && <p className={styles.error}>{errorMessage}</p>}
     </form>
   );

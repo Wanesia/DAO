@@ -4,7 +4,7 @@ import { getUserBySlug } from "../../api/userApi";
 import styles from "./Musicians.module.css";
 import Button from "../../components/Button/Button";
 import GenreTags from "../../components/general-components/GenreTags";
-import { getEnsemblesByCreator } from "../../api/ensembleApi";
+import { getEnsemblesByMember } from "../../api/ensembleApi";
 import { useEffect, useState } from "react";
 import { Ensemble } from "@shared/types";
 import EnsembleCard from "../../components/EnsembleCard/EnsembleCard";
@@ -42,7 +42,7 @@ function MusicianInfo() {
         try {
           setLoading(true);
           setError(null);
-          const ensemblesData = await getEnsemblesByCreator(user._id);
+          const ensemblesData = await getEnsemblesByMember(user.slug);
           setEnsembles(ensemblesData);
         } catch (err) {
           setError("Failed to load ensembles.");

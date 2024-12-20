@@ -6,6 +6,8 @@ import { deleteInstrument } from "../../api/userApi";
 import { useState } from "react";
 import { FaCircle, FaTrash } from "react-icons/fa";
 import EnsembleList from "./EnsembleList";
+import PostList from "./PostList";
+import { useNotification } from "../../context/NotificationContext";
 
 interface ProfileInfoProps {
   user: UserProfile;
@@ -15,6 +17,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
   const navigate = useNavigate();
   const [isDeleting, setIsDeleting] = useState(false);
   const [instruments, setInstruments] = useState(user.instruments);
+  const { addNotification } = useNotification();
 
   const handleDelete = async (index: number) => {
     if (isDeleting) return;
@@ -25,11 +28,9 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
 
       // Update local state by removing the deleted instrument
       setInstruments((prev) => prev.filter((_, i) => i !== index));
+      addNotification("success", "Instrument slettet");
     } catch (error) {
-      console.error("Error deleting instrument:", error);
-      alert(
-        error instanceof Error ? error.message : "Failed to delete instrument"
-      );
+      addNotification("error", "Kunne ikke slette instrument");
     } finally {
       setIsDeleting(false);
     }
@@ -147,6 +148,15 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
         </div>
       
           <EnsembleList />
+      </div>
+      <div className={`${styles.container} ${styles["ensembler-container"]}`}>
+        <div className={styles.ensembleHeading}>
+        <h2>Mine opslag</h2>
+        <Button text="Opret" color="white-slim"  onClick={() => navigate({ to: "/posts/create-post" })}/>
+        </div>
+
+        <PostList/>
+
       </div>
     </div>
   );

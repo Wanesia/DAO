@@ -14,7 +14,7 @@ interface SingleSelectProps<T extends FieldValues> {
   options: SingleSelectOption[];
   label?: string;
   description?: string;
-  error?: string;
+  error?: string | null;
   selectProps?: Omit<MantineSelectProps, "data" | "value" | "onChange">;
   required?: boolean;
 }
@@ -34,7 +34,6 @@ const SingleSelect = <T extends FieldValues>({
       label={label}
       description={description}
       required={required}
-      error={error}
       classNames={{
         description: styles.description,
         label: styles.label,

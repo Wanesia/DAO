@@ -19,8 +19,11 @@ import { Route as ProfileImport } from './routes/profile'
 import { Route as LoginImport } from './routes/login'
 import { Route as AddInstrumentImport } from './routes/add-instrument'
 import { Route as IndexImport } from './routes/index'
+import { Route as PostsIndexImport } from './routes/posts/index'
 import { Route as MusiciansIndexImport } from './routes/musicians/index'
 import { Route as EnsemblesIndexImport } from './routes/ensembles/index'
+import { Route as PostsCreatePostImport } from './routes/posts/create-post'
+import { Route as PostsPostIdImport } from './routes/posts/$postId'
 import { Route as MusiciansSlugImport } from './routes/musicians/$slug'
 import { Route as EnsemblesCreateEnsembleImport } from './routes/ensembles/create-ensemble'
 import { Route as EnsemblesEnsembleIdImport } from './routes/ensembles/$ensembleId'
@@ -75,6 +78,12 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const PostsIndexRoute = PostsIndexImport.update({
+  id: '/posts/',
+  path: '/posts/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const MusiciansIndexRoute = MusiciansIndexImport.update({
   id: '/musicians/',
   path: '/musicians/',
@@ -84,6 +93,18 @@ const MusiciansIndexRoute = MusiciansIndexImport.update({
 const EnsemblesIndexRoute = EnsemblesIndexImport.update({
   id: '/ensembles/',
   path: '/ensembles/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const PostsCreatePostRoute = PostsCreatePostImport.update({
+  id: '/posts/create-post',
+  path: '/posts/create-post',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const PostsPostIdRoute = PostsPostIdImport.update({
+  id: '/posts/$postId',
+  path: '/posts/$postId',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -186,6 +207,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MusiciansSlugImport
       parentRoute: typeof rootRoute
     }
+    '/posts/$postId': {
+      id: '/posts/$postId'
+      path: '/posts/$postId'
+      fullPath: '/posts/$postId'
+      preLoaderRoute: typeof PostsPostIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/posts/create-post': {
+      id: '/posts/create-post'
+      path: '/posts/create-post'
+      fullPath: '/posts/create-post'
+      preLoaderRoute: typeof PostsCreatePostImport
+      parentRoute: typeof rootRoute
+    }
     '/ensembles/': {
       id: '/ensembles/'
       path: '/ensembles'
@@ -198,6 +233,13 @@ declare module '@tanstack/react-router' {
       path: '/musicians'
       fullPath: '/musicians'
       preLoaderRoute: typeof MusiciansIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/posts/': {
+      id: '/posts/'
+      path: '/posts'
+      fullPath: '/posts'
+      preLoaderRoute: typeof PostsIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -217,8 +259,11 @@ export interface FileRoutesByFullPath {
   '/ensembles/$ensembleId': typeof EnsemblesEnsembleIdRoute
   '/ensembles/create-ensemble': typeof EnsemblesCreateEnsembleRoute
   '/musicians/$slug': typeof MusiciansSlugRoute
+  '/posts/$postId': typeof PostsPostIdRoute
+  '/posts/create-post': typeof PostsCreatePostRoute
   '/ensembles': typeof EnsemblesIndexRoute
   '/musicians': typeof MusiciansIndexRoute
+  '/posts': typeof PostsIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -233,8 +278,11 @@ export interface FileRoutesByTo {
   '/ensembles/$ensembleId': typeof EnsemblesEnsembleIdRoute
   '/ensembles/create-ensemble': typeof EnsemblesCreateEnsembleRoute
   '/musicians/$slug': typeof MusiciansSlugRoute
+  '/posts/$postId': typeof PostsPostIdRoute
+  '/posts/create-post': typeof PostsCreatePostRoute
   '/ensembles': typeof EnsemblesIndexRoute
   '/musicians': typeof MusiciansIndexRoute
+  '/posts': typeof PostsIndexRoute
 }
 
 export interface FileRoutesById {
@@ -250,8 +298,11 @@ export interface FileRoutesById {
   '/ensembles/$ensembleId': typeof EnsemblesEnsembleIdRoute
   '/ensembles/create-ensemble': typeof EnsemblesCreateEnsembleRoute
   '/musicians/$slug': typeof MusiciansSlugRoute
+  '/posts/$postId': typeof PostsPostIdRoute
+  '/posts/create-post': typeof PostsCreatePostRoute
   '/ensembles/': typeof EnsemblesIndexRoute
   '/musicians/': typeof MusiciansIndexRoute
+  '/posts/': typeof PostsIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -268,8 +319,11 @@ export interface FileRouteTypes {
     | '/ensembles/$ensembleId'
     | '/ensembles/create-ensemble'
     | '/musicians/$slug'
+    | '/posts/$postId'
+    | '/posts/create-post'
     | '/ensembles'
     | '/musicians'
+    | '/posts'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -283,8 +337,11 @@ export interface FileRouteTypes {
     | '/ensembles/$ensembleId'
     | '/ensembles/create-ensemble'
     | '/musicians/$slug'
+    | '/posts/$postId'
+    | '/posts/create-post'
     | '/ensembles'
     | '/musicians'
+    | '/posts'
   id:
     | '__root__'
     | '/'
@@ -298,8 +355,11 @@ export interface FileRouteTypes {
     | '/ensembles/$ensembleId'
     | '/ensembles/create-ensemble'
     | '/musicians/$slug'
+    | '/posts/$postId'
+    | '/posts/create-post'
     | '/ensembles/'
     | '/musicians/'
+    | '/posts/'
   fileRoutesById: FileRoutesById
 }
 
@@ -315,8 +375,11 @@ export interface RootRouteChildren {
   EnsemblesEnsembleIdRoute: typeof EnsemblesEnsembleIdRoute
   EnsemblesCreateEnsembleRoute: typeof EnsemblesCreateEnsembleRoute
   MusiciansSlugRoute: typeof MusiciansSlugRoute
+  PostsPostIdRoute: typeof PostsPostIdRoute
+  PostsCreatePostRoute: typeof PostsCreatePostRoute
   EnsemblesIndexRoute: typeof EnsemblesIndexRoute
   MusiciansIndexRoute: typeof MusiciansIndexRoute
+  PostsIndexRoute: typeof PostsIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -331,8 +394,11 @@ const rootRouteChildren: RootRouteChildren = {
   EnsemblesEnsembleIdRoute: EnsemblesEnsembleIdRoute,
   EnsemblesCreateEnsembleRoute: EnsemblesCreateEnsembleRoute,
   MusiciansSlugRoute: MusiciansSlugRoute,
+  PostsPostIdRoute: PostsPostIdRoute,
+  PostsCreatePostRoute: PostsCreatePostRoute,
   EnsemblesIndexRoute: EnsemblesIndexRoute,
   MusiciansIndexRoute: MusiciansIndexRoute,
+  PostsIndexRoute: PostsIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -356,8 +422,11 @@ export const routeTree = rootRoute
         "/ensembles/$ensembleId",
         "/ensembles/create-ensemble",
         "/musicians/$slug",
+        "/posts/$postId",
+        "/posts/create-post",
         "/ensembles/",
-        "/musicians/"
+        "/musicians/",
+        "/posts/"
       ]
     },
     "/": {
@@ -393,11 +462,20 @@ export const routeTree = rootRoute
     "/musicians/$slug": {
       "filePath": "musicians/$slug.tsx"
     },
+    "/posts/$postId": {
+      "filePath": "posts/$postId.tsx"
+    },
+    "/posts/create-post": {
+      "filePath": "posts/create-post.tsx"
+    },
     "/ensembles/": {
       "filePath": "ensembles/index.tsx"
     },
     "/musicians/": {
       "filePath": "musicians/index.tsx"
+    },
+    "/posts/": {
+      "filePath": "posts/index.tsx"
     }
   }
 }

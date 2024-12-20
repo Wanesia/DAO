@@ -1,14 +1,37 @@
 .button {
   display: flex;
   margin: auto;
-  margin-top: -0.5rem;
   border-radius: var(--small-radius);
-  color: black;
-  transition: background-color 0.3s;
+  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  border-radius: var(--large-radius);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease-in-out;
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-weight: 600;
+  box-shadow: var(--button-shadow);
+  color: var(--white);
 }
+.button:active {
+  transform: scale(0.95);
+  box-shadow: none; 
+}
+
 .join {
-  background-color: #50c878;
+  background-color: var(--primary-blue);
+}
+
+.join:hover {
+  background-color: var(--hover-blue);
 }
 .cancel {
   background-color: #FA5F55;
+}
+
+.cancel:hover {
+  background-color: #F24C41;
 }

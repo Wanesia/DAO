@@ -15,7 +15,6 @@ interface FormInputProps<T extends FieldValues> {
   disabled?: boolean;
 }
 
-
 const FormInput = <T extends FieldValues>({
   name,
   control,
@@ -29,25 +28,24 @@ const FormInput = <T extends FieldValues>({
   disabled,
 }: FormInputProps<T>) => {
   return (
-    <InputWrapper
-      label={label}
-      description={description}
-      required={required}
-      error={control.getFieldState(name)?.error?.message}
-      classNames={{
-        description: styles.description,
-        label: styles.label,
-      }}
-  
-    >
-      <Controller
-        name={name}
-        control={control}
-        rules={rules}
-        render={({ field, fieldState: { error } }) => (
+    <Controller
+      name={name}
+      control={control}
+      rules={rules}
+      render={({ field, fieldState: { error } }) => (
+        <InputWrapper
+          label={label}
+          description={description}
+          required={required}
+          error={error?.message} 
+          classNames={{
+            description: styles.description,
+            label: styles.label,
+          }}
+        >
           <Input
             {...field}
-            type={type} 
+            type={type}
             classNames={{
               input: error ? styles.inputError : styles.input,
             }}
@@ -55,9 +53,9 @@ const FormInput = <T extends FieldValues>({
             placeholder={placeholder}
             {...inputProps}
           />
-        )}
-      />
-    </InputWrapper>
+        </InputWrapper>
+      )}
+    />
   );
 };
 

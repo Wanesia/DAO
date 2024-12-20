@@ -11,6 +11,6 @@ import { ImageUploadModule } from '../imageUpload/imageUpload.module';
   ],
   controllers: [UsersController],
   providers: [UsersService],
-  exports: [UsersService],
+  exports: [UsersService, MongooseModule],
 })
 export class UserModule {}

@@ -1,56 +1,104 @@
 .ensemblePage {
-    padding: 0 2rem;
+  padding: 0 2rem;
 }
 
 .img {
-    width: 100vw;
-    height: 400px;
-    object-fit: cover;
+  width: 100vw;
+  height: 400px;
+  object-fit: cover;
 }
 
 .ensembleSection {
-    max-width: 900px;
-    margin: 3rem auto;
-
+  max-width: 900px;
+  margin: 3rem auto;
 }
 
 .info {
-    margin-bottom: 2rem;
+  margin-bottom: 2rem;
 }
 
 .ensembleSection h2 {
-    color: var(--primary-red);
+  color: var(--primary-red);
 }
 
 .creator {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
 }
 
 .buttons {
-    display: flex;
-    gap: 1rem;
-
+  display: flex;
+  gap: 1rem;
 }
 
 .buttons svg {
-    font-size: 1rem;
+  font-size: 1rem;
 }
 
 .requests {
-    margin: 2rem 0;
+  margin: 2rem 0;
 }
 
+.request {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  margin: 1rem 0;
+  gap: 1rem;
+  border: 1px solid var(--grey-border);
+  border-radius: var(--large-radius);
+  background-color: #f9f9f9;
+}
+
+.requestName {
+  font-weight: 600;
+  color: var(--primary-red);
+  cursor: pointer;
+}
+
+.requestName:hover {
+  
+}
+
+.accept {
+    padding: 0.5rem 1rem;
+    background-color: var(--primary-blue);
+    color: var(--white);
+    border-radius: var(--small-radius);
+    box-shadow: var(--small-shadow);
+    transition: transform 0.3s;
+}
+
+.accept:hover {
+    background-color: var(--hover-blue);
+}
+
+.decline {
+    border: 1px solid var(--primary-red);
+    border-radius: var(--small-radius);
+    box-shadow: var(--small-shadow);
+    transition: transform 0.3s;
+}
+
+.decline:hover {
+    background-color: var(--white);
+}
+
+.decline:active, .accept:active {
+    transform: scale(0.95);
+}
+
+
 .heading {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 3rem 0 1rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin: 3rem 0 1rem 0;
 }
 
 .membersHeading {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }

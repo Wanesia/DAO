@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker';
+import { fakerDA as faker } from '@faker-js/faker';
 import { Types } from 'mongoose';
 import { FakeEnsemble, FakeUser } from '../types';
 import { 
@@ -8,15 +8,15 @@ import {
   Genre 
 } from '../enums';
 import { LocationGenerator } from "./location.generator";
-
+import { PostGenerator } from './post.generator';
+import { FakePost } from '../types';
 
 export class EnsembleGenerator {
-  static generate(users: FakeUser[], count: number = 1): FakeEnsemble[] {
+  static generate(users: FakeUser[], count: number = 1): { ensembles: FakeEnsemble[], posts: FakePost[] } {
     console.log("generating fake ensembles");
     const ensembles: FakeEnsemble[] = [];
-    
+    const posts: FakePost[] = [];
     for (let i = 0; i < count; i++) {
-      // Select random users for this ensemble
       const memberCount = faker.number.int({ min: 2, max: Math.min(15, users.length) });
       const selectedUsers = faker.helpers.arrayElements(users, memberCount);
       const creator = selectedUsers[0];
@@ -38,13 +38,19 @@ export class EnsembleGenerator {
         member_ids: selectedUsers.map(user => user._id),
         creator: creator._id,
       };
+
       ensembles.push(ensemble);
 
-      // Update the users with their ensemble
+      // Update users with ensemble memberships
       selectedUsers.forEach(user => {
         user.ensembleIds.push(ensemble._id);
       });
+
+      // Generate posts for the ensemble
+      const generatedPosts = PostGenerator.generate(ensemble, faker.number.int({ min: 1, max: 5 }));
+      posts.push(...generatedPosts);
     }
-    return ensembles;
+
+    return { ensembles, posts };
   }
 }

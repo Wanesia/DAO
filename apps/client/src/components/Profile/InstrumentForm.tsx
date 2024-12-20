@@ -9,6 +9,7 @@ import React, { useState } from "react";
 import LevelSelector from "./LevelSelector";
 import { addInstrument } from "../../api/userApi";
 import { Genre, InstrumentName } from "../../constants/enums";
+import { useNotification } from "../../context/NotificationContext";
 
 interface ProfileInfoProps {
   user: UserProfile;
@@ -25,6 +26,7 @@ const InstrumentForm: React.FC<ProfileInfoProps> = ({ user }) => {
   } = useForm<FieldValues>({
     mode: "onBlur", // to trigger validation on blur(when the input field loses focus.)
   });
+  const { addNotification } = useNotification();
 
   const genreOptions = Object.keys(Genre).map((key) => ({
     value: Genre[key as keyof typeof Genre],
@@ -51,16 +53,16 @@ const InstrumentForm: React.FC<ProfileInfoProps> = ({ user }) => {
         return;
       }
       await addInstrument(user.email, data);
-      console.log("Instrument added successfully");
+      addNotification("success", "Instrument tilføjet med succes!");
       navigate({ to: "/profile" });
     } catch (error) {
-      console.error("Error adding instrument:", error);
-      setErrorMessage("Der opstod en fejl. Prøv venligst igen.");
+      addNotification("error", "Der opstod en fejl. Prøv venligst igen.");
       setLoading(false);
     }
   };
   return (
     <div className={styles.container}>
+      
       <Button
         type="button"
         color="white-slim"

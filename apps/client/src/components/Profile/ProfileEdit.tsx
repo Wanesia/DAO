@@ -9,12 +9,14 @@ import DragAndDrop from "../DragAndDrop/DragAndDrop";
 import FormTextarea from "../form-components/Textarea";
 import { useEffect, useState } from "react";
 import { updateUserProfile } from "../../api/userApi";
+import { useNotification } from "../../context/NotificationContext";
 
 interface ProfileInfoProps {
   user: UserProfile;
 }
 const ProfileEdit: React.FC<ProfileInfoProps> = ({ user }) => {
   const navigate = useNavigate();
+  const { addNotification } = useNotification();
   const { control, handleSubmit, setValue } = useForm<FieldValues>({
     defaultValues: {
       name: user.name || "",
@@ -55,9 +57,10 @@ const ProfileEdit: React.FC<ProfileInfoProps> = ({ user }) => {
       }
 
       await updateUserProfile(user.email, formData);
+      addNotification("success", "Profil opdateret med succes!");
       navigate({ to: "/profile" });
     } catch (error) {
-      console.error(error);
+      addNotification("error", "Der opstod en fejl. Prøv venligst igen.");
     }
   };
 

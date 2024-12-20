@@ -4,6 +4,9 @@ import Button from "../components/Button/Button";
 import { GiMusicalNotes } from "react-icons/gi";
 import { GiSaxophone } from "react-icons/gi";
 import { useAuth } from "../context/AuthContext";
+import { useState } from "react";
+import LoginPopup from "../components/LoginPopUp/LoginPopUp";
+import { useUser } from "../context/UserContext";
 
 export const Route = createFileRoute("/")({
   component: RouteComponent,
@@ -11,14 +14,29 @@ export const Route = createFileRoute("/")({
 
 function RouteComponent() {
   const { isLoggedIn } = useAuth();
+  const [showPopup, setShowPopup] = useState(false);
+  const { user } = useUser();
+  const handleClick = () => {
+    if (!isLoggedIn) {
+      setShowPopup(true);
+    }
+  };
   return (
     <main>
       {isLoggedIn ? (
         <section className="hero">
           <div className="heading-container">
-            <h1>Welcome</h1>
+            {user && <h1>Welcome {user.name}!</h1>}
+            <p className="intro">
+              Du kan nu oprette opslag for at finde nogle at spille med eller
+              kontakte andre musikere gennem deres opslag.
+            </p>
             <div className="buttons">
-              <Button text="Opret ensemble" color="white" link="/ensembles/create-ensemble" />
+              <Button
+                text="Opret ensemble"
+                color="white"
+                link="/ensembles/create-ensemble"
+              />
               <Button text="Færdiggør profil" color="blue" link="/profile" />
             </div>
           </div>
@@ -38,13 +56,13 @@ function RouteComponent() {
                 <Button
                   text="Find musiker"
                   color="white"
-                  link="/"
+                  onClick={handleClick}
                   children={<GiMusicalNotes className="icon" />}
                 />
                 <Button
                   text="Find ensembler"
                   color="white"
-                  link="/"
+                  onClick={handleClick}
                   children={<GiSaxophone className="icon" />}
                 />
               </div>
@@ -100,6 +118,7 @@ function RouteComponent() {
           </section>
         </>
       )}
+      {showPopup && <LoginPopup onClose={() => setShowPopup(false)} />}
     </main>
   );
 }
