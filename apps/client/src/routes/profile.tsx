@@ -1,22 +1,19 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { UserProvider, useUser } from '../context/UserContext';
-import ProfileInfo from '../components/Profile/ProfileInfo';
+import { createFileRoute } from "@tanstack/react-router";
+import {  useUser } from "../context/UserContext";
+import ProfileInfo from "../components/Profile/ProfileInfo";
 
-export const Route = createFileRoute('/profile')({
+export const Route = createFileRoute("/profile")({
   component: RouteComponent,
-})
-
+});
 
 function RouteComponent() {
-  return (
-    <UserProvider>
-      <Profile />
-    </UserProvider>
-  );
+  return <Profile />;
 }
 
 function Profile() {
   const { user, loading } = useUser();
+  console.log("User in Profile:", user);
+  console.log("Loading state:", loading);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -26,5 +23,5 @@ function Profile() {
     return <div>No user data available.</div>;
   }
 
-  return <ProfileInfo user={user} />;
+  return <ProfileInfo />;
 }

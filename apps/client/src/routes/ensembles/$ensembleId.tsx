@@ -18,9 +18,9 @@ import PostCard from "../../components/PostCard/PostCard";
 
 export const Route = createFileRoute("/ensembles/$ensembleId")({
   component: () => (
-    <UserProvider>
+
       <EnsembleInfo />
-    </UserProvider>
+ 
   ),
 });
 

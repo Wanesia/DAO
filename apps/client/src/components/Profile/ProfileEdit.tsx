@@ -1,6 +1,5 @@
 import { useNavigate } from "@tanstack/react-router";
 import Button from "../Button/Button";
-import { UserProfile } from "@shared/userProfile.ts";
 import FormInput from "../form-components/FormInput";
 import { useForm, FieldValues } from "react-hook-form";
 import styles from "./ProfileEdit.module.css";
@@ -10,28 +9,28 @@ import FormTextarea from "../form-components/Textarea";
 import { useEffect, useState } from "react";
 import { updateUserProfile } from "../../api/userApi";
 import { useNotification } from "../../context/NotificationContext";
+import { useUser } from "../../context/UserContext";
+import LoadingRing from "../LoadingRing/LoadingRing";
 
-interface ProfileInfoProps {
-  user: UserProfile;
-}
-const ProfileEdit: React.FC<ProfileInfoProps> = ({ user }) => {
+const ProfileEdit: React.FC = () => {
   const navigate = useNavigate();
   const { addNotification } = useNotification();
+  const { refreshUser, user } = useUser();
   const { control, handleSubmit, setValue } = useForm<FieldValues>({
     defaultValues: {
-      name: user.name || "",
-      surname: user.surname || "",
-      email: user.email || "",
-      phone: user.phone || "",
-      postcode: user.location?.postCode || "",
-      city: user.location?.city || "",
-      profileText: user.profileText || "",
-      isSeeking: user.isSeeking || false,
+      name: user?.name || "",
+      surname: user?.surname || "",
+      email: user?.email || "",
+      phone: user?.phone || "",
+      postcode: user?.location?.postCode || "",
+      city: user?.location?.city || "",
+      profileText: user?.profileText || "",
+      isSeeking: user?.isSeeking || false,
     },
   });
 
-  console.log("user", user);
-  const [isSeeking, setIsSeeking] = useState(user.isSeeking ?? false);
+  const [isSeeking, setIsSeeking] = useState(user?.isSeeking ?? false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Update form when isSeeking changes
   useEffect(() => {
@@ -39,7 +38,12 @@ const ProfileEdit: React.FC<ProfileInfoProps> = ({ user }) => {
   }, [isSeeking, setValue]);
 
   const onSubmit = async (data: FieldValues) => {
+    if (!user?.email) {
+      addNotification("error", "User email is missing. Please try again.");
+      return;
+    }
     try {
+      setIsLoading(true);
       const formData = new FormData();
 
       formData.append("name", data.name);
@@ -57,10 +61,13 @@ const ProfileEdit: React.FC<ProfileInfoProps> = ({ user }) => {
       }
 
       await updateUserProfile(user.email, formData);
+      await refreshUser();
       addNotification("success", "Profil opdateret med succes!");
       navigate({ to: "/profile" });
     } catch (error) {
       addNotification("error", "Der opstod en fejl. Prøv venligst igen.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -83,7 +90,7 @@ const ProfileEdit: React.FC<ProfileInfoProps> = ({ user }) => {
           name="image"
           control={control}
           size="small"
-          placeholderImage="/profile.png"
+          placeholderImage={user?.profilePicture ?? "/profile.png"}
           buttonLabel="Upload Cover Image"
         />
         <FormTextarea
@@ -153,7 +160,13 @@ const ProfileEdit: React.FC<ProfileInfoProps> = ({ user }) => {
           </div>
         </div>
 
-        <Button color="blue" text="Gem profil" type="submit" />
+        <Button
+          color="blue"
+          type="submit"
+          text="Gem profil"
+          disabled={isLoading}
+          children={isLoading ? <LoadingRing size="small"/> : null}
+        />
       </form>
     </>
   );
