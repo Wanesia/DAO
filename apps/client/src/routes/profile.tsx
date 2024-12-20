@@ -1,18 +1,13 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { UserProvider, useUser } from '../context/UserContext';
-import ProfileInfo from '../components/Profile/ProfileInfo';
+import { createFileRoute } from "@tanstack/react-router";
+import { useUser } from "../context/UserContext";
+import ProfileInfo from "../components/Profile/ProfileInfo";
 
-export const Route = createFileRoute('/profile')({
+export const Route = createFileRoute("/profile")({
   component: RouteComponent,
-})
-
+});
 
 function RouteComponent() {
-  return (
-    <UserProvider>
-      <Profile />
-    </UserProvider>
-  );
+  return <Profile />;
 }
 
 function Profile() {

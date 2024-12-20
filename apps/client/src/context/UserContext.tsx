@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import axiosInstance from "../api/axiosInstance";
 import {UserProfile} from "@shared/userProfile";
+import {useAuth} from "./AuthContext";
 
 interface UserContextValue {
   user: UserProfile | null;
@@ -14,6 +15,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const { isLoggedIn } = useAuth();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -21,7 +23,9 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
         const token = localStorage.getItem("access_token");
         if (!token) {
           console.error("No token found");
+          setUser(null); 
           setLoading(false);
+          return;
         }
 
         const response = await axiosInstance.get<UserProfile>("/users/profile");
@@ -36,13 +40,19 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
         setUser(transformedUser);
       } catch (error) {
         console.error("Error fetching user data:", error);
+        setUser(null); 
       } finally {
         setLoading(false);
       }
     };
 
-    fetchUserData();
-  }, []);
+    if (isLoggedIn) {
+      fetchUserData(); 
+    } else {
+      setUser(null); 
+      setLoading(false);
+    }
+  }, [isLoggedIn]);
 
   return (
     <UserContext.Provider value={{ user, loading }}>
