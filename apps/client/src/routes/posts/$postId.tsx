@@ -16,9 +16,9 @@ import { deletePost } from "../../api/postApi";
 
 export const Route = createFileRoute("/posts/$postId")({
   component: () => (
-    <UserProvider>
+
       <PostInfo />
-    </UserProvider>
+
   ),
 });
 

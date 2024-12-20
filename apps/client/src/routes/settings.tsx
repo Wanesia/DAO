@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import Settings from "../components/Profile/Settings";
-import { UserProvider, useUser } from "../context/UserContext";
+import { useUser } from "../context/UserContext";
 
 export const Route = createFileRoute("/settings")({
   component: RouteComponent,
@@ -8,11 +8,9 @@ export const Route = createFileRoute("/settings")({
 
 function RouteComponent() {
   return (
-    <UserProvider>
       <main className="main-form">
         <SettingsForm></SettingsForm>
       </main>
-    </UserProvider>
   );
 }
 function SettingsForm() {

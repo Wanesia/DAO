@@ -10,6 +10,7 @@ import LevelSelector from "./LevelSelector";
 import { addInstrument } from "../../api/userApi";
 import { Genre, InstrumentName } from "../../constants/enums";
 import { useNotification } from "../../context/NotificationContext";
+import { useUser } from "../../context/UserContext";
 
 interface ProfileInfoProps {
   user: UserProfile;
@@ -18,6 +19,7 @@ interface ProfileInfoProps {
 const InstrumentForm: React.FC<ProfileInfoProps> = ({ user }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const { refreshUser } = useUser();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const {
     control,
@@ -54,6 +56,7 @@ const InstrumentForm: React.FC<ProfileInfoProps> = ({ user }) => {
       }
       await addInstrument(user.email, data);
       addNotification("success", "Instrument tilføjet med succes!");
+      refreshUser();
       navigate({ to: "/profile" });
     } catch (error) {
       addNotification("error", "Der opstod en fejl. Prøv venligst igen.");

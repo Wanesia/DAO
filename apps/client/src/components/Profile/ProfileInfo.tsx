@@ -1,6 +1,5 @@
 import { useNavigate } from "@tanstack/react-router";
 import styles from "./ProfileInfo.module.css";
-import { UserProfile } from "@shared/userProfile.ts";
 import Button from "../Button/Button";
 import { deleteInstrument } from "../../api/userApi";
 import { useState } from "react";
@@ -8,26 +7,26 @@ import { FaCircle, FaTrash } from "react-icons/fa";
 import EnsembleList from "./EnsembleList";
 import PostList from "./PostList";
 import { useNotification } from "../../context/NotificationContext";
+import { useUser } from "../../context/UserContext";
+import { useEffect } from "react";
 
-interface ProfileInfoProps {
-  user: UserProfile;
-}
-
-const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
+const ProfileInfo: React.FC = () => {
   const navigate = useNavigate();
+  const { refreshUser, user } = useUser();
   const [isDeleting, setIsDeleting] = useState(false);
-  const [instruments, setInstruments] = useState(user.instruments);
   const { addNotification } = useNotification();
 
   const handleDelete = async (index: number) => {
     if (isDeleting) return;
+    if (!user?.email) {
+      addNotification("error", "Bruger e-mail mangler. Prøv igen.");
+      return;
+    }
 
     try {
       setIsDeleting(true);
       await deleteInstrument(user.email, index);
-
-      // Update local state by removing the deleted instrument
-      setInstruments((prev) => prev.filter((_, i) => i !== index));
+      await refreshUser();
       addNotification("success", "Instrument slettet");
     } catch (error) {
       addNotification("error", "Kunne ikke slette instrument");
@@ -35,6 +34,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
       setIsDeleting(false);
     }
   };
+
   function getUserStatus(lastSeen: string | Date): string {
     const now = new Date();
     const lastSeenDate = new Date(lastSeen);
@@ -42,7 +42,7 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
     const diffInSeconds = Math.floor(diffInMs / 1000);
   
     if (diffInSeconds < 60) {
-      return "Online"; // User is online if lastSeen is less than 1 minute ago
+      return "Online";
     } else if (diffInSeconds < 3600) {
       const minutes = Math.floor(diffInSeconds / 60);
       return `${minutes} minut${minutes > 1 ? "ter" : ""} siden`;
@@ -54,7 +54,16 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
       return `${days} dag${days > 1 ? "e" : ""} siden`;
     }
   }
+
+  useEffect(() => {
+    console.log("ProfileInfo detected user context update:", user);
+  }, [user]);
   
+  
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <div className={styles.container}>
@@ -112,13 +121,12 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
             onClick={() => navigate({ to: "/add-instrument" })}
           />
         </div>
-        {instruments && user.instruments.length > 0 ? (
-          instruments.map((instrument, index) => (
-            <div className={styles.content}>
-              <div key={`instrument-${index}`} className={styles.instrument}>
+        {user.instruments && user.instruments.length > 0 ? (
+          user.instruments.map((instrument, index) => (
+            <div key={`instrument-${index}`} className={styles.content}>
+              <div className={styles.instrument}>
                 <div className={styles.top}>
                   <p className={styles.text}>{instrument.name}</p>
-
                   <p>
                     Erfaring
                     <span className={styles.level}>{instrument.level}</span>
@@ -143,22 +151,28 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ user }) => {
       </div>
       <div className={`${styles.container} ${styles["ensembler-container"]}`}>
         <div className={styles.ensembleHeading}>
-        <h2>Mine ensembler</h2>
-        <Button text="Opret" color="white-slim"  onClick={() => navigate({ to: "/ensembles/create-ensemble" })}/>
+          <h2>Mine ensembler</h2>
+          <Button 
+            text="Opret" 
+            color="white-slim"  
+            onClick={() => navigate({ to: "/ensembles/create-ensemble" })}
+          />
         </div>
-      
-          <EnsembleList />
+        <EnsembleList />
       </div>
       <div className={`${styles.container} ${styles["ensembler-container"]}`}>
         <div className={styles.ensembleHeading}>
-        <h2>Mine opslag</h2>
-        <Button text="Opret" color="white-slim"  onClick={() => navigate({ to: "/posts/create-post" })}/>
+          <h2>Mine opslag</h2>
+          <Button 
+            text="Opret" 
+            color="white-slim"  
+            onClick={() => navigate({ to: "/posts/create-post" })}
+          />
         </div>
-
-        <PostList/>
-
+        <PostList />
       </div>
     </div>
   );
 };
+
 export default ProfileInfo;

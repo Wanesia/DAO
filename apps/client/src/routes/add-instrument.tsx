@@ -9,9 +9,8 @@ export const Route = createFileRoute("/add-instrument")({
 
 function RouteComponent() {
   return (
-    <UserProvider>
+  
       <AddInstrument></AddInstrument>
-    </UserProvider>
   );
 }
 function AddInstrument() {
