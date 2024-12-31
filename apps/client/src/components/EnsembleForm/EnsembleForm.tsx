@@ -1,4 +1,3 @@
-import React from "react";
 import { useForm, FieldValues } from "react-hook-form";
 import Button from "../Button/Button";
 import FormInput from "../form-components/FormInput";
@@ -15,7 +14,7 @@ import DragAndDrop from "../DragAndDrop/DragAndDrop";
 import { MusicianCount, PracticeFrequency, EnsembleType, Genre } from "../../constants/enums";
 import { useNotification } from "../../context/NotificationContext";
 
-const EnsembleForm: React.FC = () => {
+const EnsembleForm = (): JSX.Element => {
   const { control, handleSubmit, setError } = useForm<FieldValues>();
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -68,12 +67,12 @@ const EnsembleForm: React.FC = () => {
       navigate({ to: "/profile" });
     } catch (error: any) {
       
-      const errorMessage = error?.data?.message || "Failed to create ensemble.";
+      const errorMessage = error?.data?.message || "Kunne ikke oprette ensemble.";
       if (errorMessage === "Ensemble name must be unique") {
         setError("name", {
           type: "manual",
           message: "Et ensemble med dette navn findes allerede.",
-        });
+        });      
       } else {
         addNotification("error", "Der skete en fejl. Prøv igen.");
       }
