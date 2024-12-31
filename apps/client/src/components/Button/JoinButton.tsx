@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { sendJoinRequest, cancelJoinRequest, checkJoinRequestStatus, fetchUserId } from "../../api/joinRequestApi";
+import { useNotification } from "../../context/NotificationContext";
 import styles from "./JoinButton.module.css"
 interface JoinButtonProps {
   ensembleId: string;
@@ -9,7 +10,7 @@ const JoinButton: React.FC<JoinButtonProps> = ({ ensembleId }) => {
   const [userId, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [joinRequestStatus, setJoinRequestStatus] = useState<'JOIN' | 'WAITING' | 'NONE'>('JOIN');
-
+  const { addNotification } = useNotification();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -59,13 +60,15 @@ const JoinButton: React.FC<JoinButtonProps> = ({ ensembleId }) => {
           // Cancel existing request
           await cancelJoinRequest(ensembleId, userId);
           setJoinRequestStatus('JOIN');
+          addNotification("success", "Din anmodning er annulleret.");
         } else {
           // Send new join request
           await sendJoinRequest(ensembleId, userId);
           setJoinRequestStatus('WAITING');
+          addNotification("success", "Din anmodning er sendt.");
         }
       } catch (error) {
-        console.error("Error during request", error);
+        addNotification("error", "Fejl under anmodning. Prøv igen.");
       } finally {
         setLoading(false);
       }
@@ -76,11 +79,11 @@ const JoinButton: React.FC<JoinButtonProps> = ({ ensembleId }) => {
     className={`${styles.button} ${joinRequestStatus === 'WAITING' ? styles.cancel : styles.join}`}
     onClick={handleClick}
     >
-      {loading 
-        ? "Processing..." 
-        : joinRequestStatus === 'WAITING' 
-          ? "Cancel Request" 
-          : "Request to Join"}
+      {loading
+        ? "Behandler..."
+        : joinRequestStatus === "WAITING"
+        ? "Annuller anmodning"
+        : "Anmod om medlemskab"}
     </button>   
   );
 };

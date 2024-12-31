@@ -9,10 +9,12 @@ import { getPostById } from "../../api/postApi";
 import GenreTags from "../../components/general-components/GenreTags";
 import styles from "./Posts.module.css";
 import JoinButton from "../../components/Button/JoinButton";
-import { UserProvider, useUser } from "../../context/UserContext";
+import { useUser } from "../../context/UserContext";
 import Button from "../../components/Button/Button";
 import { FaTrash } from "react-icons/fa";
 import { deletePost } from "../../api/postApi";
+import { useNotification } from "../../context/NotificationContext";
+import LoadingRing from "../../components/LoadingRing/LoadingRing";
 
 export const Route = createFileRoute("/posts/$postId")({
   component: () => (
@@ -38,9 +40,9 @@ function PostInfo() {
   }) as { postId: string };
   const [post, setPost] = useState<PostWithEnsembleDTO | null>(null);
   const [loading, setLoading] = useState(!post);
-  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
   const { user } = useUser();
+  const { addNotification } = useNotification();
 
   useEffect(() => {
     if (!post) {
@@ -48,11 +50,9 @@ function PostInfo() {
         setLoading(true);
         try {
           const data = await getPostById(postId);
-          console.log(data);
           setPost(data);
         } catch (err) {
-          console.error("Failed to fetch post:", err);
-          setError("Failed to fetch post details.");
+          addNotification("error", "Kunne ikke hente opslag detaljer.");
         } finally {
           setLoading(false);
         }
@@ -64,15 +64,15 @@ function PostInfo() {
 
   const handleDeletePost = async (id: string) => {
     try {
-      console.log("delete ensemble", id);
       await deletePost(id);
+      addNotification("success", "Opslag slettet.");
       navigate({ to: "/profile" });
     } catch (error) {
-      console.error("Error deleting ensemble:", error);
+      addNotification("error", "Kunne ikke slette opslag.");
     }
   };
 
-  if (!post) return <div>Post not found</div>;
+  if (!post) return <div>Opslag ikke fundet.</div>;
 
   const formattedDate = post.createdAt
     ? new Intl.DateTimeFormat("en-GB", {
@@ -84,10 +84,10 @@ function PostInfo() {
 
   const isCreator = user && post?.ensemble?.creator === user._id;
   const isMember = user && post?.ensemble?.member_ids?.includes(user._id);
-  console.log(post);
   return (
     <main>
       <div className={styles.content}>
+      {loading && <LoadingRing size="large" />}  
         <div className={styles.heading}>
           <h2>{post.title}</h2>
           {formattedDate && <p>Opslag oprettet {formattedDate}</p>}

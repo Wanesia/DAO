@@ -46,7 +46,7 @@ function RouteComponent() {
           // You can define more filters by adding more objects to the filterOptions array
           filterOptions={[
             { label: "Genre", options: genreOptions, key: "genre" },
-            { label: "Location", key: "location" },
+            { label: "Sted", key: "location" },
           ]}
           getFilterLabel={(filter) => {
             if (typeof filter === "string") {

@@ -99,7 +99,7 @@ function MusicianInfo() {
                 {user.isSeeking && <p className={styles.isSeeking}>SØGENDE</p>}
               </div>
 
-               <p className={styles.status}>
+              <p className={styles.status}>
                 Medlem siden{" "}
                 {new Date(user.createdAt).toLocaleDateString("da-DK", {
                   month: "long",
@@ -185,7 +185,7 @@ function MusicianInfo() {
         <div className={styles.section}>
           <h3 className={styles.subheading}>{user.name}s ensembler</h3>
           {loading ? (
-            <p>Loading ensembler...</p>
+            <p>Indlæser ensembler...</p>
           ) : error ? (
             <p>{error}</p>
           ) : ensembles.length > 0 ? (

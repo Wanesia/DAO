@@ -10,18 +10,15 @@ import Button from "../../components/Button/Button";
 import GenreTags from "../../components/general-components/GenreTags";
 import UserCard from "../../components/UserCard/UserCard";
 import { UserProfile } from "@shared/userProfile";
-import { UserProvider, useUser } from "../../context/UserContext";
+import { useUser } from "../../context/UserContext";
 import { FaTrash } from "react-icons/fa";
 import { useNavigate } from "@tanstack/react-router";
 import { getPostsByEnsembleId } from "../../api/postApi";
 import PostCard from "../../components/PostCard/PostCard";
+import { useNotification } from "../../context/NotificationContext";
 
 export const Route = createFileRoute("/ensembles/$ensembleId")({
-  component: () => (
-
-      <EnsembleInfo />
- 
-  ),
+  component: () => <EnsembleInfo />,
 });
 
 interface UserDataMapping {
@@ -29,14 +26,14 @@ interface UserDataMapping {
 }
 
 function EnsembleInfo() {
+   // Extract `ensembleId` from the route parameters
   const { ensembleId } = useParams({
     from: "/ensembles/$ensembleId",
-    strict: true,
+    strict: true,  // Ensures only the exact route matches
   }) as { ensembleId: string };
   const navigate = useNavigate();
-
   const { user } = useUser();
-
+  const { addNotification } = useNotification();
   const [ensemble, setEnsemble] = useState<Ensemble | null>(null);
   const [userData, setUserData] = useState<UserDataMapping>({});
   const [memberData, setMemberData] = useState<UserDataMapping>({});
@@ -53,9 +50,9 @@ function EnsembleInfo() {
         try {
           const data = await getEnsembleById(ensembleId);
           setEnsemble(data);
-        } catch (err) {
-          console.error("Failed to fetch ensemble:", err);
-          setError("Failed to fetch ensemble details.");
+        } catch (error) {
+          setError("Kunne ikke hente ensemble detaljer."); 
+          addNotification("error", "Kunne ikke hente ensemble detaljer.");
         } finally {
           setLoading(false);
         }
@@ -71,9 +68,8 @@ function EnsembleInfo() {
       try {
         const response = await getPostsByEnsembleId(ensemble._id);
         setPosts(response);
-        console.log("posts", response);
       } catch (error) {
-        console.error("Error fetching posts:", error);
+        addNotification("error", "Kunne ikke hente indlæg.");
       } finally {
         setLoading(false);
       }
@@ -109,7 +105,7 @@ function EnsembleInfo() {
 
         setJoinRequests(requests);
       } catch (error) {
-        console.error("Failed to fetch join request users:", error);
+        addNotification("error", "Kunne ikke hente brugerdata for anmodninger.");
         setUserData({});
         setJoinRequests([]);
       }
@@ -161,7 +157,7 @@ function EnsembleInfo() {
       const refreshedEnsemble = await getEnsembleById(ensemble._id);
       setEnsemble(refreshedEnsemble);
     } catch (error) {
-      console.error("Error accepting join request:", error);
+      addNotification("error", "Kunne ikke acceptere anmodningen.");
     }
   };
 
@@ -176,17 +172,16 @@ function EnsembleInfo() {
       const refreshedEnsemble = await getEnsembleById(ensemble._id);
       setEnsemble(refreshedEnsemble);
     } catch (error) {
-      console.error("Error declining join request:", error);
+      addNotification("error", "Kunne ikke afvise anmodningen.");
     }
   };
 
   const handleDeleteEnsemble = async (id: string) => {
     try {
-      console.log("delete ensemble", id);
       await deleteEnsemble(id);
       navigate({ to: "/profile" });
     } catch (error) {
-      console.error("Error deleting ensemble:", error);
+      addNotification("error", "Kunne ikke slette ensemble.");
     }
   };
 
@@ -235,7 +230,7 @@ function EnsembleInfo() {
             <>
               {/* requests */}
               <section className={styles.requests}>
-                <label>Requests to Join</label>
+                <label>Anmodninger om medlemskab</label>
                 {joinRequests.length > 0 ? (
                   joinRequests.map((request: JoinRequest) => (
                     <div key={request._id} className={styles.request}>
@@ -248,7 +243,8 @@ function EnsembleInfo() {
                             })
                           }
                         >
-                          {userData[request.userId]?.name}{" "}{userData[request.userId]?.surname}{" "}
+                          {userData[request.userId]?.name}{" "}
+                          {userData[request.userId]?.surname}{" "}
                         </span>
                         ønsker at blive medlem
                       </p>
@@ -269,7 +265,7 @@ function EnsembleInfo() {
                     </div>
                   ))
                 ) : (
-                  <p>No requests at the moment</p>
+                  <p>Ingen anmodninger i øjeblikket</p>
                 )}
               </section>
             </>
@@ -308,7 +304,7 @@ function EnsembleInfo() {
                     />
                   </div>
                 ) : (
-                  <p>Loading creator information...</p>
+                  <p>Indlæser...</p>
                 )}
               </div>
             </>
@@ -316,7 +312,7 @@ function EnsembleInfo() {
         </section>
         {/* posts */}
         <section className={styles.ensembleSection}>
-          <label>Posts</label>
+          <label>Opslag</label>
           <div className="gridLarge">
             {posts.length > 0 ? (
               posts.map((post) => (
@@ -325,14 +321,14 @@ function EnsembleInfo() {
                 </div>
               ))
             ) : (
-              <p>No posts yet</p>
+              <p>Ingen opslag</p>
             )}
           </div>
         </section>
         {/* members */}
         <section className={styles.ensembleSection}>
           <div className={styles.membersHeading}>
-            <label>Members</label>
+            <label>Medlemmer</label>
             {ensemble.member_ids && ensemble.member_ids.length > 8 && (
               <Button
                 color="extra-small"
@@ -358,7 +354,7 @@ function EnsembleInfo() {
                     <UserCard user={member} size="small" />
                   </div>
                 ) : (
-                  <p key={id}>Loading...</p>
+                  <p key={id}>Indlæser...</p>
                 );
               })}
           </div>

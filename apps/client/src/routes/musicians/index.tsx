@@ -59,7 +59,7 @@ function RouteComponent() {
               options: instrumentOptions,
               key: "instrument",
             },
-            { label: "Location", key: "location" },
+            { label: "Sted", key: "location" },
           ]}
           getFilterLabel={(filter) => {
             if (typeof filter === "string") {
