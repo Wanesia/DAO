@@ -40,7 +40,7 @@ const EnsembleCard: React.FC<EnsembleCardProps> = ({ ensemble }) => {
       <div className={styles.infoContainer}>
         <p>
           {truncateText(ensemble.description, 100) ||
-            "No description available"}
+            "Ingen beskrivelse tilgængelig"}
         </p>
         <GenreTags genres={ensemble.genres} />
       </div>
