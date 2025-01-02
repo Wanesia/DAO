@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import InstrumentForm from "../components/Profile/InstrumentForm";
-import { UserProvider, useUser } from "../context/UserContext";
+import { useUser } from "../context/UserContext";
 
 
 export const Route = createFileRoute("/add-instrument")({
