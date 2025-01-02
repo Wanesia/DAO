@@ -27,7 +27,6 @@ import { Genre, JoinRequestStatus } from '@shared/enums';
 import { LastSeenInterceptor } from '../interceptors/lastSeen.interceptor';
 import { AuthenticatedRequest } from '@shared/types';
 
-
 @Controller('ensembles')
 @UseInterceptors(LastSeenInterceptor)
 export class EnsembleController {
@@ -45,43 +44,7 @@ export class EnsembleController {
     @Req() req: AuthenticatedRequest,
   ): Promise<Ensemble> {
     const creatorId = req.user.userId;
-
-    let imageUrl: string | undefined;
-    if (image) {
-      const uploadResult = await this.imageUploadService.uploadImage(
-        image,
-        'ensembles',
-      );
-      imageUrl = uploadResult.secure_url;
-    }
-
-    const ensembleDto: CreateEnsembleDto = {
-      ...formData,
-      location: {
-        city: formData.city,
-        postCode: formData.postcode,
-      },
-      genres: Array.isArray(formData.genres)
-        ? formData.genres
-        : JSON.parse(formData.genres),
-      type: formData.type,
-      imageUrl: imageUrl,
-    };
-
-    try {
-      return await this.ensembleService.createEnsemble(ensembleDto, creatorId);
-    } catch (error) {
-      if (error.message === 'Ensemble with this name already exists') {
-        throw new HttpException(
-          'Ensemble name must be unique',
-          HttpStatus.BAD_REQUEST,
-        );
-      }
-      throw new HttpException(
-        'Failed to create ensemble',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+    return this.ensembleService.createEnsemble(formData, image, creatorId);
   }
 
   @Get()
@@ -119,7 +82,10 @@ export class EnsembleController {
 
   @Post('join/:ensembleId')
   @UseGuards(JwtAuthGuard)
-  async createJoinRequest(@Param('ensembleId') ensembleId: string, @Body('userId') userId: string) {
+  async createJoinRequest(
+    @Param('ensembleId') ensembleId: string,
+    @Body('userId') userId: string,
+  ) {
     return this.ensembleService.createJoinRequest(ensembleId, userId);
   }
 
@@ -153,7 +119,7 @@ export class EnsembleController {
   }
   @Get('find/:ensembleId')
   @UseGuards(JwtAuthGuard)
-  async findById(@Param('ensembleId') ensembleId: string): Promise<void>{
+  async findById(@Param('ensembleId') ensembleId: string): Promise<void> {
     return await this.ensembleService.findById(ensembleId);
   }
 
@@ -178,10 +144,10 @@ export class EnsembleController {
   @UseGuards(JwtAuthGuard)
   async getEnsemblesByCreator(
     @Req() req: AuthenticatedRequest,
-    @Query('userId') userId?: string, 
+    @Query('userId') userId?: string,
   ): Promise<Ensemble[]> {
     try {
-      const creatorId = userId || req.user.userId; 
+      const creatorId = userId || req.user.userId;
       const ensembles = await this.ensembleService.findByCreator(creatorId);
       return ensembles;
     } catch (error) {
@@ -197,7 +163,4 @@ export class EnsembleController {
   async getEnsemblesByMember(@Param('slug') slug: string): Promise<Ensemble[]> {
     return this.ensembleService.findByMember(slug);
   }
-  
-
-  
 }

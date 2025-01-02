@@ -11,39 +11,66 @@ import { CreateEnsembleDto } from './dto/ensemble.dto';
 import { Types } from 'mongoose';
 import { Genre, JoinRequestStatus } from '@shared/enums';
 import { User } from 'src/user/schema/user.schema';
+import { ImageUploadService } from 'src/imageUpload/imageUpload.service';
 
 @Injectable()
 export class EnsembleService {
   constructor(
     @InjectModel(Ensemble.name) private readonly ensembleModel: Model<Ensemble>,
     @InjectModel(User.name) private readonly userModel: Model<User>,
+    private readonly imageUploadService: ImageUploadService,
   ) {}
 
-  async createEnsemble(
-    ensembleDto: CreateEnsembleDto,
-    creatorId: string,
-  ): Promise<Ensemble> {
-    const existingEnsemble = await this.ensembleModel.findOne({
-      name: ensembleDto.name,
-    });
-    if (existingEnsemble) {
-      throw new Error('Ensemble with this name already exists');
-    }
-
-    try {
-      const ensembleData = {
-        ...ensembleDto,
-        creator: creatorId,
-        member_ids: [creatorId],
+    async createEnsemble(
+      formData: any,
+      image: Express.Multer.File,
+      creatorId: string,
+    ): Promise<Ensemble> {
+      let imageUrl: string | undefined;
+    
+      // Image upload
+      if (image) {
+        const uploadResult = await this.imageUploadService.uploadImage(image, 'ensembles');
+        imageUrl = uploadResult.secure_url;
+      }
+    
+      // Transforming formData into a structured DTO
+      const ensembleDto: CreateEnsembleDto = {
+        ...formData,
+        location: {
+          city: formData.city,
+          postCode: formData.postcode,
+        },
+        genres: Array.isArray(formData.genres)
+          ? formData.genres
+          : JSON.parse(formData.genres),
+        type: formData.type,
+        imageUrl: imageUrl,
       };
-
-      const newEnsemble = await this.ensembleModel.create(ensembleData);
-      return newEnsemble;
-    } catch (error) {
-      console.error('Error creating ensemble:', error);
-      throw new Error('Failed to create ensemble.');
-    }
-  }
+    
+      // Check if ensemble name is unique
+      const existingEnsemble = await this.ensembleModel.findOne({
+        name: ensembleDto.name,
+      });
+      if (existingEnsemble) {
+        throw new Error('Ensemble with this name already exists');
+      }
+    
+      try {
+        // Add creator
+        const ensembleData = {
+          ...ensembleDto,
+          creator: creatorId,
+          member_ids: [creatorId],
+        };
+    
+        // Save to database
+        return await this.ensembleModel.create(ensembleData);
+      } catch (error) {
+        console.error('Error creating ensemble:', error);
+        throw new Error('Failed to create ensemble.');
+      }
+    }    
 
   async searchEnsembles(
     searchTerm: string,
