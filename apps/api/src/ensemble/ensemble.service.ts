@@ -21,56 +21,51 @@ export class EnsembleService {
     private readonly imageUploadService: ImageUploadService,
   ) {}
 
-    async createEnsemble(
-      formData: any,
-      image: Express.Multer.File,
-      creatorId: string,
-    ): Promise<Ensemble> {
-      let imageUrl: string | undefined;
-    
-      // Image upload
-      if (image) {
-        const uploadResult = await this.imageUploadService.uploadImage(image, 'ensembles');
-        imageUrl = uploadResult.secure_url;
-      }
-    
-      // Transforming formData into a structured DTO
-      const ensembleDto: CreateEnsembleDto = {
-        ...formData,
-        location: {
-          city: formData.city,
-          postCode: formData.postcode,
-        },
-        genres: Array.isArray(formData.genres)
-          ? formData.genres
-          : JSON.parse(formData.genres),
-        type: formData.type,
-        imageUrl: imageUrl,
-      };
-    
+  async createEnsemble(
+    formData: CreateEnsembleDto,
+    image: Express.Multer.File,
+    creatorId: string,
+  ): Promise<Ensemble> {
+    let imageUrl: string | undefined;
+  
+    // Image upload
+    if (image) {
+      const uploadResult = await this.imageUploadService.uploadImage(image, 'ensembles');
+      imageUrl = uploadResult.secure_url;
+    }
+  
+    // Transforming form data, adding creator
+    const ensemble = {
+      ...formData,
+      location: {
+        city: formData.city,
+        postCode: formData.postcode,
+      },
+      genres: Array.isArray(formData.genres)
+        ? formData.genres
+        : JSON.parse(formData.genres),
+      type: formData.type,
+      imageUrl: imageUrl,
+      creator: new Types.ObjectId(creatorId),
+      member_ids: [new Types.ObjectId(creatorId)], 
+    };
+  
+    try {
       // Check if ensemble name is unique
       const existingEnsemble = await this.ensembleModel.findOne({
-        name: ensembleDto.name,
+        name: ensemble.name,
       });
       if (existingEnsemble) {
         throw new Error('Ensemble with this name already exists');
       }
-    
-      try {
-        // Add creator
-        const ensembleData = {
-          ...ensembleDto,
-          creator: creatorId,
-          member_ids: [creatorId],
-        };
-    
-        // Save to database
-        return await this.ensembleModel.create(ensembleData);
-      } catch (error) {
-        console.error('Error creating ensemble:', error);
-        throw new Error('Failed to create ensemble.');
-      }
-    }    
+  
+      // Save to database
+      return await this.ensembleModel.create(ensemble);
+    } catch (error) {
+      console.error('Error creating ensemble:', error);
+      throw new Error('Failed to create ensemble.');
+    }
+  }    
 
   async searchEnsembles(
     searchTerm: string,
@@ -112,7 +107,7 @@ export class EnsembleService {
       console.error('Error searching ensembles:', error);
       throw new Error('Failed to search ensembles.');
     }
-  }
+  };
 
   async updateEnsemble(id: string, ensembleDto: any): Promise<Ensemble> {
     try {
