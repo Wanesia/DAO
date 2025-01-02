@@ -1,14 +1,5 @@
-import { Transform, Type } from 'class-transformer';
-import { IsEnum, IsArray, ValidateNested, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsArray, IsOptional, IsString, IsInt, Min } from 'class-validator';
 import { MusicianCount, PracticeFrequency, EnsembleType, Genre } from '@shared/enums';
-
-class LocationDto {
-  @IsString()
-  city: string;
-
-  @IsString()
-  postCode: string;
-}
 
 export class CreateEnsembleDto {
   @IsString()
@@ -45,4 +36,26 @@ export class CreateEnsembleDto {
   @IsEnum(Genre, { each: true })
   genres: Genre[];
 
+}
+
+export class FindEnsemblesQueryDto {
+  @IsString()
+  @IsOptional()
+  searchTerm?: string;
+
+  @IsInt()
+  @Min(1)
+  @IsOptional()
+  page: number = 1;
+
+  @IsInt()
+  @Min(1)
+  @IsOptional()
+  limit: number = 6;
+
+  @IsOptional()
+  genre?: Genre;
+
+  @IsOptional()
+  location?: string;
 }

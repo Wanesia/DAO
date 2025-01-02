@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { EnsembleService } from './ensemble.service';
 import { Ensemble } from './schema/ensemble.schema';
-import { CreateEnsembleDto } from './dto/ensemble.dto';
+import { CreateEnsembleDto, FindEnsemblesQueryDto } from './dto/ensemble.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { ImageUploadService } from '../imageUpload/imageUpload.service';
 import {
@@ -50,18 +50,14 @@ export class EnsembleController {
   @Get()
   @UseGuards(JwtAuthGuard)
   async findEnsembles(
-    @Query('searchTerm') searchTerm: string = '',
-    @Query('page') page: number = 1,
-    @Query('limit') limit: number = 6,
-    @Query('genre') genre?: Genre,
-    @Query('location') location?: string,
+    @Query() query: FindEnsemblesQueryDto
   ): Promise<{ data: Ensemble[]; total: number }> {
     return this.ensembleService.searchEnsembles(
-      searchTerm,
-      page,
-      limit,
-      genre,
-      location,
+      query.searchTerm,
+      query.page,
+      query.limit,
+      query.genre,
+      query.location,
     );
   }
 
