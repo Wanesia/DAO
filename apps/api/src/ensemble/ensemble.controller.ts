@@ -17,8 +17,6 @@ import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { ImageUploadService } from '../imageUpload/imageUpload.service';
 import {
   UseInterceptors,
-  HttpException,
-  HttpStatus,
   UploadedFile,
   Query,
 } from '@nestjs/common';
