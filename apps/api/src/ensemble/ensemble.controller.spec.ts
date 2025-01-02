@@ -7,6 +7,7 @@ import { Genre, EnsembleType, PracticeFrequency, MusicianCount} from '@shared/en
 import { ImageUploadService } from 'src/imageUpload/imageUpload.service';
 import { UsersService } from 'src/user/user.service';
 import { LastSeenInterceptor } from 'src/interceptors/lastSeen.interceptor';
+import { CreateEnsembleDto } from './dto/ensemble.dto';
 
 interface AuthenticatedRequest extends Request {
   user: {
@@ -97,37 +98,33 @@ describe('EnsembleController', () => {
         originalname: 'test.jpg',
         buffer: Buffer.from('test'),
       } as Express.Multer.File;
-
+    
       const formData = {
         name: 'Test Ensemble',
         city: 'Copenhagen',
         postcode: '1000',
-        genres: JSON.stringify(['ROCK']),
-        type: ['BAND'],
+        genres: [Genre.BAROK],
+        type: EnsembleType.CONTINUOUS,
+        number_of_musicians: MusicianCount.ONE_TO_FOUR,
+        practice_frequency: PracticeFrequency.EVERY_OTHER_WEEK,
       };
-
+    
       const mockRequest: AuthenticatedRequest = {
         user: { userId: 'creatorId' },
       } as AuthenticatedRequest;
-
+    
       jest.spyOn(mockEnsembleService, 'createEnsemble').mockResolvedValue(mockEnsemble);
-
+    
       const result = await controller.create(mockImage, formData, mockRequest);
-
+    
       expect(result).toEqual(mockEnsemble);
-
-      expect(mockImageUploadService.uploadImage).toHaveBeenCalledWith(mockImage, 'ensembles');
-
+    
       expect(mockEnsembleService.createEnsemble).toHaveBeenCalledWith(
-        {
-          ...formData,
-          location: { city: 'Copenhagen', postCode: '1000' },
-          genres: ['ROCK'],
-          imageUrl: 'http://example.com/image.jpg',
-        },
+        formData,
+        mockImage,
         'creatorId',
       );
-    });
+    });    
   });
 
   describe('findEnsembles', () => {
@@ -136,11 +133,25 @@ describe('EnsembleController', () => {
 
       jest.spyOn(mockEnsembleService, 'searchEnsembles').mockResolvedValue(mockResponse);
 
-      const result = await controller.findEnsembles('test', 1, 6, 'ROCK' as Genre);
+      const query = {
+        searchTerm: 'test',
+        page: 1,
+        limit: 6,
+        genre: 'ROCK' as Genre,
+        location: undefined,
+      };
+
+      const result = await controller.findEnsembles(query);
 
       expect(result).toEqual(mockResponse);
 
-      expect(mockEnsembleService.searchEnsembles).toHaveBeenCalledWith('test', 1, 6, 'ROCK', undefined);
+      expect(mockEnsembleService.searchEnsembles).toHaveBeenCalledWith(
+        query.searchTerm,
+        query.page,
+        query.limit,
+        query.genre,
+        query.location,
+      );
 
     });
 
@@ -149,11 +160,25 @@ describe('EnsembleController', () => {
 
       jest.spyOn(mockEnsembleService, 'searchEnsembles').mockResolvedValue(mockResponse);
 
-      const result = await controller.findEnsembles('', 1, 6);
+      const query = {
+        searchTerm: '',
+        page: 1,
+        limit: 6,
+        genre: undefined,
+        location: undefined,
+      };
+    
+      const result = await controller.findEnsembles(query);
 
       expect(result).toEqual(mockResponse);
 
-      expect(mockEnsembleService.searchEnsembles).toHaveBeenCalledWith('', 1, 6, undefined, undefined);
+      expect(mockEnsembleService.searchEnsembles).toHaveBeenCalledWith(
+        query.searchTerm,
+        query.page,
+        query.limit,
+        query.genre,
+        query.location,
+      );
 
     });
   });
