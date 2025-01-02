@@ -40,7 +40,7 @@ export class EnsembleController {
   @UseInterceptors(FileInterceptor('image'))
   async create(
     @UploadedFile() image: Express.Multer.File,
-    @Body() formData: any,
+    @Body() formData: CreateEnsembleDto,
     @Req() req: AuthenticatedRequest,
   ): Promise<Ensemble> {
     const creatorId = req.user.userId;

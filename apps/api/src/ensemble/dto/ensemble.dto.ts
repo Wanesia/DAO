@@ -26,9 +26,11 @@ export class CreateEnsembleDto {
   @IsString()
   homepageUrl?: string | '';
 
-  @ValidateNested()
-  @Type(() => LocationDto)
-  location: LocationDto;
+  @IsString()
+  city: string;
+
+  @IsString()
+  postcode: string;
 
   @IsEnum(MusicianCount)
   number_of_musicians: MusicianCount;
@@ -43,8 +45,4 @@ export class CreateEnsembleDto {
   @IsEnum(Genre, { each: true })
   genres: Genre[];
 
-  @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  member_ids?: string[];
 }
