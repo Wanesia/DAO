@@ -3,8 +3,9 @@ import EnsembleCard from "../EnsembleCard/EnsembleCard";
 import { getEnsemblesByCreator } from "../../api/ensembleApi";
 import { useNavigate } from "@tanstack/react-router";
 import { Ensemble } from "@shared/types";
+import LoadingRing from "../LoadingRing/LoadingRing";
 
-const EnsembleList: React.FC = () => {
+const EnsembleList: React.FC<{ refresh: boolean }> = ({ refresh }) => {
   const [ensembles, setEnsembles] = useState<Ensemble[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -18,6 +19,7 @@ const EnsembleList: React.FC = () => {
       try {
         const ensemblesByCreator = await getEnsemblesByCreator();
         setEnsembles(ensemblesByCreator);
+        console.log(ensemblesByCreator);
       } catch (err) {
         console.error("Failed to fetch ensembles", err);
         setError(
@@ -29,11 +31,11 @@ const EnsembleList: React.FC = () => {
     };
 
     fetchEnsembles();
-  }, []);
+  }, [refresh]);
 
-  if (loading) return <div>Loading ensembles...</div>;
+  if (loading) return <LoadingRing size="small"/>;
   if (error) return <div>Error: {error}</div>;
-  if (ensembles.length === 0) return <p>No ensembles found</p>;
+  if (ensembles.length === 0) return <p>Ingen ensembler</p>;
 
   return (
       <ul className="gridLarge">

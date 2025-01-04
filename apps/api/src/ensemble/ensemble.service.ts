@@ -46,8 +46,8 @@ export class EnsembleService {
         : JSON.parse(formData.genres),
       type: formData.type,
       imageUrl: imageUrl,
-      creator: new Types.ObjectId(creatorId),
-      member_ids: [new Types.ObjectId(creatorId)], 
+      creator: creatorId,
+      member_ids: [creatorId], 
     };
   
     try {

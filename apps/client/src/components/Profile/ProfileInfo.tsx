@@ -15,6 +15,7 @@ const ProfileInfo: React.FC = () => {
   const { refreshUser, user } = useUser();
   const [isDeleting, setIsDeleting] = useState(false);
   const { addNotification } = useNotification();
+  const [shouldRefresh, setShouldRefresh] = useState(false);
 
   const handleDelete = async (index: number) => {
     if (isDeleting) return;
@@ -155,10 +156,13 @@ const ProfileInfo: React.FC = () => {
           <Button 
             text="Opret" 
             color="white-slim"  
-            onClick={() => navigate({ to: "/ensembles/create-ensemble" })}
+            onClick={() => {
+              navigate({ to: "/ensembles/create-ensemble" });
+              setShouldRefresh((prev) => !prev); 
+            }}
           />
         </div>
-        <EnsembleList />
+        <EnsembleList refresh={shouldRefresh}/>
       </div>
       <div className={`${styles.container} ${styles["ensembler-container"]}`}>
         <div className={styles.ensembleHeading}>
