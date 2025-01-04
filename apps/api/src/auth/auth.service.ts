@@ -30,6 +30,7 @@ export class AuthService {
         ...userDto,
         password: hashedPassword,
         authProvider: 'local',
+        lastSeen: new Date(),
       });
     } catch (error) {
       if (error instanceof ConflictException) {
