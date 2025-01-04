@@ -7,7 +7,6 @@ import { Genre, EnsembleType, PracticeFrequency, MusicianCount} from '@shared/en
 import { ImageUploadService } from 'src/imageUpload/imageUpload.service';
 import { UsersService } from 'src/user/user.service';
 import { LastSeenInterceptor } from 'src/interceptors/lastSeen.interceptor';
-import { CreateEnsembleDto } from './dto/ensemble.dto';
 
 interface AuthenticatedRequest extends Request {
   user: {

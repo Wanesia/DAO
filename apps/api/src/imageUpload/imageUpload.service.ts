@@ -21,12 +21,14 @@ export class ImageUploadService {
       throw new BadRequestException('No file provided.');
     }
 
+    // validate file type
     const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif'];
     if (!allowedMimeTypes.includes(file.mimetype)) {
       throw new BadRequestException('Unsupported file type.');
     }
 
-    const maxSizeInBytes = 5 * 1024 * 1024; 
+    // validate file size
+    const maxSizeInBytes = 5 * 1024 * 1024; // 5MB limit
     if (file.size > maxSizeInBytes) {
       throw new BadRequestException('File size exceeds the allowed limit of 5MB.');
     }
