@@ -3,7 +3,7 @@ import { Select } from "@mantine/core";
 import styles from "./Filter.module.css";
 
 interface FilterProps<F> {
-  label: string;
+  label: string; // Label displayed in the UI
   options?: F[];
   onFilterChange: (value: F | string | null) => void;
   getOptionLabel?: (option: F) => string;
@@ -19,20 +19,23 @@ const Filter = <F,>({
 }: FilterProps<F>) => {
   const [selectedOption, setSelectedOption] = useState<F | string | null>(null);
 
+  // Handler for dropdown filter
   const handleDropdownChange = (value: string | null) => {
     const selected = value
       ? options.find((option) => getOptionLabel?.(option) === value) || null
       : null;
     setSelectedOption(selected);
-    onFilterChange(selected);
+    onFilterChange(selected); // Notify the parent component
   };
 
+  // Handler for text filter (location)
   const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value || null;
     setSelectedOption(value);
     onFilterChange(value);
   };
 
+  // Handler for clearing the filter
   const handleClear = () => {
     setSelectedOption(null);
     onFilterChange(null);
@@ -47,6 +50,7 @@ const Filter = <F,>({
         </button>
       </div>
 
+      {/* if the filter type is "dropdown" */}
       {filterType === "dropdown" && (
         <Select
           placeholder="Vælg"
@@ -56,10 +60,10 @@ const Filter = <F,>({
               : (selectedOption as string | null)
           }
           data={options.map((option) => ({
-            value: getOptionLabel!(option), 
+            value: getOptionLabel!(option),
             label: getOptionLabel!(option),
           }))}
-          onChange={(value) => handleDropdownChange(value)} 
+          onChange={(value) => handleDropdownChange(value)}
           clearable
           classNames={{
             input: styles.input,
@@ -67,7 +71,7 @@ const Filter = <F,>({
           }}
         />
       )}
-
+      {/* if the filter type is "text" - location */}
       {filterType === "text" && (
         <input
           type="text"

@@ -6,17 +6,18 @@ import Pagination from "../Pagination/Pagination";
 import Filter from "../Filter/Filter";
 import LoadingRing from "../LoadingRing/LoadingRing";
 
+// Using generic types to make the component reusable for different entities and filters
 interface SearchProps<T, F> {
   fetchData: (
     searchTerm: string,
     page: number,
     limit: number,
     filters: Partial<F> | null
-  ) => Promise<{ data: T[]; total: number }>;
-  renderItem: (item: T) => JSX.Element;
-  limit?: number;
-  filterOptions?: { label: string; options?: F[keyof F][]; key: keyof F }[];
-  getFilterLabel: (filter: F[keyof F]) => string;
+  ) => Promise<{ data: T[]; total: number }>; // API function to fetch specific data
+  renderItem: (item: T) => JSX.Element; // Function to render each item in the search results
+  limit?: number; // Number of results per page
+  filterOptions?: { label: string; options?: F[keyof F][]; key: keyof F }[]; 
+  getFilterLabel: (filter: F[keyof F]) => string; // Function to get the label of a filter option
 }
 
 const Search = <T, F>({
@@ -26,14 +27,16 @@ const Search = <T, F>({
   filterOptions = [],
   getFilterLabel,
 }: SearchProps<T, F>) => {
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState<string>(""); // User input for search
   const [filters, setFilters] = useState<Partial<F>>({});
   const [results, setResults] = useState<T[]>([]);
-  const [total, setTotal] = useState<number>(0);
-  const [page, setPage] = useState<number>(1);
+  const [total, setTotal] = useState<number>(0); // Total number of results
+  const [page, setPage] = useState<number>(1); // Current page number
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
+  // useCallback hook is used to ensure function reference does not change on re-renders
+  // Debouncing the fetchResults function to avoid making too many requests
   const fetchResults = useCallback(
     debounce(
       async (term: string, currentPage: number, currentFilters: Partial<F>) => {
@@ -54,7 +57,7 @@ const Search = <T, F>({
           setIsLoading(false);
         }
       },
-      500
+      500 // Delay of 500ms
     ),
     [fetchData, limit]
   );
@@ -78,6 +81,8 @@ const Search = <T, F>({
     }));
   };
 
+  // Memoizing rendered results for performance optimization
+  // Only re-renders when results or renderItem function changes
   const renderedResults = useMemo(
     () => results.map((item) => renderItem(item)),
     [results, renderItem]
