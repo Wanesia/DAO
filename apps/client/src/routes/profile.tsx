@@ -12,8 +12,6 @@ function RouteComponent() {
 
 function Profile() {
   const { user, loading } = useUser();
-  console.log("User in Profile:", user);
-  console.log("Loading state:", loading);
 
   if (loading) {
     return <div>Loading...</div>;

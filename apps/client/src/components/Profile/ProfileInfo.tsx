@@ -54,11 +54,6 @@ const ProfileInfo: React.FC = () => {
       return `${days} dag${days > 1 ? "e" : ""} siden`;
     }
   }
-
-  useEffect(() => {
-    console.log("ProfileInfo detected user context update:", user);
-  }, [user]);
-  
   
 
   if (!user) {

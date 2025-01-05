@@ -42,7 +42,6 @@ const InstrumentForm: React.FC<ProfileInfoProps> = ({ user }) => {
   const onSubmit = async (data: any) => {
     setLoading(true);
     setErrorMessage(null);
-    console.log("Submitting instrument:", data);
     try {
       if (
         !data.name ||

@@ -19,7 +19,6 @@ const EnsembleList: React.FC = () => {
       try {
         const ensemblesByCreator = await getEnsemblesByCreator();
         setEnsembles(ensemblesByCreator);
-        console.log(ensemblesByCreator);
       } catch (err) {
         console.error("Failed to fetch ensembles", err);
         setError(
