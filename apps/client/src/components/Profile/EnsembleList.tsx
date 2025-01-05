@@ -5,7 +5,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { Ensemble } from "@shared/types";
 import LoadingRing from "../LoadingRing/LoadingRing";
 
-const EnsembleList: React.FC<{ refresh: boolean }> = ({ refresh }) => {
+const EnsembleList: React.FC = () => {
   const [ensembles, setEnsembles] = useState<Ensemble[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -31,7 +31,7 @@ const EnsembleList: React.FC<{ refresh: boolean }> = ({ refresh }) => {
     };
 
     fetchEnsembles();
-  }, [refresh]);
+  }, []);
 
   if (loading) return <LoadingRing size="small"/>;
   if (error) return <div>Error: {error}</div>;
