@@ -54,11 +54,6 @@ const ProfileInfo: React.FC = () => {
       return `${days} dag${days > 1 ? "e" : ""} siden`;
     }
   }
-
-  useEffect(() => {
-    console.log("ProfileInfo detected user context update:", user);
-  }, [user]);
-  
   
 
   if (!user) {
@@ -155,7 +150,9 @@ const ProfileInfo: React.FC = () => {
           <Button 
             text="Opret" 
             color="white-slim"  
-            onClick={() => navigate({ to: "/ensembles/create-ensemble" })}
+            onClick={() => {
+              navigate({ to: "/ensembles/create-ensemble" });
+            }}
           />
         </div>
         <EnsembleList />

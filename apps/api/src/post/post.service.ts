@@ -24,7 +24,6 @@ export class PostService {
   ): Promise<{ data: Post[]; total: number }> {
     let aggregationPipeline = [];
 
-    console.log('Search term:', searchTerm);
     if (searchTerm && searchTerm.trim()) {
       aggregationPipeline.push({ $match: {} }); 
     }

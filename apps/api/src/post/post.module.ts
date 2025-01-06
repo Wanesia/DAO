@@ -4,10 +4,11 @@ import { EnsembleModule } from "src/ensemble/ensemble.module";
 import { Post, PostSchema } from "./schema/post.schema";
 import { PostController } from "./post.controller";
 import { PostService } from "./post.service";
-import { EnsembleService } from "src/ensemble/ensemble.service";
+import { UserModule } from "src/user/user.module";
 
 @Module({
     imports: [
+        UserModule,
         EnsembleModule,
         MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }]),
     ],

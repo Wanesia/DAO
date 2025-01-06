@@ -26,7 +26,6 @@ const Settings: React.FC<ProfileInfoProps> = ({ user }) => {
   });
 
   const onSubmit = async (data: UpdateSettingsDto) => {
-    console.log("Form submitted:", data);
     try {
       await updateUserSettings(user._id, data);
       navigate({ to: "/profile" });

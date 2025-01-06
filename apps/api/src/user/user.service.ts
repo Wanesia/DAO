@@ -51,8 +51,6 @@ export class UsersService {
       query['instruments.name']  = { $in: [instrument] };
     }
 
-    console.log('Query passed to search:', query);
-
     try {
       const total = await this.userModel.countDocuments(query).exec();
       const data = await this.userModel
@@ -128,7 +126,6 @@ export class UsersService {
     userDto: UpdateProfileDto,
   ): Promise<User> {
     try {
-      console.log('Updating user:', email, userDto);
       const updateData: any = { ...userDto };
       if (userDto.city || userDto.postcode) {
         updateData.location = {
@@ -210,7 +207,6 @@ export class UsersService {
       const { password, newPassword, isSubscribedToNewsletter } =
         updateSettingsDto;
       const user = await this.userModel.findById(id);
-      console.log(user);
       if (!user) {
         throw new NotFoundException(`User with ID ${id} not found`);
       }

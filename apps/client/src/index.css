@@ -103,6 +103,11 @@ svg {
 
 @media (max-width: 1024px) {
 
+.heading-container {
+    padding: 0 1rem;
+  }
+
+
 
   .welcome-img img {
     width: 300px;

@@ -16,9 +16,12 @@ import {
 } from '@nestjs/common';
 import { CreatePostDto } from './dto/post.dto';
 import { AuthenticatedRequest, Post as PostType} from '@shared/types';
+import { UseInterceptors } from '@nestjs/common';
+import { LastSeenInterceptor } from '../interceptors/lastSeen.interceptor';
 
 
 @Controller('posts')
+@UseInterceptors(LastSeenInterceptor)
 export class PostController {
   constructor(private readonly postService: PostService) {}
 

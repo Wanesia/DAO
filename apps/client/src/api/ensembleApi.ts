@@ -53,7 +53,6 @@ export const updateEnsemble = async (
 
 export const deleteEnsemble = async (id: string): Promise<void> => {
   try {
-    console.log("in delete ensemble api");
     await axiosInstance.delete(`/ensembles/${id}`);
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -97,8 +96,6 @@ export const getEnsembleById = async (
   ensembleId: string
 ): Promise<Ensemble> => {
   try {
-    console.log("ensembleId", ensembleId);
-
     const response = await axiosInstance.get<Ensemble>(
       `/ensembles/find/${ensembleId}`
     );

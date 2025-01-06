@@ -68,7 +68,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
       };
       
       setUser(transformedUser); 
-      console.log("User data refreshed", transformedUser);
       
     } catch (error) {
       console.error("Error refreshing user data:", error);

@@ -3,6 +3,7 @@ import { getPostsByUser } from "../../api/postApi";
 import { useNavigate } from "@tanstack/react-router";
 import { PostWithEnsembleDTO } from "@shared/types";
 import PostCard from "../PostCard/PostCard";
+import LoadingRing from "../LoadingRing/LoadingRing";
 
 const PostList: React.FC = () => {
   const [posts, setPosts] = useState<PostWithEnsembleDTO[]>([]);
@@ -31,9 +32,9 @@ const PostList: React.FC = () => {
     fetchPosts();
   }, []);
 
-  if (loading) return <div>Loading posts...</div>;
+  if (loading) return <LoadingRing size="small" />;
   if (error) return <div>Error: {error}</div>;
-  if (posts.length === 0) return <p>No posts found</p>;
+  if (posts.length === 0) return <p>Ingen opslag</p>;
 
   return (
       <ul className="gridLarge">
